@@ -272,12 +272,12 @@
         function preencherProduto() {
             const codigoBarras = codigoInput.value;
             if (codigoBarras === '7896051111016') {
-                produtoInput.value = 'CAIXA LEITE ITAMBÉ INTEGRAL 1l';
+                produtoInput.value = 'CAIXA LEITE ITAMBÉ INTEGRAL 1L';
             } else if (codigoBarras === '7896051111702') {
                 produtoInput.value = 'LEITE ITAMBÉ DESNATADO 1L';
             }
             else if (codigoBarras === '7896051111528') {
-                produtoInput.value = 'CAIXA LEITE ITAMBÉ SEMIDESNATADO 1l';
+                produtoInput.value = 'CAIXA LEITE ITAMBÉ SEMIDESNATADO 1L';
             }
             else if (codigoBarras === '7898367983356') {
                 produtoInput.value = 'CAIXA CERVEJA  EISENBAHN 473ml';
@@ -340,7 +340,9 @@
             novaPlanilha.classList.add('planilha');
             novaPlanilha.innerHTML = `
         <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-        <img src="C:/Users/Artur/Downloads/BAIXE NOSSO APLICATIVO SCANEANDO O QR CODE.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px;">
+       <img src="https://i.imgur.com/xDaWUpL.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px;">
+
+
         <div class="produto" id="produto-nome">${produtoInput}</div>
         <div class="info">
             <i class="fas fa-calendar-alt"></i>
