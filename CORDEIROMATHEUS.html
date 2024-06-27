@@ -153,6 +153,47 @@
                 background: #000;
                 cursor: pointer;
             }
+        input[type="radio"] {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            outline: none;
+            margin-right: 10px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+            input[type="radio"]:checked {
+                background-color: #333;
+                border-color: #333;
+            }
+        .delete-icon {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+            color: red;
+            cursor: pointer;
+        }
+
+        /* Ocultar ícone na versão para impressão */
+        @media print {
+            .delete-icon {
+                display: none !important;
+            }
+            .input-container {
+                display: none !important;
+            }
+            .btn-container {
+                display: none !important;
+            }
+            .print-container {
+                display: none !important;
+            }
+
+        }
+
     </style>
 </head>
 <body>
@@ -164,6 +205,7 @@
             <div class="info"><i class=""></i><span class="preco" id="preco">R$ 19,99</span></div>
             <div class="info"><i class="fas fa-barcode"></i><span id="codigo-barras">123456789012</span></div>
             <div class="adicional"><span id="preco-por-litro">1 LITRO SAI POR R$ 00,99</span></div>
+           
         </div>
     </div>
 
@@ -178,20 +220,22 @@
         </div>
         <div>
             <label for="preco-input">Preço:</label>
-            <input type="text" id="preco-input" placeholder="Preço">
+            <input type="number" id="precos" value="0.0" step="0.01" min="0.01">
         </div>
         <div>
             <label for="codigo-input">Código de Barras:</label>
             <input type="text" id="codigo-input" placeholder="Código de Barras" oninput="preencherProduto()">
         </div>
         <div>
-            <label for="preco-litro-input">Preço por litro:</label>
-            <input type="text" id="preco-litro-input" placeholder="Preço por litro">
+            <label for="preco-litro-input">Quanto e o litro do produto:</label>
+            <input type="text" id="preco-litro-input" placeholder="ML / OU LITRO">
         </div>
         <div>
             <label for="logo-checkbox">Com Logo:</label>
             <input type="checkbox" id="logo-checkbox">
         </div>
+
+
     </div>
     <div class="btn-container">
         <button class="btn" onclick="adicionarTabela()">Adicionar Tabela</button>
@@ -200,6 +244,13 @@
     <div class="print-container">
         <label for="tamanho-slider">Tamanho da Tabela:</label>
         <input type="range" min="200" max="500" value="350" class="slider" id="tamanho-slider">
+        <label>
+            <input type="radio" name="opcao" value="6"> Long Neck / Óleo
+        </label>
+        <br>
+        <label>
+            <input type="radio" name="opcao" value="12"> Caixa de leite / Caixa de Cerveja
+        </label>
 
         <button class="btn" onclick="imprimirTabelas()"><i class="fas fa-print"></i> Imprimir</button>
     </div>
@@ -262,34 +313,50 @@
         }
 
         function adicionarTabela() {
-            const produto = produtoInput.value || "Produto";
-            const data = dataInput.value || "Data emitida";
-            const preco = precoInput.value || "00,00";
-            const codigo = codigoInput.value || "Código de Barras";
-            const precoLitro = precoLitroInput.value || "00,00";
-            const comLogo = logoCheckbox.checked;
+            const radios = document.querySelectorAll('input[name="opcao"]');
+            let valorSelecionado = 0;
+
+            for (const radio of radios) {
+                if (radio.checked) {
+                    valorSelecionado = parseFloat(radio.value);
+                    break;
+                }
+            }
+
+            const produtoInput = document.getElementById('produto-input').value || "Produto";
+            const dataInput = document.getElementById('data-input').value || "DD/MM/AAAA";
+        
+
+            let preco = parseFloat(document.getElementById('precos').value);
+
+            const codigoInput = document.getElementById('codigo-input').value || "123456789012";
+            const precoLitroInput = document.getElementById('preco-litro-input').value || "00,99";
+            const logoCheckbox = document.getElementById('logo-checkbox').checked;
+
+            const total = preco * valorSelecionado;
 
             const planilhaContainer = document.getElementById('planilhas');
             const novaPlanilha = document.createElement('div');
             novaPlanilha.classList.add('planilha');
             novaPlanilha.innerHTML = `
-                                <img src="https://i.imgur.com/elkN6y1.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${comLogo ? 'block' : 'none'}; width: 200px; height: 190px;">
-                                <div class="produto" id="produto-nome">${produto}</div>
-                                <div class="info">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    <span id="data-emitida">Data emitida: ${data}</span>
-                                </div>
-                                <div class="info">
-                                    <span class="preco" id="preco">R$ ${preco}</span>
-                                </div>
-                            <div class="info">
-                                <i class="fas fa-barcode"></i>
-                                <span id="codigo-barras">${codigo}</span>
-                            </div>
-                            <div class="adicional">
-                                <span id="preco-por-litro">1 LITRO SAI POR R$ ${precoLitro}</span>
-                            </div>
-                        `;
+        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+        <img src="C:/Users/Artur/Downloads/BAIXE NOSSO APLICATIVO SCANEANDO O QR CODE.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px;">
+        <div class="produto" id="produto-nome">${produtoInput}</div>
+        <div class="info">
+            <i class="fas fa-calendar-alt"></i>
+            <span id="data-emitida">Data emitida: ${dataInput}</span>
+        </div>
+        <div class="info">
+            <span class="preco">R$ ${total.toFixed(2)}</span>
+        </div>
+        <div class="info">
+            <i class="fas fa-barcode"></i>
+            <span id="codigo-barras">${codigoInput}</span>
+        </div>
+        <div class="adicional">
+            <span id="preco-por-litro">1 LITRO SAI POR R$ ${precoLitroInput}</span>
+        </div>
+    `;
             planilhaContainer.appendChild(novaPlanilha);
         }
 
@@ -312,6 +379,13 @@
             const formattedDate = `${day}/${month}/${year}`;
             dataInput.value = formattedDate;
         });
+        function excluirTabela(element) {
+            const planilha = element.closest('.planilha');
+            if (planilha) {
+                planilha.remove();
+            }
+        }
+
     </script>
 </body>
 </html>
