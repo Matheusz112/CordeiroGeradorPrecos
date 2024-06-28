@@ -41,13 +41,14 @@
 
         .produto {
             font-weight: bold;
-            font-size: 20px;
+            font-size: 25px;
             margin-bottom: 15px;
+          
         }
 
         .info {
-            font-size: 20px;
-            margin-bottom: 5px;
+            font-size: 12px;
+            margin-bottom: 3px;
         }
 
             .info i {
@@ -55,13 +56,13 @@
             }
 
         .adicional {
-            font-size: 16px;
+            font-size: 27px;
             margin-top: 15px;
             font-weight: bold;
         }
 
         .preco {
-            font-size: 30px;
+            font-size: 60px;
             font-weight: bold;
             color: #000000;
             margin: 10px 0;
@@ -201,11 +202,12 @@
         <div class="planilha">
             <img src="C:/Users/Artur/Downloads/BAIXE NOSSO APLICATIVO SCANEANDO O QR CODE.png" class="logo" id="logo-imagem" alt="Logo">
             <div class="produto" id="produto-nome">Produto A</div>
-            <div class="info"><i class="fas fa-calendar-alt"></i><span id="data-emitida">Data emitida: DD/MM/AAAA</span></div>
+
             <div class="info"><i class=""></i><span class="preco" id="preco">R$ 19,99</span></div>
-            <div class="info"><i class="fas fa-barcode"></i><span id="codigo-barras">123456789012</span></div>
+
             <div class="adicional"><span id="preco-por-litro">1 LITRO SAI POR R$ 00,99</span></div>
-           
+            <div class="info"><i class="fas fa-calendar-alt"></i><span id="data-emitida">Data emitida: DD/MM/AAAA</span></div>
+
         </div>
     </div>
 
@@ -227,7 +229,7 @@
             <input type="text" id="codigo-input" placeholder="Código de Barras" oninput="preencherProduto()">
         </div>
         <div>
-            <label for="preco-litro-input">Quanto e o litro do produto:</label>
+            <label for="preco-litro-input">Quantos (ml) ou (l [Litro]) e o seu produto? </label>
             <input type="text" id="preco-litro-input" placeholder="ML / OU LITRO">
         </div>
         <div>
@@ -239,17 +241,24 @@
     </div>
     <div class="btn-container">
         <button class="btn" onclick="adicionarTabela()">Adicionar Tabela</button>
+        <button class="btn" onclick="carregarDados()">Buscar Banco de Dados </button>
+    
+        <button id="limpar-precos">Limpar Preços</button>
+
+
+
+
     </div>
 
     <div class="print-container">
         <label for="tamanho-slider">Tamanho da Tabela:</label>
         <input type="range" min="200" max="500" value="350" class="slider" id="tamanho-slider">
         <label>
-            <input type="radio" name="opcao" value="6"> Long Neck / Óleo
+            <input type="radio" name="opcao" value="6"> Long Neck / Óleo 
         </label>
         <br>
         <label>
-            <input type="radio" name="opcao" value="12"> Caixa de leite / Caixa de Cerveja
+            <input type="radio" name="opcao" value="12"> Caixa de leite / Caixa de Cerveja / Agua / Ref Caçulinha 
         </label>
 
         <button class="btn" onclick="imprimirTabelas()"><i class="fas fa-print"></i> Imprimir</button>
@@ -259,55 +268,77 @@
     </footer>
     <!-- Incluir script para FontAwesome (caso não tenha já incluído na página) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         const produtoInput = document.getElementById('produto-input');
         const dataInput = document.getElementById('data-input');
         const precoInput = document.getElementById('preco-input');
         const codigoInput = document.getElementById('codigo-input');
-        const precoLitroInput = document.getElementById('preco-litro-input');
+
         const tamanhoSlider = document.getElementById('tamanho-slider');
         const logoCheckbox = document.getElementById('logo-checkbox');
 
         function preencherProduto() {
             const codigoBarras = codigoInput.value;
             if (codigoBarras === '7896051111016') {
-                produtoInput.value = 'CAIXA LEITE ITAMBÉ INTEGRAL 1L';
+                produtoInput.value = 'CX LEITE ITAMBÊ INTEGRAL 12X1L';
             } else if (codigoBarras === '7896051111702') {
-                produtoInput.value = 'LEITE ITAMBÉ DESNATADO 1L';
+                produtoInput.value = 'CX LEITE ITAMBÊ DESNATADO 12X1L';
             }
             else if (codigoBarras === '7896051111528') {
-                produtoInput.value = 'CAIXA LEITE ITAMBÉ SEMIDESNATADO 1L';
+                produtoInput.value = 'CX LEITE ITAMBÊ SEMIDESNATADO 12X1L';
             }
+
             else if (codigoBarras === '7898367983356') {
-                produtoInput.value = 'CAIXA CERVEJA  EISENBAHN 473ml';
+                produtoInput.value = 'CX CERVEJA  EISENBAHN 12X473ml';
             }
             else if (codigoBarras === '7896036090855') {
-                produtoInput.value = 'Óleo de Soja Veleiro 900ml - 6 unidades';
+                produtoInput.value = 'Óleo de Soja Veleiro 6X900ml ';
             }
             else if (codigoBarras === '7896036090244') {
-                produtoInput.value = 'Óleo de Soja Liza  900ml - 6 unidades';
+                produtoInput.value = 'Óleo de Soja Liza  6X900ml';
             }
             else if (codigoBarras === '7896045505340') {
-                produtoInput.value = 'CAIXA CERVEJA  AMSTEL 473ml';
+                produtoInput.value = 'CAIXA CERVEJA  AMSTEL 12X473ml';
             }
             else if (codigoBarras === '7896045506248') {
-                produtoInput.value = 'CAIXA CERVEJA  HEINEKEN 473ml';
+                produtoInput.value = 'CAIXA CERVEJA  HEINEKEN 12X473ml';
             }
             else if (codigoBarras === '7896045503414') {
-                produtoInput.value = 'CAIXA CERVEJA  KAISER 473ml';
+                produtoInput.value = 'CAIXA CERVEJA  KAISER 12X473ml';
             }
             else if (codigoBarras === '7891991009164') {
-                produtoInput.value = 'CAIXA CERVEJA  ANTARTICA 473ml';
+                produtoInput.value = 'CAIXA CERVEJA  ANTARTICA 12X473ml';
             }
             else if (codigoBarras === '7891149011001') {
-                produtoInput.value = 'CAIXA CERVEJA  BRAHMA 473ml';
+                produtoInput.value = 'CAIXA CERVEJA  BRAHMA 12X473ml';
             }
             else if (codigoBarras === '7891991303323') {
-                produtoInput.value = 'CAIXA CERVEJA  STELLA ARTOIS 473ml';
+                produtoInput.value = 'CAIXA CERVEJA  STELLA ARTOIS 12X473ml';
             }
             else if (codigoBarras === '7891991014236') {
                 produtoInput.value = 'CAIXA CERVEJA  BOHEMIA  473ml';
+            }
+            else if (codigoBarras === '7898215151708 ') {
+                produtoInput.value = 'CX LEITE PIRACANJUBA INTEGRAL 12X1L';
+            }
+            else if (codigoBarras === '7896447500462 ') {
+                produtoInput.value = 'AGUÁ MIN IGARAPÉ SEM GÁS 12X500ml';
+            }
+            else if (codigoBarras === '7896447500363 ') {
+                produtoInput.value = 'AGUÁ MIN IGARAPÉ COM GÁS 12X500ml';
+            }
+            else if (codigoBarras === '0000078908901 ') {
+                produtoInput.value = 'COCA COLA MINI PET 12X200ml';
+            }
+            else if (codigoBarras === '7800660636419 ') {
+                produtoInput.value = 'REF SUKITA LARANJA PET 12X200ml';
+            }
+            else if (codigoBarras === '07891991014984  ') {
+                produtoInput.value = 'REF SODA LIMONADA PET 12X200ml';
+            }
+            else if (codigoBarras === '7892840800567  ') {
+                produtoInput.value = 'REF PEPSI  PET 12X200ml';
             }
 
         }
@@ -325,40 +356,39 @@
 
             const produtoInput = document.getElementById('produto-input').value || "Produto";
             const dataInput = document.getElementById('data-input').value || "DD/MM/AAAA";
-        
+
 
             let preco = parseFloat(document.getElementById('precos').value);
 
             const codigoInput = document.getElementById('codigo-input').value || "123456789012";
             const precoLitroInput = document.getElementById('preco-litro-input').value || "00,99";
             const logoCheckbox = document.getElementById('logo-checkbox').checked;
-
+            const soma = preco / precoLitroInput * 1000;
             const total = preco * valorSelecionado;
 
             const planilhaContainer = document.getElementById('planilhas');
             const novaPlanilha = document.createElement('div');
             novaPlanilha.classList.add('planilha');
             novaPlanilha.innerHTML = `
-        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-       <img src="https://i.imgur.com/xDaWUpL.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px;">
+            <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+           <img src="https://i.imgur.com/xDaWUpL.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px;">
 
 
-        <div class="produto" id="produto-nome">${produtoInput}</div>
-        <div class="info">
-            <i class="fas fa-calendar-alt"></i>
-            <span id="data-emitida">Data emitida: ${dataInput}</span>
-        </div>
-        <div class="info">
-            <span class="preco">R$ ${total.toFixed(2)}</span>
-        </div>
-        <div class="info">
-            <i class="fas fa-barcode"></i>
-            <span id="codigo-barras">${codigoInput}</span>
-        </div>
-        <div class="adicional">
-            <span id="preco-por-litro">1 LITRO SAI POR R$ ${precoLitroInput}</span>
-        </div>
-    `;
+            <div class="produto" id="produto-nome">${produtoInput}</div>
+
+            <div class="info">
+                <span class="preco">R$ ${total.toFixed(2)}</span>
+            </div>
+
+            <div class="adicional">
+                <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2)}</span>
+                <div class="info">
+                <i class="fas fa-calendar-alt"></i>
+                <span id="data-emitida">Data emitida: ${dataInput}</span>
+
+            </div>
+            </div>
+        `;
             planilhaContainer.appendChild(novaPlanilha);
         }
 
@@ -371,7 +401,31 @@
 
         function imprimirTabelas() {
             window.print();
+            resultadosComPreco.forEach(item => {
+                axios({
+                    method: "PATCH",
+                    url: `https://api.baserow.io/api/database/rows/table/316133/${item.id}/`,
+                    headers: {
+                        Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd",
+                        "Content-Type": "application/json"
+                    },
+                    data: {
+                        "Preço": ""
+                    }
+                })
+                    .then(response => {
+                        console.log(`Preço do produto ${item.Produto} limpo com sucesso`);
+                    })
+                    .catch(error => {
+                        console.error(`Erro ao limpar preço do produto ${item.Produto}:`, error);
+                    });
+            })
+
+
+           
         }
+
+
 
         document.addEventListener('DOMContentLoaded', function () {
             const today = new Date();
@@ -387,7 +441,86 @@
                 planilha.remove();
             }
         }
+        function carregarDados() {
+            axios({
+                method: "GET",
+                url: "https://api.baserow.io/api/database/rows/table/316133/?user_field_names=true",
+                headers: {
+                    Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd"
+                }
+            })
+                .then(response => {
+                    const dados = response.data.results;
+                    resultadosComPreco = dados.filter(item => item.Preço !== "");
 
+                    const planilhaContainer = document.getElementById('planilhas');
+                    const today = new Date();
+                    const day = today.getDate().toString().padStart(2, '0');
+                    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+                    const year = today.getFullYear();
+                    const formattedDate = `${day}/${month}/${year}`;
+                    dataInput.value = formattedDate;
+                    resultadosComPreco.forEach(item => {
+                        const novaPlanilha = document.createElement('div');
+                        novaPlanilha.classList.add('planilha');
+                        novaPlanilha.innerHTML = `
+                                <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                                <img src="https://i.imgur.com/xDaWUpL.png" class="logo" id="logo-imagem" alt="Logo">
+
+                                <div class="produto" id="produto-nome">${item.Produto}</div>
+
+                                <div class="info">
+                                    <span class="preco">R$ ${item.Preço}</span>
+                                </div>
+
+                                <div class="adicional">
+                                    <span id="preco-por-litro">1 LITRO SAI POR R$ ${item.PrecoPorLitro}</span>
+                                    <div class="info">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span id="data-emitida">Data emitida: ${formattedDate}</span>
+                                    </div>
+                                </div>
+                            `;
+                        planilhaContainer.appendChild(novaPlanilha);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar dados:', error);
+                });
+
+
+        }
+        document.getElementById('limpar-precos').addEventListener('click', limparPrecos);
+
+        function limparPrecos() {
+            resultadosComPreco.forEach(item => {
+                axios({
+                    method: "PATCH",
+                    url: `https://api.baserow.io/api/database/rows/table/316133/${item.id}/?user_field_names=true`,
+                    headers: {
+                        Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd",
+                        "Content-Type": "application/json"
+                    },
+                    data: {
+                        "Preço": ""
+                    }
+                })
+                    .then(response => {
+                        console.log(`Preço do produto ${item.Produto} limpo com sucesso`);
+                        alert("Banco de dados limpo com sucesso!")
+                    })
+                    .catch(error => {
+                        console.error(`Erro ao limpar preço do produto ${item.Produto}:`, error);
+                    });
+            });
+
+            // Recarregar dados após limpar os preços
+      
+        }
+        
+        
+
+            
     </script>
 </body>
 </html>
