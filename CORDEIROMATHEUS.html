@@ -451,7 +451,7 @@
             })
                 .then(response => {
                     const dados = response.data.results;
-                    resultadosComPreco = dados.filter(item => item.Preço !== "");
+                    const resultadosComPreco = dados.filter(item => item.Preço !== "");
 
                     const planilhaContainer = document.getElementById('planilhas');
                     const today = new Date();
@@ -460,36 +460,47 @@
                     const year = today.getFullYear();
                     const formattedDate = `${day}/${month}/${year}`;
                     dataInput.value = formattedDate;
+
+                    let somaTotal = 0;
+
                     resultadosComPreco.forEach(item => {
+                        const precoTotal = item.Preço * item.quantidade;
+                        somaTotal += precoTotal;
+                        const prelitro = item.Preço / item.ML*1000;
                         const novaPlanilha = document.createElement('div');
                         novaPlanilha.classList.add('planilha');
                         novaPlanilha.innerHTML = `
-                                <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                                <img src="https://i.imgur.com/xDaWUpL.png" class="logo" id="logo-imagem" alt="Logo">
+                        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                        <img src="https://i.imgur.com/xDaWUpL.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px;">
 
-                                <div class="produto" id="produto-nome">${item.Produto}</div>
+                        <div class="produto" id="produto-nome">${item.Produto}</div>
 
-                                <div class="info">
-                                    <span class="preco">R$ ${item.Preço}</span>
-                                </div>
+                        <div class="info">
+                           <span class="preco">R$ ${precoTotal.toFixed(2)}</span>
+                        </div>
 
-                                <div class="adicional">
-                                    <span id="preco-por-litro">1 LITRO SAI POR R$ ${item.PrecoPorLitro}</span>
-                                    <div class="info">
-                                        <i class="fas fa-calendar-alt"></i>
-                                        <span id="data-emitida">Data emitida: ${formattedDate}</span>
-                                    </div>
-                                </div>
-                            `;
+                        <div class="adicional">
+                        
+                            <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2)}</span>
+                            <div class="info">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span id="data-emitida">Data emitida: ${formattedDate}</span>
+                            </div>
+                        </div>
+                    `;
                         planilhaContainer.appendChild(novaPlanilha);
                     });
+
+                    // Exibir soma total dos preços
+                    const somaTotalElement = document.createElement('div');
+              
+                    planilhaContainer.appendChild(somaTotalElement);
                 })
                 .catch(error => {
                     console.error('Erro ao buscar dados:', error);
                 });
-
-
         }
+
         document.getElementById('limpar-precos').addEventListener('click', limparPrecos);
 
         function limparPrecos() {
