@@ -16,91 +16,36 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+  
         }
 
-        .planilha {
-            position: relative;
-            background-color: #f9f9f9;
-            border: 3px solid #000;
+        .menu-container {
+            background-color: #ffffff;
+            padding: 15px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            text-align: center;
-            margin-top: 20px;
-            width: 350px;
+            box-shadow: 0 4px 8px rgb(0, 0, 0); /* Sombra adicionada */
+            width: 200px; /* Reduzir largura do menu */
+            position: fixed;
+            left: 10px;
+            top: 20px;
         }
 
-            .planilha img.logo {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                width: 50px;
-                height: auto;
-                display: none;
+
+            .menu-container h2 {
+                margin-bottom: 05px;
+                text-align: center;
             }
-
-        .produto {
-            font-weight: bold;
-            font-size: 25px;
-            margin-bottom: 15px;
-          
-        }
-
-        .info {
-            font-size: 12px;
-            margin-bottom: 3px;
-        }
-
-            .info i {
-                margin-right: 20px;
-            }
-
-        .adicional {
-            font-size: 27px;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-
-        .preco {
-            font-size: 60px;
-            font-weight: bold;
-            color: #000000;
-            margin: 10px 0;
-        }
-
-        .input-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
-            justify-content: center;
-        }
-
-            .input-container label {
-                margin-right: 5px;
-                font-weight: bold;
-            }
-
-            .input-container input {
-                padding: 8px;
-                border-radius: 5px;
-                border: 1px solid #ccc;
-                width: 200px;
-            }
-
-                .input-container input:focus {
-                    border-color: #555;
-                    outline: none;
-                }
 
         .btn-container {
-            margin-top: 20px;
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            align-items: center;
         }
 
         .btn {
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 10px;
+            font-size: 12px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -108,6 +53,9 @@
             color: #fff;
             transition: background-color 0.3s ease, transform 0.2s ease;
             outline: none;
+            width: 150px; /* Largura fixa para todos os botões */
+            text-align: center; /* Centraliza o texto dentro do botão */
+           
         }
 
             .btn:hover {
@@ -116,10 +64,11 @@
             }
 
         .print-container {
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            margin-top: 10px;
+          
+   
+      
+ 
         }
 
         .slider {
@@ -154,14 +103,16 @@
                 background: #000;
                 cursor: pointer;
             }
+
         input[type="radio"] {
+            -webkit-appearance: none;
             appearance: none;
             width: 20px;
             height: 20px;
             border: 2px solid #ccc;
             border-radius: 50%;
             outline: none;
-            margin-right: 10px;
+            margin-right: 2px;
             transition: background-color 0.3s, border-color 0.3s;
         }
 
@@ -169,6 +120,7 @@
                 background-color: #333;
                 border-color: #333;
             }
+
         .delete-icon {
             position: absolute;
             top: 10px;
@@ -176,28 +128,316 @@
             font-size: 20px;
             color: red;
             cursor: pointer;
+            
         }
 
         /* Ocultar ícone na versão para impressão */
         @media print {
+            body {
+                align-items: center;
+                justify-content: center; /* Centraliza para impressão */
+                margin-right: 180px;
+            }
+
             .delete-icon {
                 display: none !important;
             }
-            .input-container {
+            .menu-container {
                 display: none !important;
             }
-            .btn-container {
-                display: none !important;
-            }
+            .input-container,
+            .btn-container,
             .print-container {
                 display: none !important;
             }
-
+            @page {
+                size: A4; /* Define o tamanho da página */
+                margin: 0; /* Remove as margens padrão */
+            }
         }
 
+        .input-container input[type="text"],
+        .input-container input[type="number"],
+        .input-container input[type="checkbox"] {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 120px;
+            transition: transform 0.2s ease;
+        }
+
+            .input-container input[type="text"]:focus,
+            .input-container input[type="number"]:focus,
+            .input-container input[type="checkbox"]:focus {
+                border-color: #555;
+                outline: none;
+                transform: scale(1.01);
+            }
+                #planilhas {
+        display: block !important; /* Mostra o container principal para impressão */
+    }
+        .planilha {
+            position: relative;
+            background-color: #f9f9f9;
+            border: 3px solid #000;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+            width: 350px;
+            margin-left: 10%; /* Adicione esta linha para mover para a direita */
+        }
+
+
+            .planilha img.logo {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                width: 50px;
+                height: auto;
+                display: none;
+            }
+
+        .produto {
+            font-weight: bold;
+            font-size: 25px;
+            margin-bottom: 15px;
+        }
+
+        .info {
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+
+            .info i {
+                margin-right: 20px;
+            }
+
+        .adicional {
+            font-size: 27px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .preco {
+            font-size: 60px;
+            font-weight: bold;
+            color: #000000;
+            margin: 10px 0;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1c1c1c;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            z-index: 1000;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+
+            .popup .checkmark {
+                display: inline-block;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background-color: #4caf50;
+                position: relative;
+                animation: pop-up 0.5s ease forwards;
+            }
+
+                .popup .checkmark::before {
+                    content: '';
+                    position: absolute;
+                    width: 15px;
+                    height: 30px;
+                    border-right: 5px solid white;
+                    border-bottom: 5px solid white;
+                    top: 10px;
+                    left: 18px;
+                    transform: rotate(45deg);
+                }
+
+            .popup .message {
+                margin-top: 10px;
+                font-size: 18px;
+                color: antiquewhite;
+                
+            }
+
+        @keyframes pop-up {
+            0% {
+                transform: scale(0);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+        .menuProdutos {
+            position: absolute;
+            top: 10px;
+            right: 0;
+            max-width: 300px;
+            background-color: #007bff;
+            border: 1px solid #0056b3;
+            border-radius: 5px;
+            padding: 5px;
+            box-sizing: border-box;
+            display: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+            .menuProdutos h3 {
+                margin: 0;
+                padding: 10px;
+                background-color: #0056b3;
+                color: white;
+                border-radius: 5px 5px 0 0;
+                text-align: center;
+                font-size: 18px;
+                animation: slideDown 0.3s ease-out;
+            }
+
+            .menuProdutos ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .menuProdutos li {
+                cursor: pointer;
+                padding: 10px;
+                font-weight: bold;
+                color: #fff;
+                transition: background-color 0.2s ease-in-out;
+            }
+
+                .menuProdutos li:nth-child(even) {
+                    background-color: #0069d9;
+                }
+
+                .menuProdutos li:hover {
+                    background-color: #0056b3;
+                }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="menu-container">
+        <h2>Menu de Opções</h2>
+        <div class="input-container">
+            <div>
+                <label for="produto-input">
+                    <i class="fas fa-shopping-cart"></i> <!-- Ícone do FontAwesome para carrinho de compras -->
+                </label>
+                <input type="text" id="produto-input" placeholder="Nome do Produto">
+            </div>
+            <div>
+                <label for="data-input">
+                    <i class="fas fa-calendar-alt"></i> <!-- Ícone do FontAwesome para calendário -->
+                </label>
+                <input type="text" id="data-input" placeholder="Data emitida">
+            </div>
+            <div>
+                <label for="precos">
+                    <i class="fas fa-dollar-sign"></i> <!-- Ícone do FontAwesome para dólar -->
+                </label>
+                <input type="number" id="precos" value="0.0" step="0.01" min="0.01">
+            </div>
+            <div>
+                <label for="codigo-input">
+                    <i class="fas fa-barcode"></i> <!-- Ícone do FontAwesome para código de barras -->
+                </label>
+                <input type="text" id="codigo-input" placeholder="Código de Barras" oninput="preencherProduto()">
+            </div>
+            <div>
+                <label for="preco-litro-input">
+                    <i class="fas fa-flask"></i> <!-- Ícone do FontAwesome para frasco de laboratório -->
+                </label>
+                <input type="text" id="preco-litro-input" placeholder="ML / OU LITRO">
+            </div>
+            <div>
+                <label for="logo-checkbox">
+                    <i class="fas fa-image"></i> <!-- Ícone do FontAwesome para imagem -->
+                </label>
+                <label for="logo-checkbox">Com Logo  </label>
+                <input type="checkbox" id="logo-checkbox">
+            </div>
+        </div>
+
+
+
+
+        <div class="print-container">
+            <label for="tamanho-slider">Tamanho da Tabela:</label>
+            <input type="range" min="200" max="500" value="350" class="slider" id="tamanho-slider">
+            <br>
+            <label>
+                <input type="radio" name="opcao" value="6"> Óleo / Long neck / Fardos de 6
+            </label>
+            <br>
+            <label>
+                <input type="radio" name="opcao" value="12"> Caixa de leite / Cx de Cerveja / Água / Fardos de 12
+            </label>
+            <div class="btn-container">
+                <button class="btn" onclick="adicionarTabela()">Adicionar Tabela</button>
+                <button class="btn" onclick="carregarDados()">Buscar Banco de Dados</button>
+                <button class="btn" onclick="showPopup()">Limpar Preço do Banco de Dados</button>
+                <button class="btn" onclick="imprimirTabelas()"><i class="fas fa-print"></i> Imprimir</button>
+            </div>
+
+        </div>
+    </div>
+
     <div id="planilhas">
         <div class="planilha">
             <img src="C:/Users/Artur/Downloads/BAIXE NOSSO APLICATIVO SCANEANDO O QR CODE.png" class="logo" id="logo-imagem" alt="Logo">
@@ -210,59 +450,14 @@
 
         </div>
     </div>
-
-    <div class="input-container">
-        <div>
-            <label for="produto-input">Produto:</label>
-            <input type="text" id="produto-input" placeholder="Nome do Produto">
-        </div>
-        <div>
-            <label for="data-input">Data:</label>
-            <input type="text" id="data-input" placeholder="Data emitida">
-        </div>
-        <div>
-            <label for="preco-input">Preço:</label>
-            <input type="number" id="precos" value="0.0" step="0.01" min="0.01">
-        </div>
-        <div>
-            <label for="codigo-input">Código de Barras:</label>
-            <input type="text" id="codigo-input" placeholder="Código de Barras" oninput="preencherProduto()">
-        </div>
-        <div>
-            <label for="preco-litro-input">Quantos (ml) ou (l [Litro]) e o seu produto? </label>
-            <input type="text" id="preco-litro-input" placeholder="ML / OU LITRO">
-        </div>
-        <div>
-            <label for="logo-checkbox">Com Logo:</label>
-            <input type="checkbox" id="logo-checkbox">
-        </div>
-
-
+    <div class="popup" id="popup">
+        <div class="checkmark"></div>
+        <div class="message">Preços limpos com sucesso</div>
     </div>
-    <div class="btn-container">
-        <button class="btn" onclick="adicionarTabela()">Adicionar Tabela</button>
-        <button class="btn" onclick="carregarDados()">Buscar Banco de Dados </button>
-    
-        <button id="limpar-precos">Limpar Preços</button>
-
-
-
-
-    </div>
-
-    <div class="print-container">
-        <label for="tamanho-slider">Tamanho da Tabela:</label>
-        <input type="range" min="200" max="500" value="350" class="slider" id="tamanho-slider">
-        <label>
-            <input type="radio" name="opcao" value="6"> Long Neck / Óleo 
-        </label>
-        <br>
-        <label>
-            <input type="radio" name="opcao" value="12"> Caixa de leite / Caixa de Cerveja / Agua / Ref Caçulinha 
-        </label>
-
-        <button class="btn" onclick="imprimirTabelas()"><i class="fas fa-print"></i> Imprimir</button>
-    </div>
+  <div class="menuProdutos" id="menuProdutos">
+    <h3>PRODUTOS SIMILARES</h3>
+    <ul id="sugestoes"></ul>
+  </div>
     <footer>
         <p>&copy; 2024 - Matheus Henrique Nunes. Todos os direitos reservados.</p>
     </footer>
@@ -270,6 +465,48 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
+
+
+        const produtos = {
+
+
+            '00007891111': 'CX CERVEJA HEINEKEN LN 6X330ml',
+            '7891991015462': 'CX CERVEJA STELLA ARTOIS LN 6X330ml',
+            '7501064113086': 'CX CERVEJA CORONA LN 6X330ml',
+            '7891991298421': 'CX CERVEJA BUDWEISER LN 6X330ml',
+            '7896045506040': 'CX CERVEJA HEINEKEN ZERO ÁLCOOL LN 6X330ml',
+
+
+
+            '7896051111016': 'CX LEITE ITAMBÊ INTEGRAL 12X1L',
+            '7896051111702': 'CX LEITE ITAMBÊ DESNATADO 12X1L',
+            '7896051111528': 'CX LEITE ITAMBÊ SEMIDESNATADO 12X1L',
+            '7896122305207': 'CX LEITE PORTO ALEGRE INTEGRAL 12X1L',
+
+            '7898367983356': 'CX CERVEJA EISENBAHN 12X473ml',
+            '7896036090855': 'Óleo de Soja Veleiro 6X900ml',
+            '7896036090244': 'Óleo de Soja Liza 6X900ml',
+            '7896045505340': 'CAIXA CERVEJA AMSTEL 12X473ml',
+            '7896045506248': 'CAIXA CERVEJA HEINEKEN 12X473ml',
+            '7896045503414': 'CAIXA CERVEJA KAISER 12X473ml',
+            '7891991009164': 'CAIXA CERVEJA ANTARTICA 12X473ml',
+            '7891149011001': 'CAIXA CERVEJA BRAHMA 12X473ml',
+            '7891991303323': 'CAIXA CERVEJA STELLA ARTOIS 12X473ml',
+            '7891991014236': 'CAIXA CERVEJA BOHEMIA 473ml',
+            '7898215151708': 'CX LEITE PIRACANJUBA INTEGRAL 12X1L',
+            '7896447500462': 'ÁGUA MIN IGARAPÉ SEM GÁS 12X500ml',
+            '7896447500363': 'ÁGUA MIN IGARAPÉ COM GÁS 12X500ml',
+            '0000078908901': 'REF COCA COLA MINI PET 12X200ml',
+            '7800660636419': 'REF SUKITA LARANJA PET 12X200ml',
+            '07891991014984': 'REF SODA LIMONADA PET 12X200ml',
+            '7891991014908': 'REF  GUARANÁ ANTARTICA PET 12X200ml',
+            '7891991016124': 'REF  GUARANÁ ZERO PET 12X200ml',
+            '7892840800567': 'REF PEPSI PET 12X200ml'
+
+
+        };
+
+
         const produtoInput = document.getElementById('produto-input');
         const dataInput = document.getElementById('data-input');
         const precoInput = document.getElementById('preco-input');
@@ -280,69 +517,58 @@
 
         function preencherProduto() {
             const codigoBarras = codigoInput.value;
-            if (codigoBarras === '7896051111016') {
-                produtoInput.value = 'CX LEITE ITAMBÊ INTEGRAL 12X1L';
-            } else if (codigoBarras === '7896051111702') {
-                produtoInput.value = 'CX LEITE ITAMBÊ DESNATADO 12X1L';
-            }
-            else if (codigoBarras === '7896051111528') {
-                produtoInput.value = 'CX LEITE ITAMBÊ SEMIDESNATADO 12X1L';
+
+
+            const mlInput = document.getElementById('preco-litro-input');
+            const termo = document.getElementById('codigo-input').value.trim().toLowerCase();
+            const sugestoes = document.getElementById('sugestoes');
+            const menuProdutos = document.getElementById('menuProdutos');
+            sugestoes.innerHTML = '';
+
+            if (termo === '') {
+                menuProdutos.style.display = 'none';
+                return;
             }
 
-            else if (codigoBarras === '7898367983356') {
-                produtoInput.value = 'CX CERVEJA  EISENBAHN 12X473ml';
+            const produtosSugeridos = Object.keys(produtos).filter(codigo => {
+                const nomeProduto = produtos[codigo].toLowerCase();
+                return codigo.startsWith(termo) || nomeProduto.includes(termo);
+            });
+
+            if (produtosSugeridos.length === 0) {
+                menuProdutos.style.display = 'none';
+                return;
             }
-            else if (codigoBarras === '7896036090855') {
-                produtoInput.value = 'Óleo de Soja Veleiro 6X900ml ';
-            }
-            else if (codigoBarras === '7896036090244') {
-                produtoInput.value = 'Óleo de Soja Liza  6X900ml';
-            }
-            else if (codigoBarras === '7896045505340') {
-                produtoInput.value = 'CAIXA CERVEJA  AMSTEL 12X473ml';
-            }
-            else if (codigoBarras === '7896045506248') {
-                produtoInput.value = 'CAIXA CERVEJA  HEINEKEN 12X473ml';
-            }
-            else if (codigoBarras === '7896045503414') {
-                produtoInput.value = 'CAIXA CERVEJA  KAISER 12X473ml';
-            }
-            else if (codigoBarras === '7891991009164') {
-                produtoInput.value = 'CAIXA CERVEJA  ANTARTICA 12X473ml';
-            }
-            else if (codigoBarras === '7891149011001') {
-                produtoInput.value = 'CAIXA CERVEJA  BRAHMA 12X473ml';
-            }
-            else if (codigoBarras === '7891991303323') {
-                produtoInput.value = 'CAIXA CERVEJA  STELLA ARTOIS 12X473ml';
-            }
-            else if (codigoBarras === '7891991014236') {
-                produtoInput.value = 'CAIXA CERVEJA  BOHEMIA  473ml';
-            }
-            else if (codigoBarras === '7898215151708 ') {
-                produtoInput.value = 'CX LEITE PIRACANJUBA INTEGRAL 12X1L';
-            }
-            else if (codigoBarras === '7896447500462 ') {
-                produtoInput.value = 'AGUÁ MIN IGARAPÉ SEM GÁS 12X500ml';
-            }
-            else if (codigoBarras === '7896447500363 ') {
-                produtoInput.value = 'AGUÁ MIN IGARAPÉ COM GÁS 12X500ml';
-            }
-            else if (codigoBarras === '0000078908901 ') {
-                produtoInput.value = 'COCA COLA MINI PET 12X200ml';
-            }
-            else if (codigoBarras === '7800660636419 ') {
-                produtoInput.value = 'REF SUKITA LARANJA PET 12X200ml';
-            }
-            else if (codigoBarras === '07891991014984  ') {
-                produtoInput.value = 'REF SODA LIMONADA PET 12X200ml';
-            }
-            else if (codigoBarras === '7892840800567  ') {
-                produtoInput.value = 'REF PEPSI  PET 12X200ml';
-            }
+
+            menuProdutos.style.display = 'block';
+            produtosSugeridos.forEach(codigo => {
+                const li = document.createElement('li');
+                li.textContent = produtos[codigo];
+                li.onclick = () => {
+                    document.getElementById('codigo-input').value = codigo;
+                    document.getElementById('produto-input').value = produtos[codigo];
+                    menuProdutos.style.display = 'none';
+                    const match = produtos[codigo].match(/(\d+)(ml|L)/i);  // Corrigido para produtos[codigo]
+                    if (match) {
+                        mlInput.value = match[1];
+                    } else {
+                        mlInput.value = '';
+                    }
+                    const quantidadeMatch = produtos[codigo].match(/(\d+)X/i);
+                    if (quantidadeMatch) {
+                        const quantidade = parseInt(quantidadeMatch[1], 10);
+                        if (quantidade === 6) {
+                            document.querySelector('input[name="opcao"][value="6"]').checked = true;
+                        } else if (quantidade === 12) {
+                            document.querySelector('input[name="opcao"][value="12"]').checked = true;
+                        }
+                    }
+                };
+                sugestoes.appendChild(li);
+            });
+
 
         }
-
         function adicionarTabela() {
             const radios = document.querySelectorAll('input[name="opcao"]');
             let valorSelecionado = 0;
@@ -356,39 +582,40 @@
 
             const produtoInput = document.getElementById('produto-input').value || "Produto";
             const dataInput = document.getElementById('data-input').value || "DD/MM/AAAA";
-
-
-            let preco = parseFloat(document.getElementById('precos').value);
+            const precoInput = document.getElementById('precos').value;
+            const preco = parseFloat(precoInput.replace(',', '.')); // Convertendo vírgula para ponto, se necessário
 
             const codigoInput = document.getElementById('codigo-input').value || "123456789012";
-            const precoLitroInput = document.getElementById('preco-litro-input').value || "00,99";
+            const precoLitroInput = document.getElementById('preco-litro-input').value.replace(',', '.') || "00.99";
             const logoCheckbox = document.getElementById('logo-checkbox').checked;
-            const soma = preco / precoLitroInput * 1000;
+
+            let soma = (preco / parseFloat(precoLitroInput)) * 1000;
+
+            if (produtoInput.toLowerCase().includes('leite')) {
+                soma /= 1000; // Divide por 1000 para obter o valor desejado
+            }
+
             const total = preco * valorSelecionado;
 
             const planilhaContainer = document.getElementById('planilhas');
             const novaPlanilha = document.createElement('div');
+
             novaPlanilha.classList.add('planilha');
             novaPlanilha.innerHTML = `
-            <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-           <img src="https://i.imgur.com/xDaWUpL.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px;">
-
-
-            <div class="produto" id="produto-nome">${produtoInput}</div>
-
+        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+        <img src="https://i.imgur.com/d5GvxOU.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px;">
+        <div class="produto" id="produto-nome">${produtoInput}</div>
+        <div class="info">
+            <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
+        </div>
+        <div class="adicional">
+            <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
             <div class="info">
-                <span class="preco">R$ ${total.toFixed(2)}</span>
-            </div>
-
-            <div class="adicional">
-                <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2)}</span>
-                <div class="info">
                 <i class="fas fa-calendar-alt"></i>
                 <span id="data-emitida">Data emitida: ${dataInput}</span>
-
             </div>
-            </div>
-        `;
+        </div>
+    `;
             planilhaContainer.appendChild(novaPlanilha);
         }
 
@@ -401,28 +628,7 @@
 
         function imprimirTabelas() {
             window.print();
-            resultadosComPreco.forEach(item => {
-                axios({
-                    method: "PATCH",
-                    url: `https://api.baserow.io/api/database/rows/table/316133/${item.id}/`,
-                    headers: {
-                        Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd",
-                        "Content-Type": "application/json"
-                    },
-                    data: {
-                        "Preço": ""
-                    }
-                })
-                    .then(response => {
-                        console.log(`Preço do produto ${item.Produto} limpo com sucesso`);
-                    })
-                    .catch(error => {
-                        console.error(`Erro ao limpar preço do produto ${item.Produto}:`, error);
-                    });
-            })
 
-
-           
         }
 
 
@@ -451,7 +657,7 @@
             })
                 .then(response => {
                     const dados = response.data.results;
-                    const resultadosComPreco = dados.filter(item => item.Preço !== "");
+                    resultadosComPreco = dados.filter(item => item.Preço !== "");
 
                     const planilhaContainer = document.getElementById('planilhas');
                     const today = new Date();
@@ -466,40 +672,47 @@
                     resultadosComPreco.forEach(item => {
                         const precoTotal = item.Preço * item.quantidade;
                         somaTotal += precoTotal;
-                        const prelitro = item.Preço / item.ML*1000;
+
+                        let prelitro = item.Preço / item.ML * 1000;
+                        if (item.Produto.toLowerCase().includes('leite')) {
+                            prelitro /= 1000; // Divide por 1000 para obter o valor desejado
+                        }
+
                         const novaPlanilha = document.createElement('div');
                         novaPlanilha.classList.add('planilha');
                         novaPlanilha.innerHTML = `
-                        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                        <img src="https://i.imgur.com/xDaWUpL.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px;">
+                    <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                    <img src="https://i.imgur.com/d5GvxOU.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px;">
 
-                        <div class="produto" id="produto-nome">${item.Produto}</div>
+                    <div class="produto" id="produto-nome">${item.Produto}</div>
 
+                    <div class="info">
+                        <span class="preco">R$ ${precoTotal.toFixed(2).replace(/\./g, ',')}</span>
+                    </div>
+
+                    <div class="adicional">
+                        <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2)}</span>
                         <div class="info">
-                           <span class="preco">R$ ${precoTotal.toFixed(2)}</span>
+                            <i class="fas fa-calendar-alt"></i>
+                            <span id="data-emitida">Data emitida: ${formattedDate}</span>
                         </div>
+                    </div>
+                `;
 
-                        <div class="adicional">
-                        
-                            <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2)}</span>
-                            <div class="info">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span id="data-emitida">Data emitida: ${formattedDate}</span>
-                            </div>
-                        </div>
-                    `;
                         planilhaContainer.appendChild(novaPlanilha);
                     });
 
                     // Exibir soma total dos preços
                     const somaTotalElement = document.createElement('div');
-              
+
+
                     planilhaContainer.appendChild(somaTotalElement);
                 })
                 .catch(error => {
                     console.error('Erro ao buscar dados:', error);
                 });
         }
+
 
         document.getElementById('limpar-precos').addEventListener('click', limparPrecos);
 
@@ -526,12 +739,44 @@
             });
 
             // Recarregar dados após limpar os preços
-      
-        }
-        
-        
 
-            
+        }
+        function showPopup() {
+            const popup = document.getElementById('popup');
+            popup.style.display = 'block';
+
+            setTimeout(() => {
+                popup.style.animation = 'fadeOut 0.5s forwards';
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                    popup.style.animation = 'fadeIn 0.5s forwards';
+                    resultadosComPreco.forEach(item => {
+                        axios({
+                            method: "PATCH",
+                            url: `https://api.baserow.io/api/database/rows/table/316133/${item.id}/?user_field_names=true`,
+                            headers: {
+                                Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd",
+                                "Content-Type": "application/json"
+                            },
+                            data: {
+                                "Preço": ""
+                            }
+                        })
+                            .then(response => {
+                                console.log(`Preço do produto ${item.Produto} limpo com sucesso`);
+
+                            })
+                            .catch(error => {
+                                console.error(`Erro ao limpar preço do produto ${item.Produto}:`, error);
+                            });
+                    });
+                }, 500);
+            }, 3000);
+        }
+
+
+
+
     </script>
 </body>
 </html>
