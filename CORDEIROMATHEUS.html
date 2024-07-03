@@ -130,8 +130,14 @@
             cursor: pointer;
             
         }
-
-        /* Ocultar ícone na versão para impressão */
+        .edit-icon {
+            position: absolute;
+            top: 50px; /* Ajuste este valor conforme necessário */
+            left: 10px;
+            font-size: 20px;
+            color:darkseagreen;
+            cursor: pointer;
+        }
         @media print {
             body {
                 align-items: center;
@@ -142,6 +148,10 @@
             .delete-icon {
                 display: none !important;
             }
+            .edit-icon {
+                display: none !important;
+            }
+
             .menu-container {
                 display: none !important;
             }
@@ -194,7 +204,7 @@
                 position: absolute;
                 top: 10px;
                 right: 10px;
-                width: 50px;
+                width: 100px;
                 height: auto;
                 display: none;
             }
@@ -475,13 +485,14 @@
             '7501064113086': 'CX CERVEJA CORONA LN 6X330ml',
             '7891991298421': 'CX CERVEJA BUDWEISER LN 6X330ml',
             '7896045506040': 'CX CERVEJA HEINEKEN ZERO ÁLCOOL LN 6X330ml',
-
-
+            '7891991297493 ': 'CX CERVEJA SPATEM LN 6X330ml',
+            '7891149104932 ': 'CX CERVEJA BRAHMA ZERO ÁLCOOL 12X350ml',
 
             '7896051111016': 'CX LEITE ITAMBÊ INTEGRAL 12X1L',
             '7896051111702': 'CX LEITE ITAMBÊ DESNATADO 12X1L',
             '7896051111528': 'CX LEITE ITAMBÊ SEMIDESNATADO 12X1L',
             '7896122305207': 'CX LEITE PORTO ALEGRE INTEGRAL 12X1L',
+            '7896122305207': 'CX LEITE QUATA INTEGRAL 12X1L',
 
             '7898367983356': 'CX CERVEJA EISENBAHN 12X473ml',
             '7896036090855': 'Óleo de Soja Veleiro 6X900ml',
@@ -490,9 +501,12 @@
             '7896045506248': 'CAIXA CERVEJA HEINEKEN 12X473ml',
             '7896045503414': 'CAIXA CERVEJA KAISER 12X473ml',
             '7891991009164': 'CAIXA CERVEJA ANTARTICA 12X473ml',
+            '7891991009222': 'CAIXA CERVEJA ANTARTICA ORIGINAL 12X473ml',
             '7891149011001': 'CAIXA CERVEJA BRAHMA 12X473ml',
             '7891991303323': 'CAIXA CERVEJA STELLA ARTOIS 12X473ml',
             '7891991014236': 'CAIXA CERVEJA BOHEMIA 473ml',
+            '7891991303217': 'CAIXA CERVEJA SPATEM 473ml',
+            '07891991010153': 'CAIXA CERVEJA ANTARTICA SUB ZERO 473ml',
             '7898215151708': 'CX LEITE PIRACANJUBA INTEGRAL 12X1L',
             '7896447500462': 'ÁGUA MIN IGARAPÉ SEM GÁS 12X500ml',
             '7896447500363': 'ÁGUA MIN IGARAPÉ COM GÁS 12X500ml',
@@ -603,7 +617,8 @@
             novaPlanilha.classList.add('planilha');
             novaPlanilha.innerHTML = `
         <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-        <img src="https://i.imgur.com/d5GvxOU.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px;">
+        <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+        <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px;">
         <div class="produto" id="produto-nome">${produtoInput}</div>
         <div class="info">
             <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
@@ -682,7 +697,7 @@
                         novaPlanilha.classList.add('planilha');
                         novaPlanilha.innerHTML = `
                     <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                    <img src="https://i.imgur.com/d5GvxOU.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px;">
+                    <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 230px; height: 210px;">
 
                     <div class="produto" id="produto-nome">${item.Produto}</div>
 
@@ -774,7 +789,29 @@
             }, 3000);
         }
 
+        function editarTabela(element) {
+            const planilha = element.closest('.planilha');
+            const produtoNome = planilha.querySelector('#produto-nome');
+            const preco = planilha.querySelector('.preco');
+            const precoPorLitro = planilha.querySelector('#preco-por-litro');
 
+            const novoProdutoNome = prompt('Editar Nome do Produto:', produtoNome.innerText);
+            if (novoProdutoNome !== null) {
+                produtoNome.innerText = novoProdutoNome;
+            }
+
+            const novoPreco = prompt('Editar Preço:', preco.innerText.replace('R$ ', '').replace(',', '.'));
+            if (novoPreco !== null && !isNaN(novoPreco)) {
+                const novoTotal = parseFloat(novoPreco).toFixed(2).replace('.', ',');
+                preco.innerText = `R$ ${novoTotal}`;
+
+                const precoLitro = prompt('Editar Preço por Litro:', precoPorLitro.innerText.split(' ')[4].replace(',', '.'));
+                if (precoLitro !== null && !isNaN(precoLitro)) {
+                    const novoPrecoPorLitro = (parseFloat(novoPreco) / parseFloat(precoLitro) * 1000).toFixed(2).replace('.', ',');
+                    precoPorLitro.innerText = `1 LITRO SAI POR R$ ${novoPrecoPorLitro}`;
+                }
+            }
+        }
 
 
     </script>
