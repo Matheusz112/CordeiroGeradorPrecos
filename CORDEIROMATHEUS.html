@@ -207,12 +207,13 @@
                 width: 100px;
                 height: auto;
                 display: none;
+                margin-left: 50px;
             }
 
         .produto {
             font-weight: bold;
-            font-size: 25px;
-            margin-bottom: 15px;
+            font-size: 30px;
+            margin-bottom: 10px;
         }
 
         .info {
@@ -226,7 +227,7 @@
 
         .adicional {
             font-size: 27px;
-            margin-top: 15px;
+            margin-top: 3px;
             font-weight: bold;
         }
 
@@ -379,9 +380,89 @@
                 opacity: 1;
             }
         }
+
+        .popupcordeiro {
+            display: none; /* Inicia escondido */
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro semi-transparente */
+            z-index: 9999;
+        }
+
+        .popupcordeiro-content {
+            width: 300px; /* Largura fixa do popup */
+            height: 200px; /* Altura fixa do popup */
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .popupcordeiro h2 {
+            font-weight: bold;
+            color: #333;
+            margin-top: 0;
+        }
+
+        .logocordeiro {
+            max-width: 100px; /* Reduzindo o tamanho da logo */
+            margin-bottom: 10px; /* Espaço abaixo da logo */
+            pointer-events: none; /* Desabilita eventos de mouse */
+        }
+
+        /* Estilos para o loader */
+        .loader {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-block;
+            border-top: 4px solid #2196F3; /* Azul */
+            border-right: 4px solid transparent;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+            margin-bottom: 10px; /* Espaço abaixo do loader */
+        }
+
+            .loader::after {
+                content: '';
+                box-sizing: border-box;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                border-left: 4px solid #000; /* Preto */
+                border-bottom: 4px solid transparent;
+                animation: rotation 0.5s linear infinite reverse;
+            }
+
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 <body>
+    <div id="popup" class="popupcordeiro">
+        <div class="popupcordeiro-content">
+            <img src="https://is5-ssl.mzstatic.com/image/thumb/Purple126/v4/66/60/90/666090de-4f6d-35c5-9f83-cbbcdc290738/source/256x256bb.jpg" alt="Logo" class="logocordeiro">
+            <h2 id="popup-message">Carregando dados necessários...</h2>
+            <span class="loader"></span>
+        </div>
+    </div>
+
     <div class="menu-container">
         <h2>Menu de Opções</h2>
         <div class="input-container">
@@ -464,10 +545,10 @@
         <div class="checkmark"></div>
         <div class="message">Preços limpos com sucesso</div>
     </div>
-  <div class="menuProdutos" id="menuProdutos">
-    <h3>PRODUTOS SIMILARES</h3>
-    <ul id="sugestoes"></ul>
-  </div>
+    <div class="menuProdutos" id="menuProdutos">
+        <h3>PRODUTOS SIMILARES</h3>
+        <ul id="sugestoes"></ul>
+    </div>
     <footer>
         <p>&copy; 2024 - Matheus Henrique Nunes. Todos os direitos reservados.</p>
     </footer>
@@ -480,36 +561,36 @@
         const produtos = {
 
 
-            '00007891111': 'CX CERVEJA HEINEKEN LN 6X330ml',
-            '7891991015462': 'CX CERVEJA STELLA ARTOIS LN 6X330ml',
-            '7501064113086': 'CX CERVEJA CORONA LN 6X330ml',
-            '7891991298421': 'CX CERVEJA BUDWEISER LN 6X330ml',
-            '7896045506040': 'CX CERVEJA HEINEKEN ZERO ÁLCOOL LN 6X330ml',
-            '7891991297493 ': 'CX CERVEJA SPATEM LN 6X330ml',
-            '7891149104932 ': 'CX CERVEJA BRAHMA ZERO ÁLCOOL 12X350ml',
+            '00007891111': ' HEINEKEN LN 6X330ml',
+            '7891991015462': ' STELLA ARTOIS LN 6X330ml',
+            '7501064113086': ' CORONA LN 6X330ml',
+            '7891991298421': ' BUDWEISER LN 6X330ml',
+            '7896045506040': ' HEINEKEN ZERO ÁLCOOL LN 6X330ml',
+            '7891991297493 ': ' SPATEM LN 6X330ml',
+            '7891149104932 ': ' BRAHMA ZERO ÁLCOOL 12X350ml',
+            '7896045506064 ': ' HEINEKEN  ZERO ÁLCOOL 12X350ml',
+            '7896051111016': 'LEITE ITAMBÊ INTEGRAL 12X1L',
+            '7896051111702': 'LEITE ITAMBÊ DESNATADO 12X1L',
+            '7896051111528': 'LEITE ITAMBÊ SEMIDESNATADO 12X1L',
+            '7896122305207': 'LEITE PORTO ALEGRE INTEGRAL 12X1L',
+            '7896122305207': 'LEITE QUATA INTEGRAL 12X1L',
 
-            '7896051111016': 'CX LEITE ITAMBÊ INTEGRAL 12X1L',
-            '7896051111702': 'CX LEITE ITAMBÊ DESNATADO 12X1L',
-            '7896051111528': 'CX LEITE ITAMBÊ SEMIDESNATADO 12X1L',
-            '7896122305207': 'CX LEITE PORTO ALEGRE INTEGRAL 12X1L',
-            '7896122305207': 'CX LEITE QUATA INTEGRAL 12X1L',
-
-            '7898367983356': 'CX CERVEJA EISENBAHN 12X473ml',
+            '7898367983356': 'CERVEJA EISENBAHN 12X473ml',
             '7896036090855': 'Óleo de Soja Veleiro 6X900ml',
             '7896036090244': 'Óleo de Soja Liza 6X900ml',
-            '7896045505340': 'CAIXA CERVEJA AMSTEL 12X473ml',
-            '7896045506248': 'CAIXA CERVEJA HEINEKEN 12X473ml',
-            '7896045503414': 'CAIXA CERVEJA KAISER 12X473ml',
-            '7891991009164': 'CAIXA CERVEJA ANTARTICA 12X473ml',
-            '7891991009222': 'CAIXA CERVEJA ANTARTICA ORIGINAL 12X473ml',
-            '7891149011001': 'CAIXA CERVEJA BRAHMA 12X473ml',
-            '7891991303323': 'CAIXA CERVEJA STELLA ARTOIS 12X473ml',
-            '7891991014236': 'CAIXA CERVEJA BOHEMIA 473ml',
-            '7891991303217': 'CAIXA CERVEJA SPATEM 473ml',
-            '07891991010153': 'CAIXA CERVEJA ANTARTICA SUB ZERO 473ml',
+            '7896045505340': 'CERVEJA AMSTEL 12X473ml',
+            '7896045506248': 'CERVEJA HEINEKEN 12X473ml',
+            '7896045503414': 'CERVEJA KAISER 12X473ml',
+            '7891991009164': 'CERVEJA ANTARTICA 12X473ml',
+            '7891991009222': 'CERVEJA ANTARTICA ORIGINAL 12X473ml',
+            '7891149011001': 'CERVEJA BRAHMA 12X473ml',
+            '7891991303323': 'CERVEJA STELLA ARTOIS 12X473ml',
+            '7891991014236': 'CERVEJA BOHEMIA 473ml',
+            '7891991303217': 'CERVEJA SPATEM 473ml',
+            '07891991010153': 'CERVEJA ANTARTICA SUB ZERO 473ml',
             '7898215151708': 'CX LEITE PIRACANJUBA INTEGRAL 12X1L',
-            '7896447500462': 'ÁGUA MIN IGARAPÉ SEM GÁS 12X500ml',
-            '7896447500363': 'ÁGUA MIN IGARAPÉ COM GÁS 12X500ml',
+            '7896447500462': 'ÁGUA  IGARAPÉ SEM GÁS 12X500ml',
+            '7896447500363': 'ÁGUA IGARAPÉ COM GÁS 12X500ml',
             '0000078908901': 'REF COCA COLA MINI PET 12X200ml',
             '7800660636419': 'REF SUKITA LARANJA PET 12X200ml',
             '07891991014984': 'REF SODA LIMONADA PET 12X200ml',
@@ -616,21 +697,22 @@
 
             novaPlanilha.classList.add('planilha');
             novaPlanilha.innerHTML = `
-        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-        <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
-        <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px;">
-        <div class="produto" id="produto-nome">${produtoInput}</div>
-        <div class="info">
-            <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
-        </div>
-        <div class="adicional">
-            <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
+            <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+            <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+            <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
+
+            <div class="produto" id="produto-nome">${produtoInput}</div>
             <div class="info">
-                <i class="fas fa-calendar-alt"></i>
-                <span id="data-emitida">Data emitida: ${dataInput}</span>
+                <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
             </div>
-        </div>
-    `;
+            <div class="adicional">
+                <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
+                <div class="info">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span id="data-emitida">Data emitida: ${dataInput}</span>
+                </div>
+            </div>
+        `;
             planilhaContainer.appendChild(novaPlanilha);
         }
 
@@ -696,23 +778,23 @@
                         const novaPlanilha = document.createElement('div');
                         novaPlanilha.classList.add('planilha');
                         novaPlanilha.innerHTML = `
-                    <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                    <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 230px; height: 210px;">
+                        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                        <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 230px; height: 210px;">
 
-                    <div class="produto" id="produto-nome">${item.Produto}</div>
+                        <div class="produto" id="produto-nome">${item.Produto}</div>
 
-                    <div class="info">
-                        <span class="preco">R$ ${precoTotal.toFixed(2).replace(/\./g, ',')}</span>
-                    </div>
-
-                    <div class="adicional">
-                        <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2)}</span>
                         <div class="info">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span id="data-emitida">Data emitida: ${formattedDate}</span>
+                            <span class="preco">R$ ${precoTotal.toFixed(2).replace(/\./g, ',')}</span>
                         </div>
-                    </div>
-                `;
+
+                        <div class="adicional">
+                            <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2)}</span>
+                            <div class="info">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span id="data-emitida">Data emitida: ${formattedDate}</span>
+                            </div>
+                        </div>
+                    `;
 
                         planilhaContainer.appendChild(novaPlanilha);
                     });
@@ -812,7 +894,41 @@
                 }
             }
         }
+        // Mensagens alternadas de carregamento
+        var messages = [
+            "Carregando dados necessários...",
+            "Por favor, aguarde um momento...",
+            "Preparando o site para você...",
+            "Carregando recursos...",
+            "Quase lá...",
+            "Finalizando carregamento..."
+        ];
+        var messageIndex = 0;
 
+        // Função para alternar as mensagens
+        function alternarMensagem() {
+            document.getElementById('popup-message').textContent = messages[messageIndex];
+            messageIndex = (messageIndex + 1) % messages.length; // Avança para a próxima mensagem
+        }
+
+        // Simula o carregamento dos dados
+        function carregarDados() {
+            var loader = document.querySelector('.loader');
+            var interval = setInterval(function () {
+                alternarMensagem(); // Alterna as mensagens
+            }, 2000); // Tempo para alternar as mensagens (2 segundos)
+
+            setTimeout(function () {
+                clearInterval(interval);
+                document.getElementById('popup').style.display = 'none'; // Esconde o popup ao completar o carregamento
+            }, 10000); // Tempo total do carregamento simulado (10 segundos)
+        }
+
+        // Mostra o popup ao carregar a página
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('popup').style.display = 'flex'; // Exibe o popup ao iniciar
+            carregarDados(); // Inicia o carregamento dos dados
+        });
 
     </script>
 </body>
