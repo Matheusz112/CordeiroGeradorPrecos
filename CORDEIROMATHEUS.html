@@ -16,7 +16,6 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-  
         }
 
         .menu-container {
@@ -55,7 +54,6 @@
             outline: none;
             width: 150px; /* Largura fixa para todos os botões */
             text-align: center; /* Centraliza o texto dentro do botão */
-           
         }
 
             .btn:hover {
@@ -65,10 +63,6 @@
 
         .print-container {
             margin-top: 10px;
-          
-   
-      
- 
         }
 
         .slider {
@@ -128,16 +122,17 @@
             font-size: 20px;
             color: red;
             cursor: pointer;
-            
         }
+
         .edit-icon {
             position: absolute;
             top: 50px; /* Ajuste este valor conforme necessário */
             left: 10px;
             font-size: 20px;
-            color:darkseagreen;
+            color: darkseagreen;
             cursor: pointer;
         }
+
         @media print {
             body {
                 align-items: center;
@@ -148,6 +143,7 @@
             .delete-icon {
                 display: none !important;
             }
+
             .edit-icon {
                 display: none !important;
             }
@@ -155,11 +151,13 @@
             .menu-container {
                 display: none !important;
             }
+
             .input-container,
             .btn-container,
             .print-container {
                 display: none !important;
             }
+
             @page {
                 size: A4; /* Define o tamanho da página */
                 margin: 0; /* Remove as margens padrão */
@@ -183,9 +181,11 @@
                 outline: none;
                 transform: scale(1.01);
             }
-                #planilhas {
-        display: block !important; /* Mostra o container principal para impressão */
-    }
+
+        #planilhas {
+            display: block !important; /* Mostra o container principal para impressão */
+        }
+
         .planilha {
             position: relative;
             background-color: #f9f9f9;
@@ -237,6 +237,7 @@
             color: #000000;
             margin: 10px 0;
         }
+
         .popup {
             display: none;
             position: fixed;
@@ -279,7 +280,6 @@
                 margin-top: 10px;
                 font-size: 18px;
                 color: antiquewhite;
-                
             }
 
         @keyframes pop-up {
@@ -311,6 +311,7 @@
                 opacity: 0;
             }
         }
+
         .menuProdutos {
             position: absolute;
             top: 10px;
@@ -395,8 +396,8 @@
         }
 
         .popupcordeiro-content {
-            width: 300px; /* Largura fixa do popup */
-            height: 200px; /* Altura fixa do popup */
+            width: 400px; /* Largura fixa do popup */
+            height: 250px; /* Altura fixa do popup */
             background-color: #fff;
             padding: 10px;
             border-radius: 10px;
@@ -522,7 +523,7 @@
             <div class="btn-container">
                 <button class="btn" onclick="adicionarTabela()">Adicionar Tabela</button>
                 <button class="btn" onclick="carregarDados()">Buscar Banco de Dados</button>
-                <button class="btn" onclick="showPopup()">Limpar Preço do Banco de Dados</button>
+                <button class="btn" onclick="limparPrecos()">Limpar Preço do Banco de Dados</button>
                 <button class="btn" onclick="imprimirTabelas()"><i class="fas fa-print"></i> Imprimir</button>
             </div>
 
@@ -697,22 +698,22 @@
 
             novaPlanilha.classList.add('planilha');
             novaPlanilha.innerHTML = `
-            <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-            <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
-            <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
+                <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+                <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
 
-            <div class="produto" id="produto-nome">${produtoInput}</div>
-            <div class="info">
-                <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
-            </div>
-            <div class="adicional">
-                <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
+                <div class="produto" id="produto-nome">${produtoInput}</div>
                 <div class="info">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span id="data-emitida">Data emitida: ${dataInput}</span>
+                    <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
                 </div>
-            </div>
-        `;
+                <div class="adicional">
+                    <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
+                    <div class="info">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span id="data-emitida">Data emitida: ${dataInput}</span>
+                    </div>
+                </div>
+            `;
             planilhaContainer.appendChild(novaPlanilha);
         }
 
@@ -778,23 +779,23 @@
                         const novaPlanilha = document.createElement('div');
                         novaPlanilha.classList.add('planilha');
                         novaPlanilha.innerHTML = `
-                        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                        <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 230px; height: 210px;">
+                            <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                            <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
 
-                        <div class="produto" id="produto-nome">${item.Produto}</div>
+                            <div class="produto" id="produto-nome">${item.Produto}</div>
 
-                        <div class="info">
-                            <span class="preco">R$ ${precoTotal.toFixed(2).replace(/\./g, ',')}</span>
-                        </div>
-
-                        <div class="adicional">
-                            <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2)}</span>
                             <div class="info">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span id="data-emitida">Data emitida: ${formattedDate}</span>
+                                <span class="preco">R$ ${precoTotal.toFixed(2).replace(/\./g, ',')}</span>
                             </div>
-                        </div>
-                    `;
+
+                            <div class="adicional">
+                                <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2)}</span>
+                                <div class="info">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span id="data-emitida">Data emitida: ${formattedDate}</span>
+                                </div>
+                            </div>
+                        `;
 
                         planilhaContainer.appendChild(novaPlanilha);
                     });
@@ -811,9 +812,10 @@
         }
 
 
-        document.getElementById('limpar-precos').addEventListener('click', limparPrecos);
+
 
         function limparPrecos() {
+        
             resultadosComPreco.forEach(item => {
                 axios({
                     method: "PATCH",
@@ -836,40 +838,9 @@
             });
 
             // Recarregar dados após limpar os preços
-
+       
         }
-        function showPopup() {
-            const popup = document.getElementById('popup');
-            popup.style.display = 'block';
 
-            setTimeout(() => {
-                popup.style.animation = 'fadeOut 0.5s forwards';
-                setTimeout(() => {
-                    popup.style.display = 'none';
-                    popup.style.animation = 'fadeIn 0.5s forwards';
-                    resultadosComPreco.forEach(item => {
-                        axios({
-                            method: "PATCH",
-                            url: `https://api.baserow.io/api/database/rows/table/316133/${item.id}/?user_field_names=true`,
-                            headers: {
-                                Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd",
-                                "Content-Type": "application/json"
-                            },
-                            data: {
-                                "Preço": ""
-                            }
-                        })
-                            .then(response => {
-                                console.log(`Preço do produto ${item.Produto} limpo com sucesso`);
-
-                            })
-                            .catch(error => {
-                                console.error(`Erro ao limpar preço do produto ${item.Produto}:`, error);
-                            });
-                    });
-                }, 500);
-            }, 3000);
-        }
 
         function editarTabela(element) {
             const planilha = element.closest('.planilha');
@@ -912,22 +883,23 @@
         }
 
         // Simula o carregamento dos dados
-        function carregarDados() {
+        function carregarDadoss() {
+          
             var loader = document.querySelector('.loader');
             var interval = setInterval(function () {
                 alternarMensagem(); // Alterna as mensagens
-            }, 2000); // Tempo para alternar as mensagens (2 segundos)
+            }, 1000); // Tempo para alternar as mensagens (2 segundos)
 
             setTimeout(function () {
                 clearInterval(interval);
                 document.getElementById('popup').style.display = 'none'; // Esconde o popup ao completar o carregamento
-            }, 10000); // Tempo total do carregamento simulado (10 segundos)
+            }, 6000); // Tempo total do carregamento simulado (10 segundos)
         }
 
         // Mostra o popup ao carregar a página
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('popup').style.display = 'flex'; // Exibe o popup ao iniciar
-            carregarDados(); // Inicia o carregamento dos dados
+            carregarDadoss(); // Inicia o carregamento dos dados
         });
 
     </script>
