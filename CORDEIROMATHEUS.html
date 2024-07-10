@@ -3,188 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planilha de Preços - Minha Empresa</title>
-    <!-- Incluir FontAwesome para ícones -->
+    <title>Gerenciamento de Produtos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #ffffff;
-            color: #000000;
-            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
         }
 
-        .menu-container {
-            background-color: #ffffff;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgb(0, 0, 0); /* Sombra adicionada */
-            width: 200px; /* Reduzir largura do menu */
+        .menus {
             position: fixed;
-            left: 10px;
-            top: 20px;
+            top: 0;
+            left: 0;
+            width: 210px;
+            height: 100%;
+            background-color: #007bff;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            overflow-y: auto;
         }
 
-
-            .menu-container h2 {
-                margin-bottom: 05px;
-                text-align: center;
+            .menus img {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                display: block;
+                margin: 0 auto 20px auto;
             }
 
-        .btn-container {
+        .form-group {
             display: flex;
-            flex-direction: column;
-            gap: 2px;
             align-items: center;
+            margin-right: 30px;
+            margin-bottom: 5px;
+            margin-left: 10px;
         }
 
-        .btn {
-            padding: 10px;
-            font-size: 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: #000;
-            color: #fff;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            outline: none;
-            width: 150px; /* Largura fixa para todos os botões */
-            text-align: center; /* Centraliza o texto dentro do botão */
-        }
-
-            .btn:hover {
-                background-color: #333;
-                transform: scale(1.05);
+            .form-group i {
+                color: white;
+                margin-right: 10px;
+                margin-left: 10px;
             }
 
-        .print-container {
-            margin-top: 10px;
-        }
-
-        .slider {
-            -webkit-appearance: none;
-            width: 200px;
-            height: 8px;
-            border-radius: 5px;
-            background: #ccc;
-            outline: none;
-            opacity: 0.7;
-            transition: opacity 0.2s;
-        }
-
-            .slider:hover {
-                opacity: 1;
+            .form-group input, .form-group .range-input {
+                width: calc(100% - 30px);
+                padding: 10px;
+                border-radius: 10px;
+                border: 1px solid #ccc; /* Alterado para cinza (#ccc) */
+                transition: all 0.3s ease;
             }
 
-            .slider::-webkit-slider-thumb {
-                -webkit-appearance: none;
-                appearance: none;
-                width: 20px;
-                height: 20px;
-                border-radius: 50%;
-                background: #000;
+                .form-group input:focus, .form-group .range-input:focus {
+                    border-color: #0056b3;
+                    box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
+                    outline: none;
+                }
+
+            .form-group .range-input {
+                padding: 0;
+            }
+
+            .form-group button {
+                width: 100%;
+                padding: 10px;
+                border-radius: 10px;
+                background-color: white;
+                color: #007bff;
+                border: none;
                 cursor: pointer;
-            }
-
-            .slider::-moz-range-thumb {
-                width: 20px;
-                height: 20px;
-                border-radius: 50%;
-                background: #000;
-                cursor: pointer;
-            }
-
-        input[type="radio"] {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ccc;
-            border-radius: 50%;
-            outline: none;
-            margin-right: 2px;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-
-            input[type="radio"]:checked {
-                background-color: #333;
-                border-color: #333;
-            }
-
-        .delete-icon {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 20px;
-            color: red;
-            cursor: pointer;
-        }
-
-        .edit-icon {
-            position: absolute;
-            top: 50px; /* Ajuste este valor conforme necessário */
-            left: 10px;
-            font-size: 20px;
-            color: darkseagreen;
-            cursor: pointer;
-        }
-
-        @media print {
-            body {
+                display: flex;
+                justify-content: center;
                 align-items: center;
-                justify-content: center; /* Centraliza para impressão */
-                margin-right: 180px;
+                margin-top: 4px;
             }
 
-            .delete-icon {
-                display: none !important;
-            }
+                .form-group button i {
+                    margin-right: 5px;
+                    color: #007bff;
+                }
 
-            .edit-icon {
-                display: none !important;
-            }
+                .form-group button:hover {
+                    background-color: #f0f8ff;
+                }
 
-            .menu-container {
-                display: none !important;
-            }
-
-            .input-container,
-            .btn-container,
-            .print-container {
-                display: none !important;
-            }
-
-            @page {
-                size: A4; /* Define o tamanho da página */
-                margin: 0; /* Remove as margens padrão */
-            }
-        }
-
-        .input-container input[type="text"],
-        .input-container input[type="number"],
-        .input-container input[type="checkbox"] {
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            width: 120px;
-            transition: transform 0.2s ease;
-        }
-
-            .input-container input[type="text"]:focus,
-            .input-container input[type="number"]:focus,
-            .input-container input[type="checkbox"]:focus {
-                border-color: #555;
-                outline: none;
-                transform: scale(1.01);
-            }
-
-        #planilhas {
-            display: block !important; /* Mostra o container principal para impressão */
-        }
+                .form-group button:active {
+                    background-color: #d0e0ff;
+                }
 
         .planilha {
             position: relative;
@@ -196,7 +104,7 @@
             text-align: center;
             margin-top: 20px;
             width: 350px;
-            margin-left: 10%; /* Adicione esta linha para mover para a direita */
+            margin-left : 2px; /* Adicione esta linha para mover para a direita */
         }
 
 
@@ -237,6 +145,52 @@
             color: #000000;
             margin: 10px 0;
         }
+
+        .content {
+            margin-left: 270px;
+            padding: 20px;
+            flex: 1;
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            margin-top: 20px;
+            color: white;
+        }
+
+            .checkbox-container input[type="checkbox"] {
+                display: none; /* Esconde o checkbox padrão */
+            }
+
+        .checkbox-custom {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s ease;
+            flex-shrink: 0;
+        }
+
+            .checkbox-custom i {
+                display: none; /* Esconde o ícone inicialmente */
+            }
+
+        /* Estilos quando o checkbox está marcado */
+        .checkbox-container input[type="checkbox"]:checked + .checkbox-custom {
+            background-color: #007bff; /* Cor de fundo quando marcado */
+            border-color: #007bff; /* Cor da borda quando marcado */
+        }
+
+            .checkbox-container input[type="checkbox"]:checked + .checkbox-custom i {
+                display: block; /* Mostra o ícone quando marcado */
+                color: white; /* Cor do ícone quando marcado */
+            }
+
 
         .popup {
             display: none;
@@ -453,93 +407,188 @@
                 transform: rotate(360deg);
             }
         }
+        .delete-icon {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+            color: red;
+            cursor: pointer;
+        }
+
+        .edit-icon {
+            position: absolute;
+            top: 50px; /* Ajuste este valor conforme necessário */
+            left: 10px;
+            font-size: 20px;
+            color: darkseagreen;
+            cursor: pointer;
+        }
+        .radio-label {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+            .radio-label input {
+                display: none;
+            }
+
+        .custom-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #3498db;
+            border-radius: 50%;
+            position: relative;
+            margin-right: 4px;
+            transition: all 0.3s ease;
+        }
+
+            .custom-radio:after {
+                content: '';
+                width: 12px;
+                height: 12px;
+                background: white;
+                border-radius: 50%;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) scale(0);
+                transition: all 0.3s ease;
+            }
+
+        input[type="radio"]:checked ~ .custom-radio:after {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .radio-icon {
+            margin-left: 10px;
+            font-size: 1.2em;
+            color: #3498db;
+        }
+        @media print {
+
+
+            .delete-icon {
+                display: none !important;
+            }
+
+            .edit-icon {
+                display: none !important;
+            }
+
+            .menu-container {
+                display: none !important;
+            }
+
+            .menus{
+                display: none !important;
+            }
+            body {
+                align-items: center;
+                justify-content: center; /* Centraliza para impressão */
+                margin-right: 210px;
+            }
+
+
+            .input-container,
+            .btn-container,
+            .print-container {
+                display: none !important;
+            }
+
+            @page {
+                size: A4; /* Define o tamanho da página */
+                margin: 0; /* Remove as margens padrão */
+            }
+        }
+
     </style>
 </head>
 <body>
-    <div id="popup" class="popupcordeiro">
+    <div class="menus">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZEHGRJCwmfsKXT_FkmaldF_BC9m9XTLD89Q&s" alt="Logo">
+
+        <div class="form-group">
+            <i class="fas fa-tag"></i>
+            <input type="text" id="produto-input" placeholder="Produto">
+        </div>
+        <div class="form-group">
+            <i class="fas fa-calendar-alt"></i>
+            <input type="text" id="data-input" placeholder="Data emitida">
+        </div>
+        <div class="form-group">
+            <i class="fas fa-dollar-sign"></i>
+
+            <input type="number" id="precos" value="0.0" step="0.01" min="0.01">
+        </div>
+        <div class="form-group">
+            <i class="fas fa-search"></i>
+
+            <input type="text" id="codigo-input" placeholder="Procurar Produto (Nome / Codigo de Barras )" oninput="preencherProduto()">
+
+        </div>
+        <div class="form-group">
+            <i class="fas fa-tint"></i>
+            <input type="text" id="preco-litro-input" placeholder="Quantidade ML / Litro">
+        </div>
+        <div class="form-group">
+            <i class="fas fa-arrows-alt-h"></i>
+            <input type="range" id="tamanho-slider" min="200" max="800" class="range-input" oninput="ajustarLargura(this.value)">
+        </div>
+        <label class="radio-label">
+            <input type="radio" name="opcao" value="6">
+            <span class="custom-radio"></span>
+            Fardo de 6uni
+            <span class="radio-icon">📦</span>
+        </label>
+        <label class="radio-label">
+            <input type="radio" name="opcao" value="12">
+            <span class="custom-radio"></span>
+            Fardo de 12uni
+            <span class="radio-icon">📦</span>
+        </label>
+        <div>
+            <label for="logo-checkbox">
+                <i class="fas fa-image"></i> <!-- Ícone do FontAwesome para imagem -->
+            </label>
+            <label for="logo-checkbox">Com Logo  </label>
+            <input type="checkbox" id="logo-checkbox">
+        </div>
+        <div class="form-group">
+            <button type="button" id="btnImprimir"><i class="fas fa-print"></i> Imprimir</button>
+        </div>
+        <div class="form-group">
+            <button type="button" id="btnExcluir"><i class="fas fa-trash-alt"></i> Excluir</button>
+        </div>
+        <div class="form-group">
+            <button type="button" id="btnBuscar" onclick="carregarDados()"><i class="fas fa-database"></i> Buscar</button>
+
+        </div>
+        <div class="form-group">
+            <button type="button" id="btnAdicionar"><i class="fas fa-plus"></i> Adicionar</button>
+        </div>
+
+    </div>
+
+    <div class="content">
+        <div id="planilhas">
+            <div class="planilha" id="planilha">
+                <img src="C:/Users/Artur/Downloads/BAIXE NOSSO APLICATIVO SCANEANDO O QR CODE.png" class="logo" id="logo-imagem" alt="Logo">
+                <div class="produto" id="produto-nome">Produto A</div>
+                <div class="info"><i class=""></i><span class="preco" id="preco">R$ 19,99</span></div>
+                <div class="adicional"><span id="preco-por-litro">1 LITRO SAI POR R$ 00,99</span></div>
+                <div class="info"><i class="fas fa-calendar-alt"></i><span id="data-emitida">Data emitida: DD/MM/AAAA</span></div>
+            </div>
+        </div>
+    </div>
+    <div id="popupcordeiro" class="popupcordeiro">
         <div class="popupcordeiro-content">
             <img src="https://is5-ssl.mzstatic.com/image/thumb/Purple126/v4/66/60/90/666090de-4f6d-35c5-9f83-cbbcdc290738/source/256x256bb.jpg" alt="Logo" class="logocordeiro">
             <h2 id="popup-message">Carregando dados necessários...</h2>
             <span class="loader"></span>
-        </div>
-    </div>
-
-    <div class="menu-container">
-        <h2>Menu de Opções</h2>
-        <div class="input-container">
-            <div>
-                <label for="produto-input">
-                    <i class="fas fa-shopping-cart"></i> <!-- Ícone do FontAwesome para carrinho de compras -->
-                </label>
-                <input type="text" id="produto-input" placeholder="Nome do Produto">
-            </div>
-            <div>
-                <label for="data-input">
-                    <i class="fas fa-calendar-alt"></i> <!-- Ícone do FontAwesome para calendário -->
-                </label>
-                <input type="text" id="data-input" placeholder="Data emitida">
-            </div>
-            <div>
-                <label for="precos">
-                    <i class="fas fa-dollar-sign"></i> <!-- Ícone do FontAwesome para dólar -->
-                </label>
-                <input type="number" id="precos" value="0.0" step="0.01" min="0.01">
-            </div>
-            <div>
-                <label for="codigo-input">
-                    <i class="fas fa-barcode"></i> <!-- Ícone do FontAwesome para código de barras -->
-                </label>
-                <input type="text" id="codigo-input" placeholder="Código de Barras" oninput="preencherProduto()">
-            </div>
-            <div>
-                <label for="preco-litro-input">
-                    <i class="fas fa-flask"></i> <!-- Ícone do FontAwesome para frasco de laboratório -->
-                </label>
-                <input type="text" id="preco-litro-input" placeholder="ML / OU LITRO">
-            </div>
-            <div>
-                <label for="logo-checkbox">
-                    <i class="fas fa-image"></i> <!-- Ícone do FontAwesome para imagem -->
-                </label>
-                <label for="logo-checkbox">Com Logo  </label>
-                <input type="checkbox" id="logo-checkbox">
-            </div>
-        </div>
-
-
-
-
-        <div class="print-container">
-            <label for="tamanho-slider">Tamanho da Tabela:</label>
-            <input type="range" min="200" max="500" value="350" class="slider" id="tamanho-slider">
-            <br>
-            <label>
-                <input type="radio" name="opcao" value="6"> Óleo / Long neck / Fardos de 6
-            </label>
-            <br>
-            <label>
-                <input type="radio" name="opcao" value="12"> Caixa de leite / Cx de Cerveja / Água / Fardos de 12
-            </label>
-            <div class="btn-container">
-                <button class="btn" onclick="adicionarTabela()">Adicionar Tabela</button>
-                <button class="btn" onclick="carregarDados()">Buscar Banco de Dados</button>
-                <button class="btn" onclick="limparPrecos()">Limpar Preço do Banco de Dados</button>
-                <button class="btn" onclick="imprimirTabelas()"><i class="fas fa-print"></i> Imprimir</button>
-            </div>
-
-        </div>
-    </div>
-
-    <div id="planilhas">
-        <div class="planilha">
-            <img src="C:/Users/Artur/Downloads/BAIXE NOSSO APLICATIVO SCANEANDO O QR CODE.png" class="logo" id="logo-imagem" alt="Logo">
-            <div class="produto" id="produto-nome">Produto A</div>
-
-            <div class="info"><i class=""></i><span class="preco" id="preco">R$ 19,99</span></div>
-
-            <div class="adicional"><span id="preco-por-litro">1 LITRO SAI POR R$ 00,99</span></div>
-            <div class="info"><i class="fas fa-calendar-alt"></i><span id="data-emitida">Data emitida: DD/MM/AAAA</span></div>
-
         </div>
     </div>
     <div class="popup" id="popup">
@@ -550,14 +599,31 @@
         <h3>PRODUTOS SIMILARES</h3>
         <ul id="sugestoes"></ul>
     </div>
-    <footer>
-        <p>&copy; 2024 - Matheus Henrique Nunes. Todos os direitos reservados.</p>
-    </footer>
-    <!-- Incluir script para FontAwesome (caso não tenha já incluído na página) -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
+        document.getElementById('btnImprimir').addEventListener('click', function () {
+            // Ação quando o botão Imprimir for clicado
+            imprimirTabelas();
+            // Adicione aqui a lógica para imprimir
+        });
 
+        document.getElementById('btnExcluir').addEventListener('click', function () {
+            // Ação quando o botão Excluir for clicado
+            console.log('Botão Excluir clicado!');
+            // Adicione aqui a lógica para excluir
+        });
+
+        document.getElementById('btnBuscar').addEventListener('click', function () {
+
+        });
+
+        document.getElementById('btnAdicionar').addEventListener('click', function () {
+            // Ação quando o botão Adicionar for clicado
+            adicionarTabela();
+            // Adicione aqui a lógica para adicionar produto
+        });
 
         const produtos = {
 
@@ -698,22 +764,22 @@
 
             novaPlanilha.classList.add('planilha');
             novaPlanilha.innerHTML = `
-                <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
-                <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
+                    <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                    <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+                    <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
 
-                <div class="produto" id="produto-nome">${produtoInput}</div>
-                <div class="info">
-                    <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
-                </div>
-                <div class="adicional">
-                    <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
+                    <div class="produto" id="produto-nome">${produtoInput}</div>
                     <div class="info">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span id="data-emitida">Data emitida: ${dataInput}</span>
+                        <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
                     </div>
-                </div>
-            `;
+                    <div class="adicional">
+                        <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
+                        <div class="info">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span id="data-emitida">Data emitida: ${dataInput}</span>
+                        </div>
+                    </div>
+                `;
             planilhaContainer.appendChild(novaPlanilha);
         }
 
@@ -779,23 +845,23 @@
                         const novaPlanilha = document.createElement('div');
                         novaPlanilha.classList.add('planilha');
                         novaPlanilha.innerHTML = `
-                            <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                            <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
+                                <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                                <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
 
-                            <div class="produto" id="produto-nome">${item.Produto}</div>
+                                <div class="produto" id="produto-nome">${item.Produto}</div>
 
-                            <div class="info">
-                                <span class="preco">R$ ${precoTotal.toFixed(2).replace(/\./g, ',')}</span>
-                            </div>
-
-                            <div class="adicional">
-                                <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2)}</span>
                                 <div class="info">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    <span id="data-emitida">Data emitida: ${formattedDate}</span>
+                                    <span class="preco">R$ ${precoTotal.toFixed(2).replace(/\./g, ',')}</span>
                                 </div>
-                            </div>
-                        `;
+
+                                <div class="adicional">
+                                    <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2)}</span>
+                                    <div class="info">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span id="data-emitida">Data emitida: ${formattedDate}</span>
+                                    </div>
+                                </div>
+                            `;
 
                         planilhaContainer.appendChild(novaPlanilha);
                     });
@@ -815,7 +881,7 @@
 
 
         function limparPrecos() {
-        
+
             resultadosComPreco.forEach(item => {
                 axios({
                     method: "PATCH",
@@ -838,7 +904,7 @@
             });
 
             // Recarregar dados após limpar os preços
-       
+
         }
 
 
@@ -884,7 +950,7 @@
 
         // Simula o carregamento dos dados
         function carregarDadoss() {
-          
+
             var loader = document.querySelector('.loader');
             var interval = setInterval(function () {
                 alternarMensagem(); // Alterna as mensagens
@@ -892,15 +958,17 @@
 
             setTimeout(function () {
                 clearInterval(interval);
-                document.getElementById('popup').style.display = 'none'; // Esconde o popup ao completar o carregamento
+                document.getElementById('popupcordeiro').style.display = 'none'; // Esconde o popup ao completar o carregamento
             }, 6000); // Tempo total do carregamento simulado (10 segundos)
         }
 
         // Mostra o popup ao carregar a página
         document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('popup').style.display = 'flex'; // Exibe o popup ao iniciar
+            document.getElementById('popupcordeiro').style.display = 'flex'; // Exibe o popup ao iniciar
             carregarDadoss(); // Inicia o carregamento dos dados
         });
+
+
 
     </script>
 </body>
