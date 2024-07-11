@@ -10,89 +10,7 @@
             font-family: Arial, sans-serif;
             background-color: #f0f8ff;
             margin: 0;
-            padding: 0;
-            display: flex;
         }
-
-        .menus {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 210px;
-            height: 100%;
-            background-color: #007bff;
-            padding: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            color: white;
-            overflow-y: auto;
-        }
-
-            .menus img {
-                width: 80px;
-                height: 80px;
-                border-radius: 50%;
-                display: block;
-                margin: 0 auto 20px auto;
-            }
-
-        .form-group {
-            display: flex;
-            align-items: center;
-            margin-right: 30px;
-            margin-bottom: 5px;
-            margin-left: 10px;
-        }
-
-            .form-group i {
-                color: white;
-                margin-right: 10px;
-                margin-left: 10px;
-            }
-
-            .form-group input, .form-group .range-input {
-                width: calc(100% - 30px);
-                padding: 10px;
-                border-radius: 10px;
-                border: 1px solid #ccc; /* Alterado para cinza (#ccc) */
-                transition: all 0.3s ease;
-            }
-
-                .form-group input:focus, .form-group .range-input:focus {
-                    border-color: #0056b3;
-                    box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
-                    outline: none;
-                }
-
-            .form-group .range-input {
-                padding: 0;
-            }
-
-            .form-group button {
-                width: 100%;
-                padding: 10px;
-                border-radius: 10px;
-                background-color: white;
-                color: #007bff;
-                border: none;
-                cursor: pointer;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-top: 4px;
-            }
-
-                .form-group button i {
-                    margin-right: 5px;
-                    color: #007bff;
-                }
-
-                .form-group button:hover {
-                    background-color: #f0f8ff;
-                }
-
-                .form-group button:active {
-                    background-color: #d0e0ff;
-                }
 
         .planilha {
             position: relative;
@@ -104,7 +22,7 @@
             text-align: center;
             margin-top: 20px;
             width: 350px;
-            margin-left : 2px; /* Adicione esta linha para mover para a direita */
+            margin-left :-20px; /* Adicione esta linha para mover para a direita */
         }
 
 
@@ -487,9 +405,12 @@
                 display: none !important;
             }
             body {
-                align-items: center;
-                justify-content: center; /* Centraliza para impressão */
-                margin-right: 210px;
+                margin: 0;
+                font-family: Arial, sans-serif;
+                display: flex;
+                align-items: flex-start; /* Alinha os itens ao topo */
+                justify-content: center; /* Centraliza horizontalmente */
+                height: 100vh; /* Altura total da viewport */
             }
 
 
@@ -504,11 +425,120 @@
                 margin: 0; /* Remove as margens padrão */
             }
         }
+        .menus {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #007bff;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            color: white;
+            overflow-y: auto;
+        }
+            .menus.menu-escondido {
+                transform: translateX(-250px); /* Esconde o menu movendo para a esquerda */
+            }
 
+            .menus img {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                display: block;
+                margin: 0 auto 20px auto;
+            }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+            .form-group i {
+                position: absolute;
+                left: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: white;
+                font-size: 18px;
+            }
+        ::placeholder {
+            color: #f0f8ff; /* Cor desejada para o placeholder */
+        }
+            .form-group input[type="text"],
+            .form-group input[type="number"],
+            .form-group input[type="range"],
+            .form-group button {
+                width: calc(70% - 30px);
+                padding: 10px;
+                padding-left: 40px;
+                border: none;
+                border-radius: 25px;
+                font-size: 16px;
+                outline: none;
+                background-color: rgba(255, 255, 255, 0.2);
+                color: white;
+                transition: background-color 0.3s ease;
+            }
+
+                .form-group input[type="text"]:focus,
+                .form-group input[type="number"]:focus,
+                .form-group input[type="range"]:focus,
+                .form-group button:focus {
+                    background-color: rgba(255, 255, 255, 0.3);
+                }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+            .radio-label input[type="radio"] {
+                margin-right: 10px;
+            }
+
+        .radio-icon {
+            margin-left: auto;
+            font-size: 20px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+            .checkbox-label input[type="checkbox"] {
+                margin-right: 10px;
+            }
+
+            .checkbox-label i {
+                font-size: 20px;
+                margin-right: 5px;
+            }
+
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+            .form-group button:hover {
+                background-color: rgba(255, 255, 255, 0.3);
+            }
     </style>
 </head>
 <body>
-    <div class="menus">
+    <div class="menus" id="menus">
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZEHGRJCwmfsKXT_FkmaldF_BC9m9XTLD89Q&s" alt="Logo">
 
         <div class="form-group">
@@ -521,14 +551,11 @@
         </div>
         <div class="form-group">
             <i class="fas fa-dollar-sign"></i>
-
             <input type="number" id="precos" value="0.0" step="0.01" min="0.01">
         </div>
         <div class="form-group">
             <i class="fas fa-search"></i>
-
             <input type="text" id="codigo-input" placeholder="Procurar Produto (Nome / Codigo de Barras )" oninput="preencherProduto()">
-
         </div>
         <div class="form-group">
             <i class="fas fa-tint"></i>
@@ -550,11 +577,9 @@
             Fardo de 12uni
             <span class="radio-icon">📦</span>
         </label>
-        <div>
-            <label for="logo-checkbox">
-                <i class="fas fa-image"></i> <!-- Ícone do FontAwesome para imagem -->
-            </label>
-            <label for="logo-checkbox">Com Logo  </label>
+        <div class="checkbox-label">
+            <i class="fas fa-image"></i>
+            <label for="logo-checkbox">Com Logo</label>
             <input type="checkbox" id="logo-checkbox">
         </div>
         <div class="form-group">
@@ -565,12 +590,10 @@
         </div>
         <div class="form-group">
             <button type="button" id="btnBuscar" onclick="carregarDados()"><i class="fas fa-database"></i> Buscar</button>
-
         </div>
         <div class="form-group">
             <button type="button" id="btnAdicionar"><i class="fas fa-plus"></i> Adicionar</button>
         </div>
-
     </div>
 
     <div class="content">
@@ -764,22 +787,22 @@
 
             novaPlanilha.classList.add('planilha');
             novaPlanilha.innerHTML = `
-                    <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                    <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
-                    <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
+                        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                        <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+                        <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
 
-                    <div class="produto" id="produto-nome">${produtoInput}</div>
-                    <div class="info">
-                        <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
-                    </div>
-                    <div class="adicional">
-                        <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
+                        <div class="produto" id="produto-nome">${produtoInput}</div>
                         <div class="info">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span id="data-emitida">Data emitida: ${dataInput}</span>
+                            <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
                         </div>
-                    </div>
-                `;
+                        <div class="adicional">
+                            <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
+                            <div class="info">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span id="data-emitida">Data emitida: ${dataInput}</span>
+                            </div>
+                        </div>
+                    `;
             planilhaContainer.appendChild(novaPlanilha);
         }
 
@@ -791,11 +814,21 @@
         });
 
         function imprimirTabelas() {
+           
+            
+            document.getElementById('planilhas').style.marginLeft = '-200px';
+
             window.print();
+
+            setTimeout(() => {
+                // Após a impressão ou cancelamento, restaura o menu
+           
+                document.getElementById('planilhas').style.marginLeft = '-10px';
+            }, 300);
 
         }
 
-
+        
 
         document.addEventListener('DOMContentLoaded', function () {
             const today = new Date();
@@ -804,6 +837,15 @@
             const year = today.getFullYear();
             const formattedDate = `${day}/${month}/${year}`;
             dataInput.value = formattedDate;
+            setTimeout(function () {
+                const today = new Date();
+                const day = today.getDate().toString().padStart(2, '0');
+                const month = (today.getMonth() + 1).toString().padStart(2, '0');
+                const year = today.getFullYear();
+                const formattedDate = `${day}/${month}/${year}`;
+                dataInput.value = formattedDate;
+                alert("Data carregou?");
+            }, 200);
         });
         function excluirTabela(element) {
             const planilha = element.closest('.planilha');
@@ -812,6 +854,7 @@
             }
         }
         function carregarDados() {
+
             axios({
                 method: "GET",
                 url: "https://api.baserow.io/api/database/rows/table/316133/?user_field_names=true",
@@ -845,23 +888,23 @@
                         const novaPlanilha = document.createElement('div');
                         novaPlanilha.classList.add('planilha');
                         novaPlanilha.innerHTML = `
-                                <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                                <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
+                                    <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                                    <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
 
-                                <div class="produto" id="produto-nome">${item.Produto}</div>
+                                    <div class="produto" id="produto-nome">${item.Produto}</div>
 
-                                <div class="info">
-                                    <span class="preco">R$ ${precoTotal.toFixed(2).replace(/\./g, ',')}</span>
-                                </div>
-
-                                <div class="adicional">
-                                    <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2)}</span>
                                     <div class="info">
-                                        <i class="fas fa-calendar-alt"></i>
-                                        <span id="data-emitida">Data emitida: ${formattedDate}</span>
+                                        <span class="preco">R$ ${precoTotal.toFixed(2).replace(/\./g, ',')}</span>
                                     </div>
-                                </div>
-                            `;
+
+                                    <div class="adicional">
+                                        <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2)}</span>
+                                        <div class="info">
+                                            <i class="fas fa-calendar-alt"></i>
+                                            <span id="data-emitida">Data emitida: ${formattedDate}</span>
+                                        </div>
+                                    </div>
+                                `;
 
                         planilhaContainer.appendChild(novaPlanilha);
                     });
@@ -958,6 +1001,7 @@
 
             setTimeout(function () {
                 clearInterval(interval);
+
                 document.getElementById('popupcordeiro').style.display = 'none'; // Esconde o popup ao completar o carregamento
             }, 6000); // Tempo total do carregamento simulado (10 segundos)
         }
@@ -966,6 +1010,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('popupcordeiro').style.display = 'flex'; // Exibe o popup ao iniciar
             carregarDadoss(); // Inicia o carregamento dos dados
+
         });
 
 
