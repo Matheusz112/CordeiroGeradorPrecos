@@ -649,27 +649,18 @@
         });
 
         const produtos = {
-
-
+            //=================================CERVEJAS===========================================
             '0000078936683': 'CERVE HEINEKEN LN 6X330ml',
             '7891991015462': 'CERVE STELLA ARTOIS LN 6X330ml',
             '7501064113086': 'CERVE LANGER CORONA LN 6X330ml',
             '7891991298421': 'CERVE LANGER BUDWEISER LN 6X330ml',
             '7896045506040': 'CERVE HEINEKEN ZERO ÁLCOOL LN 6X330ml',
-            '7891991297493 ': 'CERVE SPATEM LN 6X355ml',
-            '7891149104932 ': 'CERVE BRAHMA ZERO ÁLCOOL 12X350ml',
-            '7896045506064 ': 'CERVE HEINEKEN  ZERO ÁLCOOL 12X350ml',
-            '7896051111016': 'LEITE ITAMBÊ INTEGRAL 12X1L',
-            '7896051111702': 'LEITE ITAMBÊ DESNATADO 12X1L',
-            '7896051111528': 'LEITE ITAMBÊ SEMIDESNATADO 12X1L',
-            '7896122305207': 'LEITE PORTO ALEGRE INTEGRAL 12X1L',
-            '7896183202187': 'LEITE QUATA INTEGRAL 12X1L',
-
+            '7891991297493': 'CERVE SPATEM LN 6X355ml',
+            '7891149104932': 'CERVE BRAHMA ZERO ÁLCOOL 12X350ml',
+            '7896045506064': 'CERVE HEINEKEN ZERO ÁLCOOL 12X350ml',
             '7898367983356': 'CERVEJA EISENBAHN 12X473ml',
-            '7896036090855': 'Óleo de Soja Veleiro 6X900ml',
-            '7896036090244': 'Óleo de Soja Liza 6X900ml',
             '7896045505340': 'CERVEJA AMSTEL 12X473ml',
-            '7896045506248': 'CERVEJA  HEINEKEN 12X473ml',
+            '7896045506248': 'CERVEJA HEINEKEN 12X473ml',
             '7896045503414': 'CERVEJA KAISER 12X473ml',
             '7891991009164': 'CERVEJA ANTARTICA 12X473ml',
             '7891991009222': 'CERVEJA ANTARTICA ORIGINAL 12X473ml',
@@ -678,17 +669,28 @@
             '7891991014236': 'CERVEJA BOHEMIA 473ml',
             '7891991303217': 'CERVEJA SPATEM 473ml',
             '07891991010153': 'CERVEJA ANTARTICA SUB ZERO 473ml',
+
+
+            //=================================LEITES===========================================
+            '7896051111016': 'LEITE ITAMBÊ INTEGRAL 12X1L',
+            '7896051111702': 'LEITE ITAMBÊ DESNATADO 12X1L',
+            '7896051111528': 'LEITE ITAMBÊ SEMIDESNATADO 12X1L',
+            '7896122305207': 'LEITE PORTO ALEGRE INTEGRAL 12X1L',
+            '7896183202187': 'LEITE QUATA INTEGRAL 12X1L',
             '7898215151708': 'LEITE PIRACANJUBA INTEGRAL 12X1L',
-            '7896447500462': 'ÁGUA  IGARAPÉ SEM GÁS 12X500ml',
+            //=================================AGUAS ===========================================
+            '7896447500462': 'ÁGUA IGARAPÉ SEM GÁS 12X500ml',
             '7896447500363': 'ÁGUA IGARAPÉ COM GÁS 12X500ml',
+             //=================================REFRIGERANTE ===========================================
             '0000078908901': 'REF COCA COLA MINI PET 12X200ml',
             '7800660636419': 'REF SUKITA LARANJA PET 12X200ml',
             '07891991014984': 'REF SODA LIMONADA PET 12X200ml',
-            '7891991014908': 'REF  GUARANÁ ANTARTICA PET 12X200ml',
-            '7891991016124': 'REF  GUARANÁ ZERO PET 12X200ml',
-            '7892840800567': 'REF PEPSI PET 12X200ml'
-
-
+            '7891991014908': 'REF GUARANÁ ANTARTICA PET 12X200ml',
+            '7891991016124': 'REF GUARANÁ ZERO PET 12X200ml',
+            '7892840800567': 'REF PEPSI PET 12X200ml',
+            //=================================oleos ===========================================
+            '7896036090855': 'ÓLEO DE SOJA VELEIRO 6X900ml',
+            '7896036090244': 'ÓLEO DE SOJA LIZA 6X900ml'
         };
 
 
@@ -857,14 +859,14 @@
 
             axios({
                 method: "GET",
-                url: "https://api.baserow.io/api/database/rows/table/316133/?user_field_names=true",
+                url: "https://api.baserow.io/api/database/rows/table/322640/?user_field_names=true",
                 headers: {
                     Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd"
                 }
             })
                 .then(response => {
                     const dados = response.data.results;
-                    resultadosComPreco = dados.filter(item => item.Preço !== "");
+                    resultadosComPreco = dados.filter(item => item.PREÇO !== "");
 
                     const planilhaContainer = document.getElementById('planilhas');
                     const today = new Date();
@@ -877,11 +879,11 @@
                     let somaTotal = 0;
 
                     resultadosComPreco.forEach(item => {
-                        const precoTotal = item.Preço * item.quantidade;
+                        const precoTotal = item.PREÇO * item.QUANTIDADE;
                         somaTotal += precoTotal;
 
-                        let prelitro = item.Preço / item.ML * 1000;
-                        if (item.Produto.toLowerCase().includes('leite')) {
+                        let prelitro = item.PREÇO / item.ML * 1000;
+                        if (item.PRODUTO.toLowerCase().includes('leite')) {
                             prelitro /= 1000; // Divide por 1000 para obter o valor desejado
                         }
 
@@ -891,14 +893,14 @@
                                     <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
                                     <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
 
-                                    <div class="produto" id="produto-nome">${item.Produto}</div>
+                                    <div class="produto" id="produto-nome">${item.PRODUTO}</div>
 
                                     <div class="info">
                                         <span class="preco">R$ ${precoTotal.toFixed(2).replace(/\./g, ',')}</span>
                                     </div>
 
                                     <div class="adicional">
-                                        <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2)}</span>
+                                        <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2).replace('.', ',') }</span>
                                         <div class="info">
                                             <i class="fas fa-calendar-alt"></i>
                                             <span id="data-emitida">Data emitida: ${formattedDate}</span>
@@ -928,7 +930,7 @@
             resultadosComPreco.forEach(item => {
                 axios({
                     method: "PATCH",
-                    url: `https://api.baserow.io/api/database/rows/table/316133/${item.id}/?user_field_names=true`,
+                    url: `https://api.baserow.io/api/database/rows/table/316133/${item.ID}/?user_field_names=true`,
                     headers: {
                         Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd",
                         "Content-Type": "application/json"
@@ -938,11 +940,11 @@
                     }
                 })
                     .then(response => {
-                        console.log(`Preço do produto ${item.Produto} limpo com sucesso`);
+                        console.log(`Preço do produto ${item.PRODUTO} limpo com sucesso`);
                         alert("Banco de dados limpo com sucesso!")
                     })
                     .catch(error => {
-                        console.error(`Erro ao limpar preço do produto ${item.Produto}:`, error);
+                        console.error(`Erro ao limpar preço do produto ${item.PRODUTO}:`, error);
                     });
             });
 
