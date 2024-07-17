@@ -468,9 +468,9 @@
             .form-group input[type="number"],
             .form-group input[type="range"],
             .form-group button {
-                width: calc(70% - 30px);
+                width: calc(90% - 30px);
                 padding: 10px;
-                padding-left: 40px;
+                padding-left: -10px;
                 border: none;
                 border-radius: 25px;
                 font-size: 16px;
@@ -650,26 +650,28 @@
 
         const produtos = {
             //=================================CERVEJAS===========================================
-            '0000078936683': 'CERVE HEINEKEN LN 6X330ml',
-            '7891991015462': 'CERVE STELLA ARTOIS LN 6X330ml',
-            '7501064113086': 'CERVE LANGER CORONA LN 6X330ml',
-            '7891991298421': 'CERVE LANGER BUDWEISER LN 6X330ml',
-            '7896045506040': 'CERVE HEINEKEN ZERO ÁLCOOL LN 6X330ml',
-            '7891991297493': 'CERVE SPATEM LN 6X355ml',
-            '7891149104932': 'CERVE BRAHMA ZERO ÁLCOOL 12X350ml',
-            '7896045506064': 'CERVE HEINEKEN ZERO ÁLCOOL 12X350ml',
+            '0000078936683': 'CERV LANGER HEINEKEN LN 6X330ml',
+            '7891991015462': 'CERV STELLA ARTOIS LN 6X330ml',
+            '7501064113086': 'CERV LANGER CORONA LN 6X330ml',
+            '7891991298421': 'CERV LANGER BUDWEISER LN 6X330ml',
+            '7896045506040': 'CERV HEINEKEN ZERO ALC LN 6X330ml',
+            '7891991297493': 'CERV SPATEM LN 6X355ml',
+            '7891149104932': 'CERV BRAHMA ZERO ÁLCOOL 12X350ml',
+            '7896045506064': 'CERV HEINEKEN ZERO ÁLCOOL 12X350ml',
             '7898367983356': 'CERVEJA EISENBAHN 12X473ml',
-            '7896045505340': 'CERVEJA AMSTEL 12X473ml',
+            '7896045505340': 'CERVEJA LANGER AMSTEL 12X473ml',
             '7896045506248': 'CERVEJA HEINEKEN 12X473ml',
             '7896045503414': 'CERVEJA KAISER 12X473ml',
             '7891991009164': 'CERVEJA ANTARTICA 12X473ml',
             '7891991009222': 'CERVEJA ANTARTICA ORIGINAL 12X473ml',
             '7891149011001': 'CERVEJA BRAHMA 12X473ml',
             '7891991303323': 'CERVEJA STELLA ARTOIS 12X473ml',
-            '7891991014236': 'CERVEJA BOHEMIA 473ml',
-            '7891991303217': 'CERVEJA SPATEM 473ml',
+            '7891991014236': 'CERVEJA BOHEMIA 12X473ml',
+            '7891991303217': 'CERVEJA SPATEM 12X473ml',
+            '7891991011730': 'CERV PILSEN BUDWEISER 12X473ml',
             '07891991010153': 'CERVEJA ANTARTICA SUB ZERO 473ml',
-
+            '7891149040308': 'CERV MALZBIER BRAHMA 6X355ml',
+            '7898915949681': 'CERV PILSEN IMPERIO 12X473ml',
 
             //=================================LEITES===========================================
             '7896051111016': 'LEITE ITAMBÊ INTEGRAL 12X1L',
@@ -964,17 +966,7 @@
                 produtoNome.innerText = novoProdutoNome;
             }
 
-            const novoPreco = prompt('Editar Preço:', preco.innerText.replace('R$ ', '').replace(',', '.'));
-            if (novoPreco !== null && !isNaN(novoPreco)) {
-                const novoTotal = parseFloat(novoPreco).toFixed(2).replace('.', ',');
-                preco.innerText = `R$ ${novoTotal}`;
-
-                const precoLitro = prompt('Editar Preço por Litro:', precoPorLitro.innerText.split(' ')[4].replace(',', '.'));
-                if (precoLitro !== null && !isNaN(precoLitro)) {
-                    const novoPrecoPorLitro = (parseFloat(novoPreco) / parseFloat(precoLitro) * 1000).toFixed(2).replace('.', ',');
-                    precoPorLitro.innerText = `1 LITRO SAI POR R$ ${novoPrecoPorLitro}`;
-                }
-            }
+ 
         }
         // Mensagens alternadas de carregamento
         var messages = [
@@ -982,7 +974,6 @@
             "Por favor, aguarde um momento...",
             "Preparando o site para você...",
             "Carregando recursos...",
-            "Quase lá...",
             "Finalizando carregamento..."
         ];
         var messageIndex = 0;
@@ -1005,7 +996,7 @@
                 clearInterval(interval);
 
                 document.getElementById('popupcordeiro').style.display = 'none'; // Esconde o popup ao completar o carregamento
-            }, 6000); // Tempo total do carregamento simulado (10 segundos)
+            }, 5000); // Tempo total do carregamento simulado (10 segundos)
         }
 
         // Mostra o popup ao carregar a página
