@@ -22,7 +22,9 @@
             text-align: center;
             margin-top: 20px;
             width: 350px;
-            margin-left :-20px; /* Adicione esta linha para mover para a direita */
+            margin-left: -20px; /* Adicione esta linha para mover para a direita */
+            user-select: none;
+        
         }
 
 
@@ -435,7 +437,49 @@
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             color: white;
             overflow-y: auto;
+            user-select: none;
         }
+        html, body {
+            /* Custom scrollbar styles */
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: linear-gradient(180deg, #007bff, #ffdf00) #f1f1f1; /* Firefox */
+        }
+
+            html::-webkit-scrollbar, body::-webkit-scrollbar {
+                width: 8px; /* Width of the scrollbar */
+            }
+
+            html::-webkit-scrollbar-track, body::-webkit-scrollbar-track {
+                background: #007bff; /* Track color */
+                border-radius: 10px;
+            }
+
+            html::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb {
+                background: linear-gradient(180deg, #007bff, #ffdf00); /* Gradient from blue to yellow */
+                border-radius: 10px;
+            }
+
+                html::-webkit-scrollbar-thumb:hover, body::-webkit-scrollbar-thumb:hover {
+                    background: linear-gradient(180deg, #0056b3, #ffc107); /* Darker gradient on hover */
+                }
+
+            .menus::-webkit-scrollbar {
+                width: 8px; /* Width of the scrollbar */
+            }
+
+            .menus::-webkit-scrollbar-track {
+                background: #007bff; /* Track color */
+                border-radius: 10px;
+            }
+
+            .menus::-webkit-scrollbar-thumb {
+                background: linear-gradient(180deg, #007bff, #ffdf00); /* Gradient from blue to yellow */
+                border-radius: 10px;
+            }
+
+                .menus::-webkit-scrollbar-thumb:hover {
+                    background: linear-gradient(180deg, #0056b3, #ffc107); /* Darker gradient on hover */
+                }
             .menus.menu-escondido {
                 transform: translateX(-250px); /* Esconde o menu movendo para a esquerda */
             }
@@ -464,9 +508,21 @@
         ::placeholder {
             color: #f0f8ff; /* Cor desejada para o placeholder */
         }
+
+        .range-input {
+            width: calc(90% - 30px);
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            background: linear-gradient(to right, #ffc107, rgba(255, 255, 255, 0.2));
+            transition: background 0.3s ease;
+        }
+
+
             .form-group input[type="text"],
             .form-group input[type="number"],
-            .form-group input[type="range"],
+        
             .form-group button {
                 width: calc(90% - 30px);
                 padding: 10px;
@@ -482,7 +538,7 @@
 
                 .form-group input[type="text"]:focus,
                 .form-group input[type="number"]:focus,
-                .form-group input[type="range"]:focus,
+             
                 .form-group button:focus {
                     background-color: rgba(255, 255, 255, 0.3);
                 }
@@ -492,6 +548,7 @@
             align-items: center;
             color: white;
             margin-bottom: 10px;
+            font-size: 14px;
         }
 
             .radio-label input[type="radio"] {
@@ -508,29 +565,57 @@
             align-items: center;
             color: white;
             margin-bottom: 10px;
+            margin-left: 40px;
         }
 
             .checkbox-label input[type="checkbox"] {
                 margin-right: 10px;
+                border-radius: 50%;
+                margin-left: 10px;
+         
+            
+             
+                outline: none; /* Remove a borda ao focar */
+                width: 20px; /* Define a largura */
+                height: 20px; /* Define a altura */
+                border: 2px solid #ccc; /* Adiciona uma borda para melhorar a visibilidade */
+            }
+                .checkbox-label input[type="checkbox"]:checked {
+                    background-color: #ffdf00; /* Cor de fundo quando marcado */
+                    border-color: #4CAF50; /* Cor da borda quando marcado */
+                    display: inline-block; /* Exibe o ícone quando o checkbox está marcado */
+                    animation: check-animation 0.3s ease forwards;
+                }
+        @keyframes check-animation {
+            0% {
+                transform: scale(0); /* Começa invisível */
             }
 
+            50% {
+                transform: scale(1.2); /* Cresce um pouco */
+            }
+
+            100% {
+                transform: scale(1); /* Retorna ao tamanho normal */
+            }
+        }
             .checkbox-label i {
                 font-size: 20px;
                 margin-right: 5px;
             }
 
-        .form-group button {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 25px;
-            font-size: 16px;
-            outline: none;
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-            transition: background-color 0.3s ease;
-            cursor: pointer;
-        }
+            .form-group button {
+                width: 100%;
+                padding: 10px;
+                border: none;
+                border-radius: 25px;
+                font-size: 16px;
+                outline: none;
+                background-color: rgba(255, 255, 255, 0.2);
+                color: white;
+                transition: background-color 0.3s ease;
+                cursor: pointer;
+            }
 
             .form-group button:hover {
                 background-color: rgba(255, 255, 255, 0.3);
@@ -555,7 +640,7 @@
         </div>
         <div class="form-group">
             <i class="fas fa-search"></i>
-            <input type="text" id="codigo-input" placeholder="Procurar Produto (Nome / Codigo de Barras )" oninput="preencherProduto()">
+            <input type="text" id="codigo-input" placeholder="Procurar Produto" oninput="preencherProduto()">
         </div>
         <div class="form-group">
             <i class="fas fa-tint"></i>
@@ -563,7 +648,7 @@
         </div>
         <div class="form-group">
             <i class="fas fa-arrows-alt-h"></i>
-            <input type="range" id="tamanho-slider" min="200" max="800" class="range-input" oninput="ajustarLargura(this.value)">
+            <input type="range" id="tamanho-slider" min="100" max="520" class="range-input" oninput="ajustarLargura(this.value)">
         </div>
         <label class="radio-label">
             <input type="radio" name="opcao" value="6">
@@ -586,7 +671,7 @@
             <button type="button" id="btnImprimir"><i class="fas fa-print"></i> Imprimir</button>
         </div>
         <div class="form-group">
-            <button type="button" id="btnExcluir"><i class="fas fa-trash-alt"></i> Excluir</button>
+            <button type="button" id="btnExcluir" onclick="limparPrecos()"><i class="fas fa-trash-alt"></i> Excluir</button> 
         </div>
         <div class="form-group">
             <button type="button" id="btnBuscar" onclick="carregarDados()"><i class="fas fa-database"></i> Buscar</button>
@@ -928,7 +1013,6 @@
 
 
         function limparPrecos() {
-
             resultadosComPreco.forEach(item => {
                 axios({
                     method: "PATCH",
@@ -938,20 +1022,21 @@
                         "Content-Type": "application/json"
                     },
                     data: {
-                        "Preço": ""
+                        "PREÇO ": ""
                     }
                 })
                     .then(response => {
-                        console.log(`Preço do produto ${item.PRODUTO} limpo com sucesso`);
-                        alert("Banco de dados limpo com sucesso!")
+                       
+                        document.getElementById('popup').style.display = 'flex';
+                        setTimeout(minhaAcao, 7000);
+                       
+                      
+                        // Aqui você pode adicionar lógica adicional após a atualização bem-sucedida
                     })
                     .catch(error => {
                         console.error(`Erro ao limpar preço do produto ${item.PRODUTO}:`, error);
                     });
             });
-
-            // Recarregar dados após limpar os preços
-
         }
 
 
@@ -974,6 +1059,7 @@
             "Por favor, aguarde um momento...",
             "Preparando o site para você...",
             "Carregando recursos...",
+            "Quase lá...",
             "Finalizando carregamento..."
         ];
         var messageIndex = 0;
@@ -996,7 +1082,11 @@
                 clearInterval(interval);
 
                 document.getElementById('popupcordeiro').style.display = 'none'; // Esconde o popup ao completar o carregamento
-            }, 5000); // Tempo total do carregamento simulado (10 segundos)
+            }, 6000); // Tempo total do carregamento simulado (10 segundos)
+        }
+
+        function minhaAcao() {
+            document.getElementById('popup').style.display = 'none'; 
         }
 
         // Mostra o popup ao carregar a página
