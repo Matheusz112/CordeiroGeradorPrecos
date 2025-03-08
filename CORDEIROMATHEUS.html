@@ -23,8 +23,6 @@
             margin-top: 20px;
             width: 350px;
             margin-left: -20px; /* Adicione esta linha para mover para a direita */
-            user-select: none;
-        
         }
 
 
@@ -71,6 +69,7 @@
             padding: 20px;
             flex: 1;
         }
+
         .checkbox-container {
             display: flex;
             align-items: center;
@@ -327,6 +326,7 @@
                 transform: rotate(360deg);
             }
         }
+
         .delete-icon {
             position: absolute;
             top: 10px;
@@ -344,6 +344,7 @@
             color: darkseagreen;
             cursor: pointer;
         }
+
         .radio-label {
             display: flex;
             align-items: center;
@@ -388,6 +389,7 @@
             font-size: 1.2em;
             color: #3498db;
         }
+
         @media print {
 
 
@@ -403,9 +405,10 @@
                 display: none !important;
             }
 
-            .menus{
+            .menus {
                 display: none !important;
             }
+
             body {
                 margin: 0;
                 font-family: Arial, sans-serif;
@@ -427,6 +430,7 @@
                 margin: 0; /* Remove as margens padrão */
             }
         }
+
         .menus {
             position: fixed;
             top: 0;
@@ -439,6 +443,7 @@
             overflow-y: auto;
             user-select: none;
         }
+
         html, body {
             /* Custom scrollbar styles */
             scrollbar-width: thin; /* Firefox */
@@ -463,34 +468,35 @@
                     background: linear-gradient(180deg, #0056b3, #ffc107); /* Darker gradient on hover */
                 }
 
-            .menus::-webkit-scrollbar {
-                width: 8px; /* Width of the scrollbar */
+        .menus::-webkit-scrollbar {
+            width: 8px; /* Width of the scrollbar */
+        }
+
+        .menus::-webkit-scrollbar-track {
+            background: #007bff; /* Track color */
+            border-radius: 10px;
+        }
+
+        .menus::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #007bff, #ffdf00); /* Gradient from blue to yellow */
+            border-radius: 10px;
+        }
+
+            .menus::-webkit-scrollbar-thumb:hover {
+                background: linear-gradient(180deg, #0056b3, #ffc107); /* Darker gradient on hover */
             }
 
-            .menus::-webkit-scrollbar-track {
-                background: #007bff; /* Track color */
-                border-radius: 10px;
-            }
+        .menus.menu-escondido {
+            transform: translateX(-250px); /* Esconde o menu movendo para a esquerda */
+        }
 
-            .menus::-webkit-scrollbar-thumb {
-                background: linear-gradient(180deg, #007bff, #ffdf00); /* Gradient from blue to yellow */
-                border-radius: 10px;
-            }
-
-                .menus::-webkit-scrollbar-thumb:hover {
-                    background: linear-gradient(180deg, #0056b3, #ffc107); /* Darker gradient on hover */
-                }
-            .menus.menu-escondido {
-                transform: translateX(-250px); /* Esconde o menu movendo para a esquerda */
-            }
-
-            .menus img {
-                width: 80px;
-                height: 80px;
-                border-radius: 50%;
-                display: block;
-                margin: 0 auto 20px auto;
-            }
+        .menus img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px auto;
+        }
 
         .form-group {
             position: relative;
@@ -505,6 +511,7 @@
                 color: white;
                 font-size: 18px;
             }
+
         ::placeholder {
             color: #f0f8ff; /* Cor desejada para o placeholder */
         }
@@ -520,28 +527,26 @@
         }
 
 
-            .form-group input[type="text"],
-            .form-group input[type="number"],
-        
-            .form-group button {
-                width: calc(90% - 30px);
-                padding: 10px;
-                padding-left: -10px;
-                border: none;
-                border-radius: 25px;
-                font-size: 16px;
-                outline: none;
-                background-color: rgba(255, 255, 255, 0.2);
-                color: white;
-                transition: background-color 0.3s ease;
-            }
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group button {
+            width: calc(90% - 30px);
+            padding: 10px;
+            padding-left: -10px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            transition: background-color 0.3s ease;
+        }
 
-                .form-group input[type="text"]:focus,
-                .form-group input[type="number"]:focus,
-             
-                .form-group button:focus {
-                    background-color: rgba(255, 255, 255, 0.3);
-                }
+            .form-group input[type="text"]:focus,
+            .form-group input[type="number"]:focus,
+            .form-group button:focus {
+                background-color: rgba(255, 255, 255, 0.3);
+            }
 
         .radio-label {
             display: flex;
@@ -572,20 +577,19 @@
                 margin-right: 10px;
                 border-radius: 50%;
                 margin-left: 10px;
-         
-            
-             
                 outline: none; /* Remove a borda ao focar */
                 width: 20px; /* Define a largura */
                 height: 20px; /* Define a altura */
                 border: 2px solid #ccc; /* Adiciona uma borda para melhorar a visibilidade */
             }
+
                 .checkbox-label input[type="checkbox"]:checked {
                     background-color: #ffdf00; /* Cor de fundo quando marcado */
                     border-color: #4CAF50; /* Cor da borda quando marcado */
                     display: inline-block; /* Exibe o ícone quando o checkbox está marcado */
                     animation: check-animation 0.3s ease forwards;
                 }
+
         @keyframes check-animation {
             0% {
                 transform: scale(0); /* Começa invisível */
@@ -599,27 +603,218 @@
                 transform: scale(1); /* Retorna ao tamanho normal */
             }
         }
-            .checkbox-label i {
-                font-size: 20px;
-                margin-right: 5px;
-            }
 
-            .form-group button {
-                width: 100%;
-                padding: 10px;
-                border: none;
-                border-radius: 25px;
-                font-size: 16px;
-                outline: none;
-                background-color: rgba(255, 255, 255, 0.2);
-                color: white;
-                transition: background-color 0.3s ease;
-                cursor: pointer;
-            }
+        .checkbox-label i {
+            font-size: 20px;
+            margin-right: 5px;
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
 
             .form-group button:hover {
                 background-color: rgba(255, 255, 255, 0.3);
             }
+        .resize-handle {
+            width: 10px;
+            height: 100%;
+            background-color: #000;
+            position: absolute;
+            top: 0;
+            right: 0;
+            cursor: ew-resize;
+        }
+        .containerDeletados {
+            position: relative;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 400px;
+            text-align: center;
+            overflow: hidden;
+            max-height: 80vh;
+            border: 2px solid #ddd;
+            margin-top: 20px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        /* Animação de slide-in */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .containerDeletados h4 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        /* Estilo da lista de produtos deletados */
+        .containerDeletados ul {
+            list-style-type: none;
+            padding-left: 0;
+            font-size: 16px;
+            color: #555;
+            text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .containerDeletados li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: #444;
+        }
+
+            .containerDeletados li i {
+                margin-right: 10px;
+                color: #ff6347; /* Cor vibrante para os ícones */
+            }
+
+        .containerDeletados button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+            .containerDeletados button:hover {
+                background-color: #45a049;
+            }
+
+        /* Estilo do popup */
+        #mensagemSucesso {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        /* Ícones e estilo da ação de deletar */
+        .fa-trash {
+            color: red;
+        }
+
+
+
+
+        #popupDeletaPrecos {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #2980b9; /* Azul */
+            color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            width: 400px;
+            text-align: center;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+            #popupDeletaPrecos.show {
+                display: block;
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            #popupDeletaPrecos h3 {
+                font-size: 22px;
+                margin-bottom: 20px;
+                font-weight: 600;
+                color: #ecf0f1;
+            }
+
+            #popupDeletaPrecos ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+                font-size: 18px;
+                color: #ecf0f1;
+                text-align: left;
+            }
+
+                #popupDeletaPrecos ul li {
+                    background-color: #3498db; /* Azul mais claro */
+                    margin: 10px 0;
+                    padding: 10px;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    opacity: 1;
+                    transition: all 1s ease-out;
+                }
+
+                    #popupDeletaPrecos ul li.deleting {
+                        opacity: 0;
+                        transform: translateX(100%) rotate(30deg); /* Desliza para o lado e rotaciona */
+                        transition: all 1s ease-out;
+                    }
+
+                    #popupDeletaPrecos ul li i {
+                        margin-right: 12px;
+                        color: #e74c3c; /* Cor da lixeira */
+                        transition: all 1s ease-out;
+                    }
+
+        /* Animação suave para o popup */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%) scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        /* Estilo de lixeira para o ícone */
+        .fa-trash {
+            font-size: 20px;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .deleting i.fa-trash {
+            transform: scale(1.2) rotate(720deg);
+        }
     </style>
 </head>
 <body>
@@ -671,7 +866,8 @@
             <button type="button" id="btnImprimir"><i class="fas fa-print"></i> Imprimir</button>
         </div>
         <div class="form-group">
-            <button type="button" id="btnExcluir" onclick="limparPrecos()"><i class="fas fa-trash-alt"></i> Excluir</button> 
+            <button type="button" id="btnExcluir" onclick="limparPrecos()"><i class="fas fa-trash-alt"></i> Excluir</button>
+        
         </div>
         <div class="form-group">
             <button type="button" id="btnBuscar" onclick="carregarDados()"><i class="fas fa-database"></i> Buscar</button>
@@ -680,7 +876,7 @@
             <button type="button" id="btnAdicionar"><i class="fas fa-plus"></i> Adicionar</button>
         </div>
     </div>
-
+    <div id="containerDeletados"></div>
     <div class="content">
         <div id="planilhas">
             <div class="planilha" id="planilha">
@@ -689,6 +885,8 @@
                 <div class="info"><i class=""></i><span class="preco" id="preco">R$ 19,99</span></div>
                 <div class="adicional"><span id="preco-por-litro">1 LITRO SAI POR R$ 00,99</span></div>
                 <div class="info"><i class="fas fa-calendar-alt"></i><span id="data-emitida">Data emitida: DD/MM/AAAA</span></div>
+                <div class="resize-handle"></div> <!-- Este elemento vai ser usado para redimensionar -->
+
             </div>
         </div>
     </div>
@@ -707,7 +905,10 @@
         <h3>PRODUTOS SIMILARES</h3>
         <ul id="sugestoes"></ul>
     </div>
-
+    <div id="popupDeletaPrecos">
+        <h3>Alterações Realizadas</h3>
+        <ul id="produtosDeletados"></ul>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
@@ -747,8 +948,8 @@
             '7896045505340': 'CERVEJA LANGER AMSTEL 12X473ml',
             '7896045506248': 'CERVEJA HEINEKEN 12X473ml',
             '7896045503414': 'CERVEJA KAISER 12X473ml',
-            '7891991009164': 'CERVEJA ANTARTICA 12X473ml',
-            '7891991009222': 'CERVEJA ANTARTICA ORIGINAL 12X473ml',
+            '7891991009164': 'CERVEJA ANTARCTICA 12X473ml',
+            '7891991009222': 'CERVEJA ANTARCTICA ORIGINAL 12X473ml',
             '7891149011001': 'CERVEJA BRAHMA 12X473ml',
             '7891991303323': 'CERVEJA STELLA ARTOIS 12X473ml',
             '7891991014236': 'CERVEJA BOHEMIA 12X473ml',
@@ -768,7 +969,7 @@
             //=================================AGUAS ===========================================
             '7896447500462': 'ÁGUA IGARAPÉ SEM GÁS 12X500ml',
             '7896447500363': 'ÁGUA IGARAPÉ COM GÁS 12X500ml',
-             //=================================REFRIGERANTE ===========================================
+            //=================================REFRIGERANTE ===========================================
             '0000078908901': 'REF COCA COLA MINI PET 12X200ml',
             '7800660636419': 'REF SUKITA LARANJA PET 12X200ml',
             '07891991014984': 'REF SODA LIMONADA PET 12X200ml',
@@ -847,6 +1048,7 @@
             const radios = document.querySelectorAll('input[name="opcao"]');
             let valorSelecionado = 0;
 
+            // Verificar qual radio foi selecionado
             for (const radio of radios) {
                 if (radio.checked) {
                     valorSelecionado = parseFloat(radio.value);
@@ -857,7 +1059,7 @@
             const produtoInput = document.getElementById('produto-input').value || "Produto";
             const dataInput = document.getElementById('data-input').value || "DD/MM/AAAA";
             const precoInput = document.getElementById('precos').value;
-            const preco = parseFloat(precoInput.replace(',', '.')); // Convertendo vírgula para ponto, se necessário
+            const preco = parseFloat(precoInput.replace(',', '.')); // Convertendo vírgula para ponto
 
             const codigoInput = document.getElementById('codigo-input').value || "123456789012";
             const precoLitroInput = document.getElementById('preco-litro-input').value.replace(',', '.') || "00.99";
@@ -865,35 +1067,74 @@
 
             let soma = (preco / parseFloat(precoLitroInput)) * 1000;
 
+            // Ajuste para leite
             if (produtoInput.toLowerCase().includes('leite')) {
-                soma /= 1000; // Divide por 1000 para obter o valor desejado
+                soma /= 1000; // Divide por 1000 para obter o valor correto
             }
 
             const total = preco * valorSelecionado;
 
             const planilhaContainer = document.getElementById('planilhas');
-            const novaPlanilha = document.createElement('div');
 
+            // Verifique se o contêiner existe
+            if (!planilhaContainer) {
+                alert("O contêiner de planilhas não foi encontrado."); // Exibe um alerta
+                return;
+            }
+
+            // Criar nova planilha
+            const novaPlanilha = document.createElement('div');
             novaPlanilha.classList.add('planilha');
             novaPlanilha.innerHTML = `
-                        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                        <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
-                        <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
+                <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+                <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
 
-                        <div class="produto" id="produto-nome">${produtoInput}</div>
-                        <div class="info">
-                            <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
-                        </div>
-                        <div class="adicional">
-                            <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
-                            <div class="info">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span id="data-emitida">Data emitida: ${dataInput}</span>
-                            </div>
-                        </div>
-                    `;
+                <div class="produto" id="produto-nome">${produtoInput}</div>
+                <div class="info">
+                    <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
+                </div>
+                <div class="adicional">
+                    <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
+                    <div class="info">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span id="data-emitida">Data emitida: ${dataInput}</span>
+                    </div>
+                       <div class="resize-handle"></div> <!-- Este elemento vai ser usado para redimensionar -->
+                </div>
+            `;
+
             planilhaContainer.appendChild(novaPlanilha);
+
+            // Ativar redimensionamento
+            ativarRedimensionamento(novaPlanilha);
         }
+        function ativarRedimensionamento(planilha) {
+            let isResizing = false;
+            let startWidth, startX;
+
+            planilha.querySelector(".resize-handle").addEventListener("mousedown", (e) => {
+                isResizing = true;
+                startWidth = planilha.offsetWidth;
+                startX = e.clientX;
+                document.addEventListener("mousemove", resize);
+                document.addEventListener("mouseup", stopResize);
+            });
+
+            function resize(e) {
+                if (isResizing) {
+                    let newWidth = startWidth + (e.clientX - startX);
+                    planilha.style.width = `${Math.max(200, newWidth)}px`;
+                }
+            }
+
+            function stopResize() {
+                isResizing = false;
+                document.removeEventListener("mousemove", resize);
+                document.removeEventListener("mouseup", stopResize);
+            }
+        }
+
 
         tamanhoSlider.addEventListener('input', function () {
             const planilhas = document.querySelectorAll('.planilha');
@@ -903,21 +1144,21 @@
         });
 
         function imprimirTabelas() {
-           
-            
+
+
             document.getElementById('planilhas').style.marginLeft = '-200px';
 
             window.print();
 
             setTimeout(() => {
                 // Após a impressão ou cancelamento, restaura o menu
-           
+
                 document.getElementById('planilhas').style.marginLeft = '-10px';
             }, 300);
 
         }
 
-        
+
 
         document.addEventListener('DOMContentLoaded', function () {
             const today = new Date();
@@ -933,7 +1174,7 @@
                 const year = today.getFullYear();
                 const formattedDate = `${day}/${month}/${year}`;
                 dataInput.value = formattedDate;
-             
+
             }, 200);
         });
         function excluirTabela(element) {
@@ -977,25 +1218,29 @@
                         const novaPlanilha = document.createElement('div');
                         novaPlanilha.classList.add('planilha');
                         novaPlanilha.innerHTML = `
-                                    <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                                    <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
+                                                <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                                                <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
 
-                                    <div class="produto" id="produto-nome">${item.PRODUTO}</div>
+                                                <div class="produto" id="produto-nome">${item.PRODUTO}</div>
 
-                                    <div class="info">
-                                        <span class="preco">R$ ${precoTotal.toFixed(2).replace(/\./g, ',')}</span>
-                                    </div>
+                                                <div class="info">
+                                                    <span class="preco">R$ ${precoTotal.toFixed(2).replace(/\./g, ',')}</span>
+                                                </div>
 
-                                    <div class="adicional">
-                                        <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2).replace('.', ',') }</span>
-                                        <div class="info">
-                                            <i class="fas fa-calendar-alt"></i>
-                                            <span id="data-emitida">Data emitida: ${formattedDate}</span>
-                                        </div>
-                                    </div>
-                                `;
+                                                <div class="adicional">
+                                                    <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2).replace('.', ',')}</span>
+                                                    <div class="info">
+                                                        <i class="fas fa-calendar-alt"></i>
+                                                        <span id="data-emitida">Data emitida: ${formattedDate}</span>
+
+                                                    </div>
+                                                     <div class="resize-handle"></div>
+                                                </div>
+                                            `;
 
                         planilhaContainer.appendChild(novaPlanilha);
+
+                        ativarRedimensionamento(novaPlanilha);
                     });
 
                     // Exibir soma total dos preços
@@ -1010,36 +1255,157 @@
         }
 
 
+        function ativarRedimensionamento(planilha) {
+            let isResizing = false;
+            let startWidth, startX;
 
-
-        function limparPrecos() {
-            resultadosComPreco.forEach(item => {
-                axios({
-                    method: "PATCH",
-                    url: `https://api.baserow.io/api/database/rows/table/316133/${item.ID}/?user_field_names=true`,
-                    headers: {
-                        Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd",
-                        "Content-Type": "application/json"
-                    },
-                    data: {
-                        "PREÇO ": ""
-                    }
-                })
-                    .then(response => {
-                       
-                        document.getElementById('popup').style.display = 'flex';
-                        setTimeout(minhaAcao, 7000);
-                       
-                      
-                        // Aqui você pode adicionar lógica adicional após a atualização bem-sucedida
-                    })
-                    .catch(error => {
-                        console.error(`Erro ao limpar preço do produto ${item.PRODUTO}:`, error);
-                    });
+            planilha.querySelector(".resize-handle").addEventListener("mousedown", (e) => {
+                isResizing = true;
+                startWidth = planilha.offsetWidth;
+                startX = e.clientX;
+                document.addEventListener("mousemove", resize);
+                document.addEventListener("mouseup", stopResize);
             });
+
+            function resize(e) {
+                if (isResizing) {
+                    let newWidth = startWidth + (e.clientX - startX);
+                    planilha.style.width = `${Math.max(200, newWidth)}px`;
+                }
+            }
+
+            function stopResize() {
+                isResizing = false;
+                document.removeEventListener("mousemove", resize);
+                document.removeEventListener("mouseup", stopResize);
+            }
+        }
+        function limparPrecos() {
+            // Inicia a requisição GET para buscar todos os produtos
+            axios({
+                method: "GET",
+                url: "https://api.baserow.io/api/database/rows/table/322640/?user_field_names=true",
+                headers: {
+                    Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd"
+                }
+            })
+                .then(function (response) {
+                    const dados = response.data.results;
+                    const produtosDeletadosList = document.getElementById("produtosDeletados");
+                    produtosDeletadosList.innerHTML = "";  // Limpa a lista de produtos deletados
+
+                    // Processa cada produto, sem pular nenhum
+                    dados.forEach(function (item) {
+                        const preco = item.PREÇO;
+                        const produtoId = item.id || item.ID;  // ID do produto
+                        const nomeProduto = item.PRODUTO ? item.PRODUTO : "Sem Nome";  // Se não tiver nome, define como "Sem Nome"
+
+                        // Verifica se o preço está preenchido
+                        if (preco && preco !== "") {
+                            axios({
+                                method: "PATCH",
+                                url: `https://api.baserow.io/api/database/rows/table/322640/${produtoId}/?user_field_names=true`,
+                                headers: {
+                                    Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd"
+                                },
+                                data: { "PREÇO": "" } // Atualiza o preço para vazio
+                            })
+                                .then(function () {
+                                    // Adiciona o nome do produto na lista do popup com animação
+                                    const li = document.createElement("li");
+                                    li.innerHTML = `<i class="fas fa-trash"></i> Deletado: ${nomeProduto}`;
+                                    produtosDeletadosList.appendChild(li);
+
+                                    // Aciona a animação para o produto deslizar para o lado
+                                    setTimeout(function () {
+                                        li.classList.add("deleting");
+                                    }, 1000); // O produto ficará 1 segundo antes de desaparecer
+
+                                    // Exibe o popup com animação
+                                    const popup = document.getElementById("popupDeletaPrecos");
+                                    if (popup.style.display !== "block") {
+                                        popup.style.display = "block";
+                                        popup.classList.add("show");
+                                        setTimeout(function () {
+                                            popup.classList.remove("show");
+                                            setTimeout(function () {
+                                                popup.style.display = "none";
+                                            }, 500);
+                                        }, 5000); // O popup ficará visível por 5 segundos
+                                    }
+                                })
+                                .catch(function (error) {
+                                    console.error("Erro ao limpar preço do produto:", nomeProduto, error);
+                                });
+                        }
+                    });
+                })
+                .catch(function (error) {
+                    console.error("Erro ao buscar produtos:", error);
+                });
         }
 
 
+
+        document.getElementById("limparPrecosBtn").addEventListener("click", function () {
+            // Inicia a requisição GET para buscar todos os produtos
+            axios({
+                method: "GET",
+                url: "https://api.baserow.io/api/database/rows/table/322640/?user_field_names=true",
+                headers: {
+                    Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd"
+                }
+            })
+                .then(function (response) {
+                    const dados = response.data.results;
+                    const produtosDeletadosList = document.getElementById("produtosDeletados");
+                    produtosDeletadosList.innerHTML = "";
+
+                    // Processa cada produto
+                    dados.forEach(function (item) {
+                        if (item.PREÇO && item.PREÇO !== "") {
+                            // Limpar o preço do produto no banco de dados
+                            axios({
+                                method: "PATCH",
+                                url: `https://api.baserow.io/api/database/rows/table/322640/${item.ID}/?user_field_names=true`,
+                                headers: {
+                                    Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd",
+                                    "Content-Type": "application/json"
+                                },
+                                data: {
+                                    "PREÇO ": ""  // Limpa o preço do produto
+                                }
+                            })
+                                .then(function () {
+                                    // Adiciona o produto ao popup
+                                    const li = document.createElement("li");
+                                    li.innerHTML = `<i class="fas fa-trash"></i> Deletado: ${item.PRODUTO}`;
+                                    produtosDeletadosList.appendChild(li);
+
+                                    // Animar o item sendo apagado
+                                    setTimeout(function () {
+                                        li.classList.add("deleting");
+                                    }, 500);  // Ajuste o tempo da animação
+                                })
+                                .catch(function (error) {
+                                    console.error("Erro ao limpar preço do produto:", error);
+                                });
+                        }
+                    });
+
+                    // Exibe o popup com animação
+                    const popup = document.getElementById("popupDeletaPrecos");
+                    popup.classList.add("show");
+
+                    // Esconde o popup após 3 segundos
+                    setTimeout(function () {
+                        popup.classList.remove("show");
+                    }, 5000);
+                })
+                .catch(function (error) {
+                    console.error("Erro ao buscar os dados:", error);
+                });
+        });
         function editarTabela(element) {
             const planilha = element.closest('.planilha');
             const produtoNome = planilha.querySelector('#produto-nome');
@@ -1051,14 +1417,14 @@
                 produtoNome.innerText = novoProdutoNome;
             }
 
- 
+
         }
         // Mensagens alternadas de carregamento
         var messages = [
             "Carregando dados necessários...",
             "Por favor, aguarde um momento...",
-            "Preparando o site para você...",
-            "Carregando recursos...",
+            "Preparando recurso banco de dados by matheus",
+            "Buscando melhor rota ao servidor",
             "Quase lá...",
             "Finalizando carregamento..."
         ];
@@ -1086,7 +1452,7 @@
         }
 
         function minhaAcao() {
-            document.getElementById('popup').style.display = 'none'; 
+            document.getElementById('popup').style.display = 'none';
         }
 
         // Mostra o popup ao carregar a página
