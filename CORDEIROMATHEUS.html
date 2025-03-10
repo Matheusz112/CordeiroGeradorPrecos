@@ -21,7 +21,7 @@
             padding: 20px;
             text-align: center;
             margin-top: 20px;
-            width: 350px;
+            width: 92%;
             margin-left: -20px; /* Adicione esta linha para mover para a direita */
         }
 
@@ -423,6 +423,9 @@
             .swal-overlay {
                 display: none !important;
             }
+            .swal2-container {
+                display: none !important; /* Esconde o modal do SweetAlert2 durante a impressão */
+            }
             .input-container,
             .btn-container,
             .print-container {
@@ -629,6 +632,7 @@
             .form-group button:hover {
                 background-color: rgba(255, 255, 255, 0.3);
             }
+
         .resize-handle {
             width: 10px;
             height: 100%;
@@ -638,6 +642,7 @@
             right: 0;
             cursor: ew-resize;
         }
+
         .containerDeletados {
             position: relative;
             background-color: #fff;
@@ -1092,23 +1097,23 @@
             const novaPlanilha = document.createElement('div');
             novaPlanilha.classList.add('planilha');
             novaPlanilha.innerHTML = `
-                    <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                    <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
-                    <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
+                        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                        <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+                        <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
 
-                    <div class="produto" id="produto-nome">${produtoInput}</div>
-                    <div class="info">
-                        <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
-                    </div>
-                    <div class="adicional">
-                        <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
+                        <div class="produto" id="produto-nome">${produtoInput}</div>
                         <div class="info">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span id="data-emitida">Data emitida: ${dataInput}</span>
+                            <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
                         </div>
-                           <div class="resize-handle"></div> <!-- Este elemento vai ser usado para redimensionar -->
-                    </div>
-                `;
+                        <div class="adicional">
+                            <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
+                            <div class="info">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span id="data-emitida">Data emitida: ${dataInput}</span>
+                            </div>
+                               <div class="resize-handle"></div> <!-- Este elemento vai ser usado para redimensionar -->
+                        </div>
+                    `;
 
             planilhaContainer.appendChild(novaPlanilha);
 
@@ -1208,16 +1213,13 @@
                     dataInput.value = formattedDate;
 
                     let somaTotal = 0;
-                    let paginaAtual = null;
+                    let paginaAtual = document.createElement('div');
+                    paginaAtual.classList.add('pagina-impressao');
+                    planilhaContainer.appendChild(paginaAtual);
+
+                    let itensNaPagina = 0; // Controla a quantidade de itens na página atual
 
                     resultadosComPreco.forEach((item, index) => {
-                        if (index % 6 === 0) {
-                            paginaAtual = document.createElement('div');
-                            paginaAtual.classList.add('pagina-impressao');
-                            paginaAtual.style.pageBreakAfter = 'always'; // Garante que cada página tenha no máximo 6 itens
-                            planilhaContainer.appendChild(paginaAtual);
-                        }
-
                         const precoTotal = item.PREÇO * item.QUANTIDADE;
                         somaTotal += precoTotal;
 
@@ -1247,9 +1249,21 @@
                 `;
 
                         paginaAtual.appendChild(novaPlanilha);
+                        itensNaPagina++;
+
+                        // Quando a página atinge 6 itens, cria uma nova página
+                        if (itensNaPagina === 6) {
+                            paginaAtual = document.createElement('div');
+                            paginaAtual.classList.add('pagina-impressao');
+                            planilhaContainer.appendChild(paginaAtual);
+                            itensNaPagina = 0; // Reinicia o contador de itens na nova página
+                        }
+
+                        ativarRedimensionamento(novaPlanilha);
                     });
                 });
         }
+
 
 
         function ativarRedimensionamento(planilha) {
@@ -1357,7 +1371,9 @@
                     limparPrecos(); // Função para limpar os preços
                 }
             });
-        };
+        }; 
+
+
 
 
 
