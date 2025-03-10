@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciamento de Produtos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="icon" href="https://i.postimg.cc/NfYkvFTj/GERADOR-DE-PRE-OS.png" type="image/png">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -870,7 +869,7 @@
         </div>
         <div class="form-group">
             <button type="button" id="btnExcluir" onclick="limparPrecos()"><i class="fas fa-trash-alt"></i> Excluir</button>
-        
+
         </div>
         <div class="form-group">
             <button type="button" id="btnBuscar" onclick="carregarDados()"><i class="fas fa-database"></i> Buscar</button>
@@ -914,6 +913,8 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         document.getElementById('btnImprimir').addEventListener('click', function () {
             // Ação quando o botão Imprimir for clicado
@@ -1089,23 +1090,23 @@
             const novaPlanilha = document.createElement('div');
             novaPlanilha.classList.add('planilha');
             novaPlanilha.innerHTML = `
-                <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
-                <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
+                    <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                    <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+                    <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
 
-                <div class="produto" id="produto-nome">${produtoInput}</div>
-                <div class="info">
-                    <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
-                </div>
-                <div class="adicional">
-                    <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
+                    <div class="produto" id="produto-nome">${produtoInput}</div>
                     <div class="info">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span id="data-emitida">Data emitida: ${dataInput}</span>
+                        <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
                     </div>
-                       <div class="resize-handle"></div> <!-- Este elemento vai ser usado para redimensionar -->
-                </div>
-            `;
+                    <div class="adicional">
+                        <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
+                        <div class="info">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span id="data-emitida">Data emitida: ${dataInput}</span>
+                        </div>
+                           <div class="resize-handle"></div> <!-- Este elemento vai ser usado para redimensionar -->
+                    </div>
+                `;
 
             planilhaContainer.appendChild(novaPlanilha);
 
@@ -1187,7 +1188,6 @@
             }
         }
         function carregarDados() {
-
             axios({
                 method: "GET",
                 url: "https://api.baserow.io/api/database/rows/table/322640/?user_field_names=true",
@@ -1196,64 +1196,56 @@
                 }
             })
                 .then(response => {
-                    const dados = response.data.results;
-                    resultadosComPreco = dados.filter(item => item.PREÇO !== "");
+                    let dados = response.data.results;
+                    let resultadosComPreco = dados.filter(item => item.PREÇO !== "");
 
                     const planilhaContainer = document.getElementById('planilhas');
+                    planilhaContainer.innerHTML = ""; // Limpa antes de adicionar novos elementos
                     const today = new Date();
-                    const day = today.getDate().toString().padStart(2, '0');
-                    const month = (today.getMonth() + 1).toString().padStart(2, '0');
-                    const year = today.getFullYear();
-                    const formattedDate = `${day}/${month}/${year}`;
+                    const formattedDate = today.toLocaleDateString('pt-BR');
                     dataInput.value = formattedDate;
 
                     let somaTotal = 0;
+                    let paginaAtual = null;
 
-                    resultadosComPreco.forEach(item => {
+                    resultadosComPreco.forEach((item, index) => {
+                        if (index % 6 === 0) {
+                            paginaAtual = document.createElement('div');
+                            paginaAtual.classList.add('pagina-impressao');
+                            paginaAtual.style.pageBreakAfter = 'always'; // Garante que cada página tenha no máximo 6 itens
+                            planilhaContainer.appendChild(paginaAtual);
+                        }
+
                         const precoTotal = item.PREÇO * item.QUANTIDADE;
                         somaTotal += precoTotal;
 
                         let prelitro = item.PREÇO / item.ML * 1000;
                         if (item.PRODUTO.toLowerCase().includes('leite')) {
-                            prelitro /= 1000; // Divide por 1000 para obter o valor desejado
+                            prelitro /= 1000;
                         }
 
                         const novaPlanilha = document.createElement('div');
                         novaPlanilha.classList.add('planilha');
+                        novaPlanilha.style.breakInside = 'avoid'; // Impede que a planilha seja cortada entre páginas
                         novaPlanilha.innerHTML = `
-                                                <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                                                <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
+                    <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                    <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
+                    <div class="produto" id="produto-nome">${item.PRODUTO}</div>
+                    <div class="info">
+                        <span class="preco">R$ ${precoTotal.toFixed(2).replace('.', ',')}</span>
+                    </div>
+                    <div class="adicional">
+                        <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2).replace('.', ',')}</span>
+                        <div class="info">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span id="data-emitida">Data emitida: ${formattedDate}</span>
+                        </div>
+                        <div class="resize-handle"></div>
+                    </div>
+                `;
 
-                                                <div class="produto" id="produto-nome">${item.PRODUTO}</div>
-
-                                                <div class="info">
-                                                    <span class="preco">R$ ${precoTotal.toFixed(2).replace(/\./g, ',')}</span>
-                                                </div>
-
-                                                <div class="adicional">
-                                                    <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2).replace('.', ',')}</span>
-                                                    <div class="info">
-                                                        <i class="fas fa-calendar-alt"></i>
-                                                        <span id="data-emitida">Data emitida: ${formattedDate}</span>
-
-                                                    </div>
-                                                     <div class="resize-handle"></div>
-                                                </div>
-                                            `;
-
-                        planilhaContainer.appendChild(novaPlanilha);
-
-                        ativarRedimensionamento(novaPlanilha);
+                        paginaAtual.appendChild(novaPlanilha);
                     });
-
-                    // Exibir soma total dos preços
-                    const somaTotalElement = document.createElement('div');
-
-
-                    planilhaContainer.appendChild(somaTotalElement);
-                })
-                .catch(error => {
-                    console.error('Erro ao buscar dados:', error);
                 });
         }
 
@@ -1347,6 +1339,23 @@
                     console.error("Erro ao buscar produtos:", error);
                 });
         }
+
+        window.onafterprint = () => {
+            Swal.fire({
+                title: "🖨️ Impressão concluída!",
+                text: "A impressão saiu corretamente?\n\n⚠️ Ao clicar em ✅ OK, os preços serão LIMPOS e precisarão ser gerados novamente.\n❌ Se cancelar, nada será alterado. Recomendamos que ao imprimir os preços clicar em ✅",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "✅ Sim, limpar preços",
+                cancelButtonText: "❌ Manter como está",
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    limparPrecos(); // Função para limpar os preços
+                }
+            });
+        };
 
 
 
