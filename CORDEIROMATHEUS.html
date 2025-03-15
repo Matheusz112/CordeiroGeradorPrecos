@@ -3,11 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciamento de Produtos - Matheus</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="icon" href="https://i.postimg.cc/BZFww1q0/GERADOR-DE-PRE-OS-1.png" type="image/png">
-    <link rel="apple-touch-icon" href="https://i.postimg.cc/BZFww1q0/GERADOR-DE-PRE-OS-1.png">
-    <link rel="icon" sizes="512x512" href="https://i.postimg.cc/BZFww1q0/GERADOR-DE-PRE-OS-1.png">
+    <title>Menu Dinâmico - Supermercado</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -143,7 +139,8 @@
             text-align: center;
             margin-top: 20px;
             width: 100%;
-         
+            page-break-inside: avoid;
+            page-break-after: avoid;
         }
 
 
@@ -687,6 +684,17 @@
         }
 
         @media print {
+            .pagina-impressao {
+                page-break-before: always; /* Força uma nova página antes de cada "pagina-impressao" */
+                page-break-inside: avoid; /* Evita a quebra dentro da div */
+                break-inside: avoid;
+            }
+
+            .planilha {
+                page-break-inside: avoid; /* Evita a quebra dentro de um item */
+                break-inside: avoid;
+                margin-bottom: 10px;
+            }
             .resize-handle {
                 display: none !important;
             }
@@ -730,11 +738,147 @@
                 margin: 0; /* Remove as margens padrão */
             }
         }
+        .wrapper {
+            display: flex;
+            width: 120%;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            font-size: 12px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s, border 0.3s;
+        }
+
+            .option i {
+                margin-left: 5px;
+                font-size: 14px;
+            }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: #ddd;
+            border-radius: 50%;
+            margin-right: 8px;
+            position: relative;
+            transition: background 0.3s;
+        }
+
+            .dot::before {
+                content: "";
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                width: 8px;
+                height: 8px;
+                background: #0069d9;
+                border-radius: 50%;
+                opacity: 0;
+                transition: opacity 0.3s, transform 0.3s;
+            }
+        input[type="radio"] {
+            display: none; /* Esconde apenas os inputs do tipo rádio */
+        }
+
+            input:checked + .option {
+                background: #0069d9;
+                border-color: #0069d9;
+                color: white;
+            }
+
+                input:checked + .option .dot {
+                    background: #fff;
+                }
+
+                    input:checked + .option .dot::before {
+                        opacity: 1;
+                        transform: scale(1.2);
+                    }
+
+        .option:hover {
+            background: #f0f0f0;
+        }
+        .checkbox-group {
+    
+            align-items: center;
+            cursor: pointer;
+            float: left;
+   
+        }
+
+            .checkbox-group input {
+                position: absolute;
+                opacity: 0;
+                cursor: pointer;
+                height: 0;
+                width: 0;
+                outline: none;
+                -webkit-appearance: none;
+            }
+
+        .custom-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background: #fff;
+            margin-right: 6px;
+            position: relative;
+        }
+
+            .custom-checkbox svg {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+        .checkbox-group label.checkbox-label {
+            font-size: 14px;
+            color: #555;
+            user-select: none;
+            display: inline-flex;
+            align-items: center;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        /* Check inicial escondido */
+        .checkmark {
+            fill: none;
+            stroke: #3498db;
+            stroke-width: 2;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        /* Ao marcar, revela o check e anima o traço */
+        .checkbox-group input:checked ~ label.checkbox-label .custom-checkbox svg path {
+            opacity: 1;
+            animation: draw 0.5s forwards;
+        }
+
+        @keyframes draw {
+            from {
+                stroke-dashoffset: 48;
+            }
+
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="menu" id="menus">
-        <img src="Now.gif" alt="Logo">
+        <img src="file:///C:/Users/Artur/Downloads/Now.gif" alt="Logo">
 
         <!-- Produto -->
         <div class="form-group">
@@ -781,22 +925,29 @@
             <input type="range" id="tamanho-slider" min="200" max="520" class="range-input" oninput="ajustarLargura(this.value)">
         </div>
 
-        <!-- Seleção de Fardo -->
-        <div class="radio-group">
-            <p>Fardo:</p>
-            <label class="radio-label">
-                <input type="radio" name="opcao" value="6"> 6 un <i class="fas fa-box"></i>
-            </label>
-            <label class="radio-label">
-                <input type="radio" name="opcao" value="12"> 12 un <i class="fas fa-box"></i>
-            </label>
+
+        <div class="wrapper">
+            <input type="radio" name="opcao" value="6" id="op1">
+            <label class="option" for="op1"><div class="dot"></div> Fardo 6 uni <i class="fas fa-box"></i></label>
+
+            <input type="radio" name="opcao" value="12" id="op2">
+            <label class="option" for="op2"><div class="dot"></div> Fardo 12 uni <i class="fas fa-box"></i></label>
         </div>
+
+
+
+
 
         <!-- Opção Com Logo -->
         <div class="checkbox-group">
-            <label class="checkbox-label">
-                <input type="checkbox" id="logo-checkbox">
-                <i class="fas fa-image"></i> Com Logo
+            <input type="checkbox" id="logo-checkbox">
+            <label class="checkbox-label" for="logo-checkbox">
+                <div class="custom-checkbox">
+                    <svg viewBox="0 0 24 24">
+                        <path class="checkmark" d="M4 12l5 5L20 7"></path>
+                    </svg>
+                </div>
+                Com Logo
             </label>
         </div>
 
@@ -1004,7 +1155,7 @@
             const produtoInput = document.getElementById('produto-input').value || "Produto";
             const dataInput = document.getElementById('data-input').value || "DD/MM/AAAA";
             const precoInput = document.getElementById('precos').value;
-            const preco = parseFloat(precoInput.replace(',', '.')); // Convertendo vírgula para ponto
+            const preco = parseFloat(precoInput.replace(',', '.'));
 
             const codigoInput = document.getElementById('codigo-input').value || "123456789012";
             const precoLitroInput = document.getElementById('preco-litro-input').value.replace(',', '.') || "00.99";
@@ -1014,7 +1165,7 @@
 
             // Ajuste para leite
             if (produtoInput.toLowerCase().includes('leite')) {
-                soma /= 1000; // Divide por 1000 para obter o valor correto
+                soma /= 1000;
             }
 
             const total = preco * valorSelecionado;
@@ -1023,37 +1174,66 @@
 
             // Verifique se o contêiner existe
             if (!planilhaContainer) {
-                alert("O contêiner de planilhas não foi encontrado."); // Exibe um alerta
+                alert("O contêiner de planilhas não foi encontrado.");
                 return;
             }
 
+            let itensNaPaginas = planilhaContainer.querySelectorAll('.planilha').length; // Conta quantas planilhas existem
+
             // Criar nova planilha
             const novaPlanilha = document.createElement('div');
+            novaPlanilha.classList.add('pagina-impressao');
             novaPlanilha.classList.add('planilha');
             novaPlanilha.innerHTML = `
-                            <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                            <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
-                            <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
-
-                            <div class="produto" id="produto-nome">${produtoInput}</div>
-                            <div class="info">
-                                <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
-                            </div>
-                            <div class="adicional">
-                                <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
-                                <div class="info">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    <span id="data-emitida">Data emitida: ${dataInput}</span>
-                                </div>
-                                   <div class="resize-handle"></div> <!-- Este elemento vai ser usado para redimensionar -->
-                            </div>
-                        `;
+        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+        <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+        <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
+        <div class="produto" id="produto-nome">${produtoInput}</div>
+        <div class="info">
+            <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
+        </div>
+        <div class="adicional">
+            <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
+            <div class="info">
+                <i class="fas fa-calendar-alt"></i>
+                <span id="data-emitida">Data emitida: ${dataInput}</span>
+            </div>
+            <div class="resize-handle"></div> <!-- Este elemento vai ser usado para redimensionar -->
+        </div>
+    `;
 
             planilhaContainer.appendChild(novaPlanilha);
+            itensNaPaginas++;
 
-            // Ativar redimensionamento
+            // Verifique se deve criar uma nova página ao atingir 6 itens
+            if (itensNaPaginas >= 7) {
+                const novaPagina = document.createElement('div');
+                novaPagina.classList.add('pagina-impressao');
+                planilhaContainer.appendChild(novaPagina);
+                itensNaPaginas = 0; // Reinicia o contador de itens na nova página
+            }
+
+            // Ajuste a altura das páginas para evitar overflow
+            ajustarAlturaDasPaginas(planilhaContainer);
+
             ativarRedimensionamento(novaPlanilha);
         }
+
+        // Função para ajustar a altura das páginas e evitar overflow
+        function ajustarAlturaDasPaginas(planilhaContainer) {
+            const paginas = planilhaContainer.querySelectorAll('.pagina-impressao');
+            for (const pagina of paginas) {
+                const alturaMaxima = 800; // Define a altura máxima para uma página de impressão
+                const alturaAtual = pagina.scrollHeight;
+
+                // Se a página ultrapassar a altura máxima, ajusta o conteúdo
+                if (alturaAtual > alturaMaxima) {
+                    pagina.style.height = `${alturaMaxima}px`;
+                    pagina.style.overflowY = 'auto'; // Adiciona rolagem caso o conteúdo ultrapasse
+                }
+            }
+        }
+
 
 
 
@@ -1191,7 +1371,7 @@
                         itensNaPagina++;
 
                         // Quando a página atinge 6 itens, cria uma nova página
-                        if (itensNaPagina === 6) {
+                        if (itensNaPagina === 7) {
                             paginaAtual = document.createElement('div');
                             paginaAtual.classList.add('pagina-impressao');
                             planilhaContainer.appendChild(paginaAtual);
