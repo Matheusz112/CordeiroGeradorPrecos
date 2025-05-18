@@ -50,7 +50,7 @@
             .menu img {
                 display: block;
                 margin: 0 auto;
-                width: 110px;
+                width: 90px;
                 border-radius: 10%;
               
             }
@@ -390,7 +390,7 @@
 
         .popupcordeiro-content {
             width: 400px; /* Largura fixa do popup */
-            height: 250px; /* Altura fixa do popup */
+            height: 500px; /* Altura fixa do popup */
             background-color: #fff;
             padding: 10px;
             border-radius: 10px;
@@ -683,11 +683,11 @@
             transform: scale(1.2) rotate(100deg);
         }
 
-          @media print {
+        @media print {
             .pagina-impressao {
-     
+              
                 page-break-inside: avoid; /* Evita a quebra dentro da div */
-               
+                break-inside: avoid;
             }
 
             .planilha {
@@ -971,10 +971,10 @@
         <div id="planilhas">
             <div class="planilha" id="planilha">
                 <img src="C:/Users/Artur/Downloads/BAIXE NOSSO APLICATIVO SCANEANDO O QR CODE.png" class="logo" id="logo-imagem" alt="Logo">
-                <div class="produto" id="produto-nome">DESENVOLVIDO POR MATHEUS</div>
+                <div class="produto" id="produto-nome">Produto A</div>
                 <div class="info"><i class=""></i><span class="preco" id="preco">R$ 19,99</span></div>
-                <div class="adicional"><span id="preco-por-litro">GERADOR DE PREÇO AUTOMATICO</span></div>
-                <div class="info"><i class="fas fa-calendar-alt"></i><span id="data-emitida">CALCULOS PRECISOS E SEM ERROS.</span></div>
+                <div class="adicional"><span id="preco-por-litro">1 LITRO SAI POR R$ 00,99</span></div>
+                <div class="info"><i class="fas fa-calendar-alt"></i><span id="data-emitida">Data emitida: DD/MM/AAAA</span></div>
                 <div class="resize-handle"></div> <!-- Este elemento vai ser usado para redimensionar -->
 
             </div>
@@ -1003,94 +1003,70 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        document.getElementById('btnImprimir').addEventListener('click', function () {
-            // Ação quando o botão Imprimir for clicado
-            imprimirTabelas();
-            // Adicione aqui a lógica para imprimir
-        });
-
-        document.getElementById('btnExcluir').addEventListener('click', function () {
-            // Ação quando o botão Excluir for clicado
-            console.log('Botão Excluir clicado!');
-            // Adicione aqui a lógica para excluir
-        });
-
-        document.getElementById('btnBuscar').addEventListener('click', function () {
-
-        });
-
-        document.getElementById('btnAdicionar').addEventListener('click', function () {
-            // Ação quando o botão Adicionar for clicado
-            adicionarTabela();
-            // Adicione aqui a lógica para adicionar produto
-        });
-
         const produtos = {
-            '0000078936683': 'CERV LAGER HEINEKEN LN 6X330ml', // 3
-            '7891991015462': 'CERV STELLA ARTOIS LN 6X330ml', // 4
-            '7891149108718': 'CERV LAGER CORONA LN 6X330ml', // 5
-            '7891991298421': 'CERV LAGER BUDWEISER LN 6X330ml', // 6
-            '7896045506040': 'CERV HEINEKEN ZERO ALC LN 6X330ml', // 7
-            '7891991297493': 'CERV  P MALTE SPATEM LN 6X355ml', // 8
-            '7891149104932': 'CERV BRAHMA ZERO ÁLCOOL 12X350ml', // 9
-            '7896045506064': 'CERV HEINEKEN ZERO ÁLCOOL 12X350ml', // 10
-            '7898367983356': 'CERV EISENBAHN 12X473ml', // 11
-            '7896045505340': 'CERVEJA LAGER AMSTEL 12X473ml', // 12
-            '7896045506248': 'CERV HEINEKEN LT  12X473ml', // 13
-            '7896045503414': 'CERVEJA KAISER 12X473ml', // 14
-            '7891991009164': 'CERV PILSEN ANTARTICA 12X473ml', // 15
-            '7891991295017': 'CERV ANTARCTICA ORIGINAL 12X473ml', // 16
-            '7891149011001': 'CERVEJA BRAHMA 12X473ml', // 17
-            '7891991303309': 'CERVEJA STELLA ARTOIS 12X473ml', // 18
-            '7891991014236': 'CERVEJA BOHEMIA 473ml', // 19
-            '7891991303200': 'CERVE P MALTE SPATEM LT  12X473ml', // 20
-            '07891991010153': 'CERV ANTARTICA SUB ZERO 473ml', // 21
-            '7896051111016': 'LEITE ITAMBÊ INTEGRAL 12X1L', // 22
-            '7896051111702': 'LEITE ITAMBÊ DESNATADO 12X1L', // 23
-            '7896051111528': 'LEITE ITAMBÊ SEMIDESNATADO 12X1L', // 24
-            '7896122305207': 'LEITE PORTO ALEGRE INTEGRAL 12X1L', // 25
-            '7896183202187': 'LEITE QUATA INTEGRAL 12X1L', // 26
-            '7898215151708': 'LEITE PIRACANJUBA INTEGRAL 12X1L', // 27
-            '7896447500103': 'ÁGUA IGARAPE SEM GÁS 12X500ml', // 28
-            '7896447500363': 'ÁGUA IGARAPÉ COM GÁS 12X500ml', // 29
-            '000789338738': 'REFRI COCA COLA MINI PET 12X200ml', // 30
-            '7800660636419': 'REFRI SUKITA LARANJA PET 12X200ml', // 31
-            '07891991014984': 'REFRI SODA LIMONADA PET 12X200ml', // 32
-            '7891991014908': 'REFRI GUARANÁ ANTARTICA PET 12X200ml', // 33
-            '7891991016124': 'REFRI GUARANÁ ZERO PET 12X200ml', // 34
-            '7892840800567': 'REFRI PEPSI PET 12X200ml', // 35
-            '7896036090855': 'ÓLEO DE SOJA VELEIRO 6X900ml', // 36
-            '7896036090244': 'ÓLEO DE SOJA LIZA 6X900ml', // 37
-            '7891149040308': 'CERV MALZBIER BRAHMA 6X355ml', // 38
-            '7898915949193': 'CERV PILSEN IMPERIO 12X473ml', // 39
-            '7891991012454': 'CERV PILSEN BUDWEISER 12X473ml', // 40
-            '7896427701391': 'LEITE INT ITA 12X1L', // 67
-            '7898080640017': 'LEITE INT ITALAC 12X1L', // 68
-            '7898926669042': 'AGUA MIN GRAO MOGOL 12X500ml', // 69
-            '7891991297479': 'CERV P MALTE SPATEM LN 6X355ml', // 70
-            '7896045505371': 'CERV LAGER HEINEKEN LN 6X355ml', // 71
-            '7898969406963': 'CERV PILSEN BRUDER BX GASTRO 12X473ml', // 72
-            '789862528372': 'CERV PILSEN LAUT 12X473ml', // 73
-            '7897395099695': 'CERV P MALTE PETRA 12X473ml', // 74
-            '7897395020217': 'CERV PILSEN ITAIPAVA LT 12X473ml', // 75
-            '7891149201006': 'CERV PILSEN SKOL LT 12X473ml' // 76
+            '0000078936683': 'CERV LAGER HEINEKEN LN 6X330ml',
+            '7891991015462': 'CERV STELLA ARTOIS LN 6X330ml',
+            '7891149108718': 'CERV LAGER CORONA LN 6X330ml',
+            '7891991298421': 'CERV LAGER BUDWEISER LN 6X330ml',
+            '7896045506040': 'CERV HEINEKEN ZERO ALC LN 6X330ml',
+            '7891991297493': 'CERV P MALTE SPATEM LN 6X355ml',
+            '7891149104932': 'CERV BRAHMA ZERO ÁLCOOL 12X350ml',
+            '7896045506064': 'CERV HEINEKEN ZERO ÁLCOOL 12X350ml',
+            '7898367983356': 'CERV EISENBAHN 12X473ml',
+            '7896045505340': 'CERVEJA LAGER AMSTEL 12X473ml',
+            '7896045506248': 'CERV HEINEKEN LT 12X473ml',
+            '7896045503414': 'CERVEJA KAISER 12X473ml',
+            '7891991009164': 'CERV PILSEN ANTARTICA 12X473ml',
+            '7891991295017': 'CERV ANTARCTICA ORIGINAL 12X473ml',
+            '7891149011001': 'CERVEJA BRAHMA 12X473ml',
+            '7891991303309': 'CERVEJA STELLA ARTOIS 12X473ml',
+            '7891991014236': 'CERVEJA BOHEMIA 473ml',
+            '7891991303200': 'CERVE P MALTE SPATEM LT 12X473ml',
+            '07891991010153': 'CERV ANTARTICA SUB ZERO 473ml',
+            '7896051111016': 'LEITE ITAMBÊ INTEGRAL 12X1L',
+            '7896051111702': 'LEITE ITAMBÊ DESNATADO 12X1L',
+            '7896051111528': 'LEITE ITAMBÊ SEMIDESNATADO 12X1L',
+            '7896122305207': 'LEITE PORTO ALEGRE INTEGRAL 12X1L',
+            '7896183202187': 'LEITE QUATA INTEGRAL 12X1L',
+            '7898215151708': 'LEITE PIRACANJUBA INTEGRAL 12X1L',
+            '7896447500103': 'ÁGUA IGARAPE SEM GÁS 12X500ml',
+            '7896447500363': 'ÁGUA IGARAPÉ COM GÁS 12X500ml',
+            '000789338738': 'REFRI COCA COLA MINI PET 12X200ml',
+            '7800660636419': 'REFRI SUKITA LARANJA PET 12X200ml',
+            '07891991014984': 'REFRI SODA LIMONADA PET 12X200ml',
+            '7891991014908': 'REFRI GUARANÁ ANTARTICA PET 12X200ml',
+            '7891991016124': 'REFRI GUARANÁ ZERO PET 12X200ml',
+            '7892840800567': 'REFRI PEPSI PET 12X200ml',
+            '7896036090855': 'ÓLEO DE SOJA VELEIRO 6X900ml',
+            '7896036090244': 'ÓLEO DE SOJA LIZA 6X900ml',
+            '7891149040308': 'CERV MALZBIER BRAHMA 6X355ml',
+            '7898915949193': 'CERV PILSEN IMPERIO 12X473ml',
+            '7891991012454': 'CERV PILSEN BUDWEISER 12X473ml',
+            '7896427701391': 'LEITE INT ITA 12X1L',
+            '7898080640017': 'LEITE INT ITALAC 12X1L',
+            '7898926669042': 'AGUA MIN GRAO MOGOL 12X500ml',
+            '7891991297479': 'CERV P MALTE SPATEM LN 6X355ml',
+            '7896045505371': 'CERV LAGER HEINEKEN LN 6X355ml',
+            '7898969406963': 'CERV PILSEN BRUDER BX GASTRO 12X473ml',
+            '789862528372': 'CERV PILSEN LAUT 12X473ml',
+            '7897395099695': 'CERV P MALTE PETRA 12X473ml',
+            '7897395020217': 'CERV PILSEN ITAIPAVA LT 12X473ml',
+            '7891149201006': 'CERV PILSEN SKOL LT 12X473ml'
         };
-
 
         const produtoInput = document.getElementById('produto-input');
         const dataInput = document.getElementById('data-input');
-        const precoInput = document.getElementById('preco-input');
+        const precoInput = document.getElementById('precos');
         const codigoInput = document.getElementById('codigo-input');
-
         const tamanhoSlider = document.getElementById('tamanho-slider');
         const logoCheckbox = document.getElementById('logo-checkbox');
 
+        document.getElementById('btnImprimir').addEventListener('click', imprimirTabelas);
+        document.getElementById('btnAdicionar').addEventListener('click', adicionarTabela);
+
         function preencherProduto() {
-            const codigoBarras = codigoInput.value;
-
-
             const mlInput = document.getElementById('preco-litro-input');
-            const termo = document.getElementById('codigo-input').value.trim().toLowerCase();
+            const termo = codigoInput.value.trim().toLowerCase();
             const sugestoes = document.getElementById('sugestoes');
             const menuProdutos = document.getElementById('menuProdutos');
             sugestoes.innerHTML = '';
@@ -1115,12 +1091,12 @@
                 const li = document.createElement('li');
                 li.textContent = produtos[codigo];
                 li.onclick = () => {
-                    document.getElementById('codigo-input').value = codigo;
-                    document.getElementById('produto-input').value = produtos[codigo];
+                    codigoInput.value = codigo;
+                    produtoInput.value = produtos[codigo];
                     menuProdutos.style.display = 'none';
-                    const match = produtos[codigo].match(/(\d+)(ml|L)/i);  // Corrigido para produtos[codigo]
+                    const match = produtos[codigo].match(/(\d+)(ml|L)/i);
                     if (match) {
-                        mlInput.value = match[1];
+                        mlInput.value = match[1] + ' ' + match[2];
                     } else {
                         mlInput.value = '';
                     }
@@ -1136,15 +1112,27 @@
                 };
                 sugestoes.appendChild(li);
             });
+        }
 
+        function adicionarItemAPagina(planilhaContainer, novaPlanilha) {
+            let grupos = planilhaContainer.querySelectorAll('.grupo-impressao');
+            let grupoAtual;
 
+            if (grupos.length === 0 || grupos[grupos.length - 1].querySelectorAll('.planilha').length >= 6) {
+                grupoAtual = document.createElement('div');
+                grupoAtual.classList.add('grupo-impressao');
+                planilhaContainer.appendChild(grupoAtual);
+            } else {
+                grupoAtual = grupos[grupos.length - 1];
+            }
+
+            grupoAtual.appendChild(novaPlanilha);
         }
 
         function adicionarTabela() {
             const radios = document.querySelectorAll('input[name="opcao"]');
             let valorSelecionado = 0;
 
-            // Verificar qual radio foi selecionado
             for (const radio of radios) {
                 if (radio.checked) {
                     valorSelecionado = parseFloat(radio.value);
@@ -1152,167 +1140,54 @@
                 }
             }
 
-            const produtoInput = document.getElementById('produto-input').value || "Produto";
-            const dataInput = document.getElementById('data-input').value || "DD/MM/AAAA";
-            const precoInput = document.getElementById('precos').value;
-            const preco = parseFloat(precoInput.replace(',', '.'));
+            const produto = produtoInput.value || "Produto";
+            const data = dataInput.value || "DD/MM/AAAA";
+            const preco = parseFloat(precoInput.value.replace(',', '.')) || 0.0;
+            const codigo = codigoInput.value || "123456789012";
+            const precoLitroInput = document.getElementById('preco-litro-input').value.replace(/[^0-9.]/g, '');
+            const precoLitro = parseFloat(precoLitroInput) || 0.99;
+            const comLogo = logoCheckbox.checked;
 
-            const codigoInput = document.getElementById('codigo-input').value || "123456789012";
-            const precoLitroInput = document.getElementById('preco-litro-input').value.replace(',', '.') || "00.99";
-            const logoCheckbox = document.getElementById('logo-checkbox').checked;
-
-            let soma = (preco / parseFloat(precoLitroInput)) * 1000;
-
-            // Ajuste para leite
-            if (produtoInput.toLowerCase().includes('leite')) {
+            let soma = (preco / precoLitro) * 1000;
+            if (produto.toLowerCase().includes('leite')) {
                 soma /= 1000;
             }
 
             const total = preco * valorSelecionado;
 
             const planilhaContainer = document.getElementById('planilhas');
-
-            // Verifique se o contêiner existe
             if (!planilhaContainer) {
                 alert("O contêiner de planilhas não foi encontrado.");
                 return;
             }
 
-            let itensNaPaginas = planilhaContainer.querySelectorAll('.planilha').length; // Conta quantas planilhas existem
-
-            // Criar nova planilha
             const novaPlanilha = document.createElement('div');
-            novaPlanilha.classList.add('pagina-impressao');
             novaPlanilha.classList.add('planilha');
+            novaPlanilha.style.breakInside = 'avoid';
             novaPlanilha.innerHTML = `
-        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-        <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
-        <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
-        <div class="produto" id="produto-nome">${produtoInput}</div>
-        <div class="info">
-            <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
-        </div>
-        <div class="adicional">
-            <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
-            <div class="info">
-                <i class="fas fa-calendar-alt"></i>
-                <span id="data-emitida">Data emitida: ${dataInput}</span>
-            </div>
-            <div class="resize-handle"></div> <!-- Este elemento vai ser usado para redimensionar -->
-        </div>
-    `;
+                    <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                    <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+                    <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
+                    <div class="content-container">
+                        <div class="produto" id="produto-nome">${produto}</div>
+                        <div class="info">
+                            <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
+                        </div>
+                        <div class="adicional">
+                            <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
+                            <div class="info">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span id="data-emitida">Data emitida: ${data}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="resize-handle"></div>
+                `;
 
-            planilhaContainer.appendChild(novaPlanilha);
-            itensNaPaginas++;
-
-            // Verifique se deve criar uma nova página ao atingir 6 itens
-            if (itensNaPaginas >= 7) {
-                const novaPagina = document.createElement('div');
-                novaPagina.classList.add('pagina-impressao');
-                planilhaContainer.appendChild(novaPagina);
-                itensNaPaginas = 0; // Reinicia o contador de itens na nova página
-            }
-
-            // Ajuste a altura das páginas para evitar overflow
-            ajustarAlturaDasPaginas(planilhaContainer);
-
+            adicionarItemAPagina(planilhaContainer, novaPlanilha);
             ativarRedimensionamento(novaPlanilha);
         }
 
-        // Função para ajustar a altura das páginas e evitar overflow
-        function ajustarAlturaDasPaginas(planilhaContainer) {
-            const paginas = planilhaContainer.querySelectorAll('.pagina-impressao');
-            for (const pagina of paginas) {
-                const alturaMaxima = 800; // Define a altura máxima para uma página de impressão
-                const alturaAtual = pagina.scrollHeight;
-
-                // Se a página ultrapassar a altura máxima, ajusta o conteúdo
-                if (alturaAtual > alturaMaxima) {
-                    pagina.style.height = `${alturaMaxima}px`;
-                    pagina.style.overflowY = 'auto'; // Adiciona rolagem caso o conteúdo ultrapasse
-                }
-            }
-        }
-
-
-
-
-
-
-        function ativarRedimensionamento(planilha) {
-            let isResizing = false;
-            let startWidth, startX;
-
-            planilha.querySelector(".resize-handle").addEventListener("mousedown", (e) => {
-                isResizing = true;
-                startWidth = planilha.offsetWidth;
-                startX = e.clientX;
-                document.addEventListener("mousemove", resize);
-                document.addEventListener("mouseup", stopResize);
-            });
-
-            function resize(e) {
-                if (isResizing) {
-                    let newWidth = startWidth + (e.clientX - startX);
-                    planilha.style.width = `${Math.max(200, newWidth)}px`;
-                }
-            }
-
-            function stopResize() {
-                isResizing = false;
-                document.removeEventListener("mousemove", resize);
-                document.removeEventListener("mouseup", stopResize);
-            }
-        }
-
-
-        tamanhoSlider.addEventListener('input', function () {
-            const planilhas = document.querySelectorAll('.planilha');
-            planilhas.forEach(planilha => {
-                planilha.style.width = this.value * 2 + 'px';
-            });
-        });
-
-        function imprimirTabelas() {
-
-
-            document.getElementById('planilhas').style.marginLeft = '-200px';
-
-            window.print();
-
-            setTimeout(() => {
-                // Após a impressão ou cancelamento, restaura o menu
-
-                document.getElementById('planilhas').style.marginLeft = '10px';
-            }, 300);
-
-        }
-
-
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const today = new Date();
-            const day = today.getDate().toString().padStart(2, '0');
-            const month = (today.getMonth() + 1).toString().padStart(2, '0');
-            const year = today.getFullYear();
-            const formattedDate = `${day}/${month}/${year}`;
-            dataInput.value = formattedDate;
-            setTimeout(function () {
-                const today = new Date();
-                const day = today.getDate().toString().padStart(2, '0');
-                const month = (today.getMonth() + 1).toString().padStart(2, '0');
-                const year = today.getFullYear();
-                const formattedDate = `${day}/${month}/${year}`;
-                dataInput.value = formattedDate;
-
-            }, 200);
-        });
-        function excluirTabela(element) {
-            const planilha = element.closest('.planilha');
-            if (planilha) {
-                planilha.remove();
-            }
-        }
         function carregarDados() {
             axios({
                 method: "GET",
@@ -1371,7 +1246,7 @@
                         itensNaPagina++;
 
                         // Quando a página atinge 6 itens, cria uma nova página
-                        if (itensNaPagina === 7) {
+                        if (itensNaPagina === 6) {
                             paginaAtual = document.createElement('div');
                             paginaAtual.classList.add('pagina-impressao');
                             planilhaContainer.appendChild(paginaAtual);
@@ -1409,71 +1284,6 @@
                 document.removeEventListener("mouseup", stopResize);
             }
         }
-        async function limparPrecos() {
-            try {
-                // Inicia a requisição GET para buscar todos os produtos
-                const response = await axios({
-                    method: "GET",
-                    url: "https://api.baserow.io/api/database/rows/table/322640/?user_field_names=true",
-                    headers: {
-                        Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd"
-                    }
-                });
-
-                const dados = response.data.results;
-                const produtosDeletadosList = document.getElementById("produtosDeletados");
-                produtosDeletadosList.innerHTML = "";  // Limpa a lista de produtos deletados
-
-                // Processa cada produto de forma sequencial
-                for (let item of dados) {
-                    const preco = item.PREÇO;
-                    const produtoId = item.id || item.ID;  // ID do produto
-                    const nomeProduto = item.PRODUTO ? item.PRODUTO : "Sem Nome";  // Se não tiver nome, define como "Sem Nome"
-
-                    // Verifica se o preço está preenchido
-                    if (preco && preco !== "") {
-                        try {
-                            // Faz a requisição PATCH para atualizar o preço para vazio
-                            await axios({
-                                method: "PATCH",
-                                url: `https://api.baserow.io/api/database/rows/table/322640/${produtoId}/?user_field_names=true`,
-                                headers: {
-                                    Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd"
-                                },
-                                data: { "PREÇO": "" } // Atualiza o preço para vazio
-                            });
-
-                            // Adiciona o nome do produto na lista do popup com animação
-                            const li = document.createElement("li");
-                            li.innerHTML = `<i class="fas fa-trash"></i> Deletado: ${nomeProduto}`;
-                            produtosDeletadosList.appendChild(li);
-
-                            // Aciona a animação para o produto deslizar para o lado
-                            setTimeout(function () {
-                                li.classList.add("deleting");
-                            }, 500); // O produto ficará 1 segundo antes de desaparecer
-
-                            // Exibe o popup com animação
-                            const popup = document.getElementById("popupDeletaPrecos");
-                            if (popup.style.display !== "block") {
-                                popup.style.display = "block";
-                                popup.classList.add("show");
-                                setTimeout(function () {
-                                    popup.classList.remove("show");
-                                    setTimeout(function () {
-                                        popup.style.display = "none";
-                                    }, 500);
-                                }, 2000); // O popup ficará visível por 5 segundos
-                            }
-                        } catch (error) {
-                            console.error("Erro ao limpar preço do produto:", nomeProduto, error);
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error("Erro ao buscar produtos:", error);
-            }
-        }
 
         window.onafterprint = () => {
             Swal.fire({
@@ -1492,65 +1302,90 @@
             });
         };
 
-        document.getElementById("limparPrecosBtn").addEventListener("click", function () {
-            // Inicia a requisição GET para buscar todos os produtos
-            axios({
-                method: "GET",
-                url: "https://api.baserow.io/api/database/rows/table/322640/?user_field_names=true",
-                headers: {
-                    Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd"
-                }
-            })
-                .then(function (response) {
-                    const dados = response.data.results;
-                    const produtosDeletadosList = document.getElementById("produtosDeletados");
-                    produtosDeletadosList.innerHTML = "";
+        function imprimirTabelas() {
+            document.getElementById('planilhas').style.marginLeft = '-230px';
+            window.print();
+            setTimeout(() => {
+                document.getElementById('planilhas').style.marginLeft = '0';
+            }, 300);
+        }
 
-                    // Processa cada produto
-                    dados.forEach(function (item) {
-                        if (item.PREÇO && item.PREÇO !== "") {
-                            // Limpar o preço do produto no banco de dados
-                            axios({
-                                method: "PATCH",
-                                url: `https://api.baserow.io/api/database/rows/table/322640/${item.ID}/?user_field_names=true`,
-                                headers: {
-                                    Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd",
-                                    "Content-Type": "application/json"
-                                },
-                                data: {
-                                    "PREÇO ": ""  // Limpa o preço do produto
-                                }
-                            })
-                                .then(function () {
-                                    // Adiciona o produto ao popup
-                                    const li = document.createElement("li");
-                                    li.innerHTML = `<i class="fas fa-trash"></i> Deletado: ${item.PRODUTO}`;
-                                    produtosDeletadosList.appendChild(li);
-
-                                    // Animar o item sendo apagado
-                                    setTimeout(function () {
-                                        li.classList.add("deleting");
-                                    }, 500);  // Ajuste o tempo da animação
-                                })
-                                .catch(function (error) {
-                                    console.error("Erro ao limpar preço do produto:", error);
-                                });
-                        }
-                    });
-
-                    // Exibe o popup com animação
-                    const popup = document.getElementById("popupDeletaPrecos");
-                    popup.classList.add("show");
-
-                    // Esconde o popup após 3 segundos
-                    setTimeout(function () {
-                        popup.classList.remove("show");
-                    }, 5000);
-                })
-                .catch(function (error) {
-                    console.error("Erro ao buscar os dados:", error);
+        async function limparPrecos() {
+            try {
+                const response = await axios({
+                    method: "GET",
+                    url: "https://api.baserow.io/api/database/rows/table/322640/?user_field_names=true",
+                    headers: {
+                        Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd"
+                    }
                 });
-        });
+
+                const dados = response.data.results;
+                const produtosDeletadosList = document.getElementById("produtosDeletados");
+                produtosDeletadosList.innerHTML = "";
+
+                for (let item of dados) {
+                    const preco = item.PREÇO;
+                    const produtoId = item.id || item.ID;
+                    const nomeProduto = item.PRODUTO || "Sem Nome";
+
+                    if (preco && preco !== "") {
+                        try {
+                            await axios({
+                                method: "PATCH",
+                                url: `https://api.baserow.io/api/database/rows/table/322640/${produtoId}/?user_field_names=true`,
+                                headers: {
+                                    Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd"
+                                },
+                                data: { "PREÇO": "" }
+                            });
+
+                            const li = document.createElement("li");
+                            li.innerHTML = `<i class="fas fa-trash"></i> Deletado: ${nomeProduto}`;
+                            produtosDeletadosList.appendChild(li);
+
+                            setTimeout(() => {
+                                li.classList.add("deleting");
+                            }, 500);
+
+                            const popup = document.getElementById("popupDeletaPrecos");
+                            if (popup.style.display !== "block") {
+                                popup.style.display = "block";
+                                popup.classList.add("show");
+                                setTimeout(() => {
+                                    popup.classList.remove("show");
+                                    setTimeout(() => {
+                                        popup.style.display = "none";
+                                    }, 500);
+                                }, 2000);
+                            }
+                        } catch (error) {
+                            console.error("Erro ao limpar preço do produto:", nomeProduto, error);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Erro ao buscar produtos:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro',
+                    text: 'Não foi possível limpar os preços.'
+                });
+            }
+        }
+
+        function excluirTabela(element) {
+            const planilha = element.closest('.planilha');
+            if (planilha) {
+                const grupo = planilha.closest('.grupo-impressao');
+                planilha.remove();
+                if (grupo && grupo.querySelectorAll('.planilha').length === 0) {
+                    grupo.remove();
+                }
+                atualizarSlider();
+            }
+        }
+
         function editarTabela(element) {
             const planilha = element.closest('.planilha');
             const produtoNome = planilha.querySelector('#produto-nome');
@@ -1606,9 +1441,6 @@
             carregarDadoss(); // Inicia o carregamento dos dados
 
         });
-
-
-
     </script>
 </body>
 </html>
