@@ -28,7 +28,7 @@
             top: 100px;
 
 
-            margin: 10;
+            margin:10px;
             font-family: Arial, sans-serif;
             display: flex;
             align-items: flex-start; /* Alinha os itens ao topo */
@@ -50,7 +50,7 @@
             .menu img {
                 display: block;
                 margin: 0 auto;
-                width: 90px;
+                width: 110px;
                 border-radius: 10%;
               
             }
@@ -138,23 +138,22 @@
             padding: 20px;
             text-align: center;
             margin-top: 20px;
+         
+            justify-content: space-between;
             width: 100%;
-            page-break-inside: avoid;
-            page-break-after: avoid;
         }
-
-
-
 
             .planilha img.logo {
                 position: absolute;
                 top: 10px;
                 right: 10px;
-                width: 100px;
-                height: auto;
+                width: 190px;
+                height: fit-content;
                 display: none;
                 margin-left: 50px;
+
             }
+
 
         .produto {
             font-weight: bold;
@@ -920,10 +919,8 @@
             </div>
         </div>
 
-        <!-- Ajustar Largura -->
-        <div class="form-group">
-            <input type="range" id="tamanho-slider" min="200" max="520" class="range-input" oninput="ajustarLargura(this.value)">
-        </div>
+ 
+
 
 
         <div class="wrapper">
@@ -947,7 +944,7 @@
                         <path class="checkmark" d="M4 12l5 5L20 7"></path>
                     </svg>
                 </div>
-                Com Logo
+                Com Qr code  baixar App Cordeiro?
             </label>
         </div>
 
@@ -963,6 +960,9 @@
         </div>
         <div class="form-group">
             <button type="button" id="btnAdicionar"><i class="fas fa-plus"></i> Adicionar</button>
+        </div>
+        <div class="form-group">
+            <button type="button" id="btnAlinhar" onclick="alternarAlinhamentoTexto('center')">Centralizar Texto</button>
         </div>
     </div>
 
@@ -1140,6 +1140,12 @@
                 }
             }
 
+
+            const today = new Date();
+            const formattedDateTime = today.toLocaleString('pt-BR');
+            dataInput.value = formattedDateTime;
+
+
             const produto = produtoInput.value || "Produto";
             const data = dataInput.value || "DD/MM/AAAA";
             const preco = parseFloat(precoInput.value.replace(',', '.')) || 0.0;
@@ -1167,7 +1173,9 @@
             novaPlanilha.innerHTML = `
                     <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
                     <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
-                    <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
+     
+
+                   <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${comLogo ? 'block' : 'none'};" width: fit-content; height: 190px; margin-left: 10px;">
                     <div class="content-container">
                         <div class="produto" id="produto-nome">${produto}</div>
                         <div class="info">
@@ -1186,8 +1194,20 @@
 
             adicionarItemAPagina(planilhaContainer, novaPlanilha);
             ativarRedimensionamento(novaPlanilha);
+            atualizarVisibilidadeLogo();
         }
 
+
+        let alinhamentoAtual = 'center';
+        function alternarAlinhamentoTexto() {
+            const alinhamentos = ['left', 'center', 'right'];
+            alinhamentoAtual = alinhamentos[(alinhamentos.indexOf(alinhamentoAtual) + 1) % alinhamentos.length];
+            const contentContainers = document.querySelectorAll('.planilha .content-container');
+            contentContainers.forEach(container => {
+                container.style.textAlign = alinhamentoAtual;
+            });
+            document.getElementById('btnAlinhar').textContent = `Alinhar: ${alinhamentoAtual === 'left' ? 'Esquerda' : alinhamentoAtual === 'center' ? 'Meio' : 'Direita'}`;
+        }
         function carregarDados() {
             axios({
                 method: "GET",
@@ -1201,7 +1221,7 @@
                     let resultadosComPreco = dados.filter(item => item.PREÇO !== "");
 
                     const planilhaContainer = document.getElementById('planilhas');
-                    planilhaContainer.innerHTML = ""; // Limpa antes de adicionar novos elementos
+                    planilhaContainer.innerHTML = "";
                     const today = new Date();
                     const formattedDate = today.toLocaleDateString('pt-BR');
                     dataInput.value = formattedDate;
@@ -1210,8 +1230,9 @@
                     let paginaAtual = document.createElement('div');
                     paginaAtual.classList.add('pagina-impressao');
                     planilhaContainer.appendChild(paginaAtual);
-
-                    let itensNaPagina = 0; // Controla a quantidade de itens na página atual
+                    const logoCheckbox = document.getElementById('logo-checkbox');
+                    const comLogo = logoCheckbox.checked;
+                    let itensNaPagina = 0;
 
                     resultadosComPreco.forEach((item, index) => {
                         const precoTotal = item.PREÇO * item.QUANTIDADE;
@@ -1224,37 +1245,39 @@
 
                         const novaPlanilha = document.createElement('div');
                         novaPlanilha.classList.add('planilha');
-                        novaPlanilha.style.breakInside = 'avoid'; // Impede que a planilha seja cortada entre páginas
+                        novaPlanilha.style.breakInside = 'avoid';
                         novaPlanilha.innerHTML = `
-                        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                        <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${logoCheckbox ? 'block' : 'none'}; width: 200px; height: 190px; margin-left: 10px;">
-                        <div class="produto" id="produto-nome">${item.PRODUTO}</div>
-                        <div class="info">
-                            <span class="preco">R$ ${precoTotal.toFixed(2).replace('.', ',')}</span>
-                        </div>
-                        <div class="adicional">
-                            <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2).replace('.', ',')}</span>
-                            <div class="info">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span id="data-emitida">Data emitida: ${formattedDate}</span>
-                            </div>
-                            <div class="resize-handle"></div>
-                        </div>
-                    `;
+                <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${comLogo ? 'block' : 'none'};" width="200" height="190" style="margin-left: 10px;">
+                <div class="produto" id="produto-nome">${item.PRODUTO}</div>
+                <div class="info">
+                    <span class="preco">R$ ${precoTotal.toFixed(2).replace('.', ',')}</span>
+                </div>
+                <div class="adicional">
+                    <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2).replace('.', ',')}</span>
+                    <div class="info">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span id="data-emitida">Data emitida: ${formattedDate}</span>
+                    </div>
+                    <div class="resize-handle"></div>
+                </div>
+            `;
 
                         paginaAtual.appendChild(novaPlanilha);
                         itensNaPagina++;
 
-                        // Quando a página atinge 6 itens, cria uma nova página
                         if (itensNaPagina === 6) {
                             paginaAtual = document.createElement('div');
                             paginaAtual.classList.add('pagina-impressao');
                             planilhaContainer.appendChild(paginaAtual);
-                            itensNaPagina = 0; // Reinicia o contador de itens na nova página
+                            itensNaPagina = 0;
                         }
 
                         ativarRedimensionamento(novaPlanilha);
                     });
+
+                    // Aplica o alinhamento atual para os dados carregados
+                    alternarAlinhamentoTexto();
                 });
         }
 
@@ -1441,6 +1464,23 @@
             carregarDadoss(); // Inicia o carregamento dos dados
 
         });
+
+
+
+
+        function atualizarVisibilidadeLogo() {
+            const comLogo = logoCheckbox.checked;
+            const logos = document.querySelectorAll('.planilha .logo');
+            logos.forEach(logo => {
+                logo.style.display = comLogo ? 'block' : 'none';
+                const planilha = logo.closest('.planilha');
+                if (planilha) {
+                    const contentWidth = planilha.querySelector('.content-container').offsetWidth;
+                    const logoWidth = comLogo ? logo.offsetWidth : 0;
+                    planilha.style.width = `${contentWidth + logoWidth + 60}px`; // 40px padding + 20px gap
+                }
+            });
+        }
     </script>
 </body>
 </html>
