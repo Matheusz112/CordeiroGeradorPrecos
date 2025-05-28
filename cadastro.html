@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login - Cadastro de Produto</title>
+  <script src="https://unpkg.com/@ericblade/quagga2/dist/quagga.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #e0e7ff 0%, #f1f3f5 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+    }
+    .container {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+      transition: transform 0.3s ease;
+    }
+    .container:hover {
+      transform: translateY(-3px);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #1e293b;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    .form-grid {
+      display: grid;
+      gap: 12px;
+    }
+    label {
+      font-weight: 600;
+      color: #334155;
+      font-size: 0.85rem;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-size: 0.9rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+    }
+    button {
+      background: linear-gradient(90deg, #3b82f6, #2563eb);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      padding: 10px;
+      font-size: 0.9rem;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: linear-gradient(90deg, #2563eb, #1d4ed8);
+    }
+    button:disabled {
+      background: #9ca3af;
+      cursor: not-allowed;
+    }
+    #scanner {
+      width: 100%;
+      height: 150px;
+      margin-bottom: 12px;
+      display: none;
+      border: 2px solid #d1d5db;
+      border-radius: 8px;
+    }
+    .show-password {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: -8px;
+      margin-bottom: 12px;
+      font-size: 0.8rem;
+      color: #475569;
+    }
+    .show-password input {
+      width: auto;
+    }
+    .error-message, .success-message {
+      text-align: center;
+      font-weight: 600;
+      padding: 8px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+      opacity: 0;
+      animation: fadeIn 0.5s ease forwards;
+      word-wrap: break-word;
+    }
+    .error-message {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+    .success-message {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    .loading::after {
+      content: '';
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 2px solid #fff;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 8px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+        max-width: 90%;
+      }
+      h2 {
+        font-size: 1.3rem;
+      }
+      label, input, select, button {
+        font-size: 0.85rem;
+      }
+      .error-message, .success-message {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="loginContainer">
+    <h2>Login - Unidade</h2>
+    <div id="loginFeedback" class="error-message" style="display:none"></div>
+    <div class="form-grid">
+      <label for="unidade">Selecione a Unidade</label>
+      <select id="unidade">
+        <option value="">-- Escolha --</option>
+        <option value="sagrado">Sagrado Coração</option>
+        <option value="riogrande">Rio Grande</option>
+      </select>
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" placeholder="Digite a senha" />
+      <div class="show-password">
+        <input type="checkbox" id="mostrarSenha" onclick="toggleSenha()" />
+        <label for="mostrarSenha">Mostrar senha</label>
+      </div>
+      <button onclick="verificarLogin()">Entrar</button>
+    </div>
+  </div>
+
+  <div class="container" id="formContainer" style="display:none">
+    <h2>Cadastro de Produto</h2>
+    <div id="barcodeFeedback" class="error-message" style="display:none"></div>
+    <form id="productForm" onsubmit="cadastrarProduto(event)" class="form-grid">
+      <label for="descricao">Descrição do Produto</label>
+      <input
+        type="text"
+        id="descricao"
+        name="descricao"
+        placeholder="Ex: CERV PILSEN ITAIPAVA 12X473ml"
+        required
+        oninput="verificarFardoAutomaticamente()"
+      />
+      <label for="quantidade">Quantidade por Fardo</label>
+      <select id="quantidade" name="quantidade" required>
+        <option value="6">6 unidades</option>
+        <option value="12">12 unidades</option>
+      </select>
+      <label for="volume">Volume (ml ou litro)</label>
+      <input
+        type="text"
+        id="volume"
+        name="volume"
+        placeholder="Ex: 500 ou 1"
+        required
+        oninput="onlyNumber(event)"
+      />
+      <label for="codigobarra">Código de Barras</label>
+      <input
+        type="text"
+        id="codigobarra"
+        name="codigobarra"
+        placeholder="Ex: 7891234567890"
+        required
+        oninput="checkBarcode()"
+      />
+      <button type="button" onclick="startScanner()">📷 Escanear Código</button>
+      <div id="scanner"></div>
+      <button type="submit" id="submitButton">Cadastrar Produto</button>
+    </form>
+  </div>
+
+  <script>
+    let isBarcodeValid = false;
+    let isSubmitting = false;
+
+    function verificarLogin() {
+      const unidade = document.getElementById('unidade').value;
+      const senha = document.getElementById('senha').value;
+      const feedback = document.getElementById('loginFeedback');
+      const valido =
+        (unidade === 'sagrado' && senha === 'cordeiro3') ||
+        (unidade === 'riogrande' && senha === 'cordeiro2');
+
+      if (valido) {
+        document.getElementById('loginContainer').style.display = 'none';
+        document.getElementById('formContainer').style.display = 'block';
+        feedback.style.display = 'none';
+      } else {
+        feedback.innerText = 'Unidade ou senha incorreta!';
+        feedback.className = 'error-message';
+        feedback.style.display = 'block';
+      }
+    }
+
+    function toggleSenha() {
+      const senhaInput = document.getElementById('senha');
+      senhaInput.type = senhaInput.type === 'password' ? 'text' : 'password';
+    }
+
+    function startScanner() {
+      const scannerEl = document.getElementById('scanner');
+      scannerEl.style.display = 'block';
+
+      Quagga.init(
+        {
+          inputStream: {
+            name: 'Live',
+            type: 'LiveStream',
+            target: scannerEl,
+            constraints: {
+              facingMode: 'environment',
+            },
+          },
+          decoder: {
+            readers: ['ean_reader'],
+          },
+        },
+        function (err) {
+          if (err) {
+            console.error(err);
+            return;
+          }
+          Quagga.start();
+        }
+      );
+
+      Quagga.onDetected((data) => {
+        const barcode = data.codeResult.code;
+        document.getElementById('codigobarra').value = barcode;
+        Quagga.stop();
+        scannerEl.style.display = 'none';
+        checkBarcode();
+      });
+    }
+
+    function verificarFardoAutomaticamente() {
+      const descricao = document
+        .getElementById('descricao')
+        .value.toLowerCase();
+      const selectQuantidade = document.getElementById('quantidade');
+      const volumeInput = document.getElementById('volume');
+
+      if (/\b12x/i.test(descricao)) {
+        selectQuantidade.value = '12';
+      } else if (/\b6x/i.test(descricao)) {
+        selectQuantidade.value = '6';
+      }
+
+      const volumeMatch = descricao.match(/(\d+)(ml|l)/);
+      if (volumeMatch) {
+        volumeInput.value = volumeMatch[1];
+      } else {
+        volumeInput.value = '';
+      }
+    }
+
+    function onlyNumber(event) {
+      const input = event.target;
+      input.value = input.value.replace(/\D/g, '');
+    }
+
+    async function checkBarcode() {
+      const barcode = document.getElementById('codigobarra').value;
+      const feedback = document.getElementById('barcodeFeedback');
+
+      if (barcode.length < 8) {
+        feedback.style.display = 'none';
+        isBarcodeValid = false;
+        return;
+      }
+
+      try {
+        const response = await axios({
+          method: 'GET',
+          url: 'https://api.baserow.io/api/database/rows/table/322640/?user_field_names=true',
+          headers: {
+            Authorization: 'Token Zpp1pMg1AYeG0lnXC1De0hIZID19BUM6',
+          },
+          params: {
+            filter__CODIGO__equal: barcode,
+          },
+        });
+
+        if (response.data.results.length > 0) {
+          const productName = response.data.results[0].PRODUTO || 'Desconhecido';
+          feedback.innerText = `Produto já existe: ${productName}`;
+          feedback.className = 'error-message';
+          feedback.style.display = 'block';
+          isBarcodeValid = false;
+        } else {
+          feedback.innerText = 'Este produto pode ser cadastrado!';
+          feedback.className = 'success-message';
+          feedback.style.display = 'block';
+          isBarcodeValid = true;
+        }
+      } catch (error) {
+        console.error('Erro ao verificar código de barras:', error);
+        feedback.innerText = 'Erro ao verificar código de barras!';
+        feedback.className = 'error-message';
+        feedback.style.display = 'block';
+        isBarcodeValid = false;
+      }
+    }
+
+    async function cadastrarProduto(event) {
+      event.preventDefault();
+
+      if (isSubmitting) return;
+
+      const barcode = document.getElementById('codigobarra').value;
+      const descricao = document.getElementById('descricao').value;
+      const feedback = document.getElementById('barcodeFeedback');
+      const submitButton = document.getElementById('submitButton');
+
+      if (!isBarcodeValid) {
+        feedback.innerText = 'Não é possível cadastrar: Código de barras já existe ou inválido!';
+        feedback.className = 'error-message';
+        feedback.style.display = 'block';
+        return;
+      }
+
+      isSubmitting = true;
+      submitButton.disabled = true;
+      submitButton.innerText = 'Cadastrando...';
+      submitButton.classList.add('loading');
+
+      const productData = {
+        CODIGO: barcode,
+        PRODUTO: descricao,
+        QUANTIDADE: document.getElementById('quantidade').value,
+        ML: document.getElementById('volume').value,
+        PREÇO: '',
+      };
+
+      try {
+        const response = await axios({
+          method: 'POST',
+          url: 'https://api.baserow.io/api/database/rows/table/322640/?user_field_names=true',
+          headers: {
+            Authorization: 'Token Zpp1pMg1AYeG0lnXC1De0hIZID19BUM6',
+            'Content-Type': 'application/json',
+          },
+          data: productData,
+        });
+
+        feedback.innerText = `Produto "${descricao}" cadastrado com sucesso!`;
+        feedback.className = 'success-message';
+        feedback.style.display = 'block';
+        document.getElementById('productForm').reset();
+        isBarcodeValid = false;
+      } catch (error) {
+        console.error('Erro ao cadastrar produto:', error);
+        feedback.innerText = 'Erro ao cadastrar produto!';
+        feedback.className = 'error-message';
+        feedback.style.display = 'block';
+      } finally {
+        isSubmitting = false;
+        submitButton.disabled = false;
+        submitButton.innerText = 'Cadastrar Produto';
+        submitButton.classList.remove('loading');
+      }
+    }
+  </script>
+</body>
+</html>
