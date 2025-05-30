@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login - Cadastro de Produto</title>
-  <script src="https://unpkg.com/@ericblade/quagga2/dist/quagga.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <style>
     * {
@@ -39,6 +38,12 @@
       color: #1e293b;
       font-size: 1.5rem;
       font-weight: 700;
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 15px;
+      max-width: 150px;
+      height: auto;
     }
     .form-grid {
       display: grid;
@@ -78,14 +83,6 @@
     button:disabled {
       background: #9ca3af;
       cursor: not-allowed;
-    }
-    #scanner {
-      width: 100%;
-      height: 150px;
-      margin-bottom: 12px;
-      display: none;
-      border: 2px solid #d1d5db;
-      border-radius: 8px;
     }
     .show-password {
       display: flex;
@@ -143,6 +140,9 @@
       h2 {
         font-size: 1.3rem;
       }
+      .logo {
+        max-width: 120px;
+      }
       label, input, select, button {
         font-size: 0.85rem;
       }
@@ -154,6 +154,7 @@
 </head>
 <body>
   <div class="container" id="loginContainer">
+    <img src="https://i.ibb.co/RKfjxBk/Design-sem-nome.gif" alt="Logo da Empresa" class="logo" />
     <h2>Login - Unidade</h2>
     <div id="loginFeedback" class="error-message" style="display:none"></div>
     <div class="form-grid">
@@ -174,6 +175,7 @@
   </div>
 
   <div class="container" id="formContainer" style="display:none">
+    <img src="https://i.ibb.co/RKfjxBk/Design-sem-nome.gif" alt="Logo da Empresa" class="logo" />
     <h2>Cadastro de Produto</h2>
     <div id="barcodeFeedback" class="error-message" style="display:none"></div>
     <form id="productForm" onsubmit="cadastrarProduto(event)" class="form-grid">
@@ -209,8 +211,6 @@
         required
         oninput="checkBarcode()"
       />
-      <button type="button" onclick="startScanner()">📷 Escanear Código</button>
-      <div id="scanner"></div>
       <button type="submit" id="submitButton">Cadastrar Produto</button>
     </form>
   </div>
@@ -241,42 +241,6 @@
     function toggleSenha() {
       const senhaInput = document.getElementById('senha');
       senhaInput.type = senhaInput.type === 'password' ? 'text' : 'password';
-    }
-
-    function startScanner() {
-      const scannerEl = document.getElementById('scanner');
-      scannerEl.style.display = 'block';
-
-      Quagga.init(
-        {
-          inputStream: {
-            name: 'Live',
-            type: 'LiveStream',
-            target: scannerEl,
-            constraints: {
-              facingMode: 'environment',
-            },
-          },
-          decoder: {
-            readers: ['ean_reader'],
-          },
-        },
-        function (err) {
-          if (err) {
-            console.error(err);
-            return;
-          }
-          Quagga.start();
-        }
-      );
-
-      Quagga.onDetected((data) => {
-        const barcode = data.codeResult.code;
-        document.getElementById('codigobarra').value = barcode;
-        Quagga.stop();
-        scannerEl.style.display = 'none';
-        checkBarcode();
-      });
     }
 
     function verificarFardoAutomaticamente() {
