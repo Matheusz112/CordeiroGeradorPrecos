@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciamento de Produtos</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    .input-icon {
+      position: relative;
+    }
+    .input-icon i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6b7280;
+      font-size: 14px;
+    }
+    .input-icon input {
+      padding-left: 40px;
+    }
+    .input-icon select {
+      padding-left: 40px;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="%236b7280" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5H7z"/></svg>') no-repeat right 10px center;
+    }
+    .input-icon label {
+      margin-bottom: 4px;
+    }
+    #mainContent {
+      display: none;
+    }
+    .modal {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 0.5rem;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center font-sans">
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Login</h2>
+      <div class="mb-4">
+        <label for="locationSelect" class="block text-sm font-medium text-gray-700 mb-2">Selecionar Local</label>
+        <select id="locationSelect" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
+          <option value="">Escolha um local</option>
+          <option value="sagrado">Cordeiro Sagrado Coração</option>
+          <option value="riogrande">Cordeiro Rio Grande</option>
+        </select>
+      </div>
+      <div class="mb-4 input-icon">
+        <i class="fas fa-lock fa-sm"></i>
+        <input 
+          type="password" 
+          id="passwordInput" 
+          placeholder="Digite a senha" 
+          class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+        >
+      </div>
+      <button 
+        id="togglePasswordButton" 
+        onclick="togglePassword()" 
+        class="w-full bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600 transition mb-4"
+      >
+        Mostrar Senha
+      </button>
+      <button 
+        onclick="validateLogin()" 
+        class="w-full bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition"
+      >
+        Entrar
+      </button>
+      <p id="loginMessage" class="mt-4 text-center text-red-500"></p>
+    </div>
+  </div>
+
+  <div id="mainContent" class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-2xl">
+    <img src="https://media.licdn.com/dms/image/v2/C4E0BAQEfwWU9zchODg/company-logo_200_200/company-logo_200_200/0/1653061758819?e=2147483647&v=beta&t=ecww_HgXGTo8lEzRcjDvu4Z1-qpC1I3Mdh65rgCK6Eg" alt="Logo" class="mx-auto mb-4 w-24 h-24">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Gerenciamento de Produtos</h1>
+    
+    <div class="mb-6">
+      <label for="searchType" class="block text-sm font-medium text-gray-700 mb-2">Pesquisar por</label>
+      <select 
+        id="searchType" 
+        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition mb-4"
+      >
+        <option value="name">Nome do Produto</option>
+        <option value="barcode">Código de Barras</option>
+      </select>
+      <label for="searchInput" class="block text-sm font-medium text-gray-700 mb-2">Termo de Pesquisa</label>
+      <div class="flex space-x-2">
+        <div class="input-icon flex-1">
+          <i class="fas fa-search fa-sm"></i>
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Digite o nome ou código de barras" 
+            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+          >
+        </div>
+        <button 
+          onclick="searchProduct()" 
+          class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition"
+        >
+          Pesquisar
+        </button>
+      </div>
+      <button 
+        onclick="searchLastScannedBarcode()" 
+        class="mt-4 w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+      >
+        Buscar pelo Último Código de Barras Escaneado
+      </button>
+    </div>
+
+    <div class="mb-6">
+      <label for="productSelect" class="block text-sm font-medium text-gray-700 mb-2">Selecionar Produto</label>
+      <div class="input-icon">
+        <i class="fas fa-box fa-sm"></i>
+        <select 
+          id="productSelect" 
+          onchange="loadProductDetails()" 
+          class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+        >
+          <option value="">Selecione um produto</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="updateForm" class="hidden fade-in">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">Atualizar Produto</h2>
+      <div class="space-y-4">
+        <div class="input-icon">
+          <label for="codigo" class="block text-sm font-medium text-gray-700">Código de Barras</label>
+          <i class="fas fa-barcode fa-sm"></i>
+          <input 
+            type="text" 
+            id="codigo" 
+            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+          >
+        </div>
+        <div class="input-icon">
+          <label for="produto" class="block text-sm font-medium text-gray-700">Produto</label>
+          <i class="fas fa-box-open fa-sm"></i>
+          <input 
+            type="text" 
+            id="produto" 
+            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+          >
+        </div>
+        <div class="input-icon">
+          <label for="preco" class="block text-sm font-medium text-gray-700">Preço</label>
+          <i class="fas fa-dollar-sign fa-sm"></i>
+          <input 
+            type="text" 
+            id="preco" 
+            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+          >
+        </div>
+        <div class="input-icon">
+          <label for="ml" class="block text-sm font-medium text-gray-700">ML</label>
+          <i class="fas fa-flask fa-sm"></i>
+          <input 
+            type="text" 
+            id="ml" 
+            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+          >
+        </div>
+        <div class="input-icon">
+          <label for="quantidade" class="block text-sm font-medium text-gray-700">Quantidade</label>
+          <i class="fas fa-cubes fa-sm"></i>
+          <input 
+            type="text" 
+            id="quantidade" 
+            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+          >
+        </div>
+        <button 
+          onclick="updateProduct()" 
+          class="w-full bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition"
+        >
+          Atualizar Produto
+        </button>
+      </div>
+    </div>
+
+    <p id="message" class="mt-4 text-center"></p>
+  </div>
+
+  <script>
+    const token = 'UkqZsuMMnwE59fMqs8OwXX60SASP7FOd';
+    let selectedRowId = null;
+
+    function togglePassword() {
+      const passwordInput = document.getElementById('passwordInput');
+      const toggleButton = document.getElementById('togglePasswordButton');
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleButton.textContent = 'Esconder Senha';
+      } else {
+        passwordInput.type = 'password';
+        toggleButton.textContent = 'Mostrar Senha';
+      }
+    }
+
+    function validateLogin() {
+      const location = document.getElementById('locationSelect').value;
+      const password = document.getElementById('passwordInput').value;
+      const loginMessage = document.getElementById('loginMessage');
+
+      if (!location) {
+        loginMessage.textContent = 'Por favor, selecione um local.';
+        return;
+      }
+
+      if (location === 'sagrado' && password === 'cordeiro3') {
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+      } else if (location === 'riogrande' && password === 'cordeiro2') {
+        document.getElementById('loginModal').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+      } else {
+        loginMessage.textContent = 'Senha incorreta para o local selecionado.';
+      }
+    }
+
+    async function searchProduct() {
+      const searchTerm = document.getElementById('searchInput').value.trim();
+      const searchType = document.getElementById('searchType').value;
+      const messageElement = document.getElementById('message');
+      if (!searchTerm) {
+        showMessage('Por favor, digite um termo de pesquisa.', 'text-red-500');
+        return;
+      }
+
+      try {
+        const response = await axios({
+          method: 'GET',
+          url: 'https://api.baserow.io/api/database/rows/table/322640/?user_field_names=true',
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        });
+
+        const products = response.data.results;
+        const productSelect = document.getElementById('productSelect');
+        productSelect.innerHTML = '<option value="">Selecione um produto</option>';
+
+        const filteredProducts = products.filter(product => {
+          if (searchType === 'name') {
+            return product.PRODUTO.toLowerCase().includes(searchTerm.toLowerCase());
+          } else {
+            return product.CODIGO.toLowerCase().includes(searchTerm.toLowerCase());
+          }
+        });
+
+        if (filteredProducts.length === 0) {
+          showMessage('Nenhum produto encontrado.', 'text-red-500');
+          return;
+        }
+
+        filteredProducts.forEach(product => {
+          const option = document.createElement('option');
+          option.value = product.id;
+          option.textContent = `${product.PRODUTO} (Código: ${product.CODIGO})`;
+          productSelect.appendChild(option);
+        });
+
+        if (filteredProducts.length === 1) {
+          selectedRowId = filteredProducts[0].id;
+          productSelect.value = selectedRowId;
+          loadProductDetails();
+        }
+
+        showMessage(`${filteredProducts.length} produto(s) encontrado(s).`, 'text-green-500');
+      } catch (error) {
+        showMessage('Erro ao buscar produtos: ' + error.message, 'text-red-500');
+      }
+    }
+
+    async function searchLastScannedBarcode() {
+      const messageElement = document.getElementById('message');
+      try {
+        const response = await axios({
+          method: 'GET',
+          url: 'https://api.baserow.io/api/database/rows/table/459281/2/?user_field_names=true',
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        });
+
+        const lastScannedBarcode = response.data.codigo;
+        if (!lastScannedBarcode) {
+          showMessage('Nenhum código de barras escaneado encontrado.', 'text-red-500');
+          return;
+        }
+
+        document.getElementById('searchType').value = 'barcode';
+        document.getElementById('searchInput').value = lastScannedBarcode;
+        await searchProduct();
+      } catch (error) {
+        showMessage('Erro ao buscar o último código de barras: ' + error.message, 'text-red-500');
+      }
+    }
+
+    async function loadProductDetails() {
+      const productSelect = document.getElementById('productSelect');
+      selectedRowId = productSelect.value;
+      const updateForm = document.getElementById('updateForm');
+
+      if (!selectedRowId) {
+        updateForm.classList.add('hidden');
+        return;
+      }
+
+      try {
+        const response = await axios({
+          method: 'GET',
+          url: `https://api.baserow.io/api/database/rows/table/322640/${selectedRowId}/?user_field_names=true`,
+          headers: {
+            Authorization: `Token ${token}`
+          }
+        });
+
+        const product = response.data;
+        document.getElementById('codigo').value = product.CODIGO || '';
+        document.getElementById('produto').value = product.PRODUTO || '';
+        document.getElementById('preco').value = product.PREÇO || '';
+        document.getElementById('ml').value = product.ML || '';
+        document.getElementById('quantidade').value = product.QUANTIDADE || '';
+        updateForm.classList.remove('hidden');
+      } catch (error) {
+        showMessage('Erro ao carregar detalhes do produto: ' + error.message, 'text-red-500');
+      }
+    }
+
+    async function updateProduct() {
+      const messageElement = document.getElementById('message');
+      if (!selectedRowId) {
+        showMessage('Por favor, selecione um produto.', 'text-red-500');
+        return;
+      }
+
+      const confirmUpdate = confirm('Tem certeza que deseja fazer essas alterações no produto?');
+      if (!confirmUpdate) {
+        showMessage('Alterações canceladas.', 'text-yellow-500');
+        return;
+      }
+
+      const updatedData = {
+        CODIGO: document.getElementById('codigo').value,
+        PRODUTO: document.getElementById('produto').value,
+        PREÇO: document.getElementById('preco').value,
+        ML: document.getElementById('ml').value,
+        QUANTIDADE: document.getElementById('quantidade').value
+      };
+
+      try {
+        await axios({
+          method: 'PATCH',
+          url: `https://api.baserow.io/api/database/rows/table/322640/${selectedRowId}/?user_field_names=true`,
+          headers: {
+            Authorization: `Token ${token}`,
+            'Content-Type': 'application/json'
+          },
+          data: updatedData
+        });
+
+        showMessage('Produto atualizado com sucesso!', 'text-green-500');
+      } catch (error) {
+        showMessage('Erro ao atualizar produto: ' + error.message, 'text-red-500');
+      }
+    }
+
+    function showMessage(message, className) {
+      const messageElement = document.getElementById('message');
+      messageElement.textContent = message;
+      messageElement.className = className;
+    }
+  </script>
+</body>
+</html>
