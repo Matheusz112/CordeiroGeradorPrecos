@@ -36,7 +36,13 @@
       transform: translateY(-2px);
     }
 
-    .clear-button {
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .clear-button, .update-image-button {
       background: #ef4444;
       color: white;
       border: none;
@@ -45,11 +51,14 @@
       cursor: pointer;
       font-size: 12px;
       font-weight: 600;
-      margin-bottom: 10px;
       display: flex;
       align-items: center;
       gap: 5px;
       transition: background 0.3s, transform 0.2s;
+    }
+
+    .update-image-button {
+      background: #0284c7;
     }
 
     .clear-button:hover {
@@ -57,7 +66,12 @@
       transform: scale(1.05);
     }
 
-    .clear-button i {
+    .update-image-button:hover {
+      background: #016ba0;
+      transform: scale(1.05);
+    }
+
+    .clear-button i, .update-image-button i {
       font-size: 12px;
     }
 
@@ -229,11 +243,11 @@
       .info p i {
         font-size: 8px;
       }
-      .clear-button {
+      .clear-button, .update-image-button {
         font-size: 10px;
         padding: 6px 10px;
       }
-      .clear-button i {
+      .clear-button i, .update-image-button i {
         font-size: 10px;
       }
       .loading p {
@@ -266,7 +280,10 @@
 </head>
 <body>
   <div class="container">
-    <button class="clear-button" onclick="clearPrices()"><i class="fas fa-trash-alt"></i> Limpar Preços</button>
+    <div class="button-group">
+      <button class="clear-button" onclick="clearPrices()"><i class="fas fa-trash-alt"></i> Limpar Preços</button>
+      <button class="update-image-button" onclick="updateProductsWithoutImage()"><i class="fas fa-image"></i> Atualizar Imagens</button>
+    </div>
     <div id="message" class="message"><i class="fas fa-info-circle"></i> <span id="message-text"></span></div>
     <div id="loading" class="loading">
       <div class="spinner"></div>
@@ -283,6 +300,13 @@
     function showLoading(show) {
       const loadingDiv = document.getElementById("loading");
       loadingDiv.style.display = show ? "flex" : "none";
+    }
+
+    function showMessage(text) {
+      const messageDiv = document.getElementById("message");
+      const messageText = document.getElementById("message-text");
+      messageText.innerHTML = text;
+      messageDiv.style.display = "flex";
     }
 
     function loadProducts() {
@@ -329,7 +353,7 @@
         showLoading(false);
       })
       .catch(err => {
-        console.error(err);
+        console.error("Erro ao carregar produtos:", err);
         showLoading(false);
         const lista = document.getElementById("lista");
         lista.innerHTML = "";
@@ -340,13 +364,82 @@
       });
     }
 
-    function clearPrices() {
-      const messageDiv = document.getElementById("message");
-      const messageText = document.getElementById("message-text");
-      messageDiv.style.display = "none";
-      messageText.innerHTML = "";
+    function updateProductsWithoutImage() {
       showLoading(true);
+      axios.get("https://api.baserow.io/api/database/rows/table/322640/?user_field_names=true", {
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      })
+      .then(res => {
+        // Filtrar apenas produtos com preço válido
+        const validProducts = res.data.results.filter(item => item["PREÇO"] && !isNaN(parseFloat(item["PREÇO"])));
 
+        // Agrupar por PRODUTO e ML
+        const productGroups = validProducts.reduce((acc, item) => {
+          const key = `${item["PRODUTO"]}|${item["ML"] || ""}`;
+          if (!acc[key]) {
+            acc[key] = [];
+          }
+          acc[key].push(item);
+          return acc;
+        }, {});
+
+        const updatePromises = [];
+        const updatedProducts = [];
+
+        // Iterar por cada grupo de produtos
+        Object.values(productGroups).forEach(group => {
+          // Encontrar um produto com IMAGEM URL não vazia
+          const productWithImage = group.find(item => item["IMAGEM URL"] && item["IMAGEM URL"].trim() !== "");
+          if (productWithImage) {
+            // Atualizar produtos no grupo que não têm imagem
+            group.forEach(item => {
+              if (!item["IMAGEM URL"] || item["IMAGEM URL"].trim() === "") {
+                updatedProducts.push(`${item["PRODUTO"]} (${item["ML"] || "N/A"} ml)`);
+                updatePromises.push(
+                  axios({
+                    method: "PATCH",
+                    url: `https://api.baserow.io/api/database/rows/table/322640/${item.id}/?user_field_names=true`,
+                    headers: {
+                      Authorization: `Token ${token}`,
+                      "Content-Type": "application/json"
+                    },
+                    data: {
+                      "IMAGEM URL": productWithImage["IMAGEM URL"]
+                    }
+                  })
+                );
+              }
+            });
+          }
+        });
+
+        if (updatePromises.length > 0) {
+          Promise.all(updatePromises)
+            .then(() => {
+              showMessage(`URLs de imagem atualizadas para: ${[...new Set(updatedProducts)].join(", ")}`);
+              loadProducts(); // Recarregar produtos para refletir mudanças
+            })
+            .catch(err => {
+              console.error("Erro ao atualizar URLs de imagem:", err);
+              showMessage("Erro ao atualizar URLs de imagem.");
+              showLoading(false);
+            });
+        } else {
+          showMessage("Nenhuma URL de imagem precisou ser atualizada.");
+          showLoading(false);
+        }
+      })
+      .catch(err => {
+        console.error("Erro ao carregar produtos:", err);
+        showMessage("Erro ao carregar produtos.");
+        showLoading(false);
+      });
+    }
+
+    function clearPrices() {
+      showLoading(true);
       axios.get("https://api.baserow.io/api/database/rows/table/322640/?user_field_names=true", {
         headers: {
           Authorization: `Token ${token}`
@@ -357,7 +450,7 @@
         const updatePromises = res.data.results
           .filter(item => item["PREÇO"] && !isNaN(parseFloat(item["PREÇO"])))
           .map(item => {
-            clearedProducts.push(item["PRODUTO"]);
+            clearedProducts.push(`${item["PRODUTO"]} (${item["ML"] || "N/A"} ml)`);
             return axios({
               method: "PATCH",
               url: `https://api.baserow.io/api/database/rows/table/322640/${item.id}/?user_field_names=true`,
@@ -371,33 +464,30 @@
             });
           });
 
-        Promise.all(updatePromises)
-          .then(() => {
-            if (clearedProducts.length > 0) {
-              messageText.innerHTML = `Preços limpos para: ${clearedProducts.join(", ")}`;
-              messageDiv.style.display = "flex";
-            } else {
-              messageText.innerHTML = "Nenhum preço foi limpo.";
-              messageDiv.style.display = "flex";
-            }
-            loadProducts(); // Reload products after clearing prices
-          })
-          .catch(err => {
-            console.error(err);
-            messageText.innerHTML = "Erro ao limpar preços.";
-            messageDiv.style.display = "flex";
-            showLoading(false);
-          });
+        if (updatePromises.length > 0) {
+          Promise.all(updatePromises)
+            .then(() => {
+              showMessage(`Preços limpos para: ${[...new Set(clearedProducts)].join(", ")}`);
+              loadProducts(); // Recarregar produtos após limpar preços
+            })
+            .catch(err => {
+              console.error("Erro ao limpar preços:", err);
+              showMessage("Erro ao limpar preços.");
+              showLoading(false);
+            });
+        } else {
+          showMessage("Nenhum preço foi limpo.");
+          showLoading(false);
+        }
       })
       .catch(err => {
-        console.error(err);
-        messageText.innerHTML = "Erro ao carregar produtos.";
-        messageDiv.style.display = "flex";
+        console.error("Erro ao carregar produtos:", err);
+        showMessage("Erro ao carregar produtos.");
         showLoading(false);
       });
     }
 
-    // Initial load
+    // Carregamento inicial
     loadProducts();
   </script>
 </body>
