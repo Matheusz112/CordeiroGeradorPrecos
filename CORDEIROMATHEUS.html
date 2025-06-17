@@ -14,25 +14,21 @@
             --hover-highlight: #1F618D;
             --icon-color: #FFFFFF;
             --border-color: #2980B9;
+            --layout1-bg: #3498DB; /* Lighter blue for Layout Simples */
+            --layout2-bg: #1F618D; /* Darker blue for Layout com QR Code */
         }
 
         * {
             box-sizing: border-box;
-
         }
 
         body {
- 
             background: linear-gradient(135deg, #E3F2FD, #AED6F1);
-
-            top: 100px;
-
-
-            margin:10px;
+            margin: 10px;
             font-family: Arial, sans-serif;
             display: flex;
-            align-items: flex-start; /* Alinha os itens ao topo */
-            justify-content: center; /* Centraliza horizontalmente */
+            align-items: flex-start;
+            justify-content: center;
         }
 
         .menu {
@@ -47,13 +43,12 @@
             left: 0;
         }
 
-            .menu img {
-                display: block;
-                margin: 0 auto;
-                width: 110px;
-                border-radius: 10%;
-              
-            }
+        .menu img {
+            display: block;
+            margin: 0 auto;
+            width: 110px;
+            border-radius: 10%;
+        }
 
         .form-group {
             margin-bottom: 10px;
@@ -64,25 +59,25 @@
             width: 100%;
         }
 
-            .input-container i {
-                position: absolute;
-                left: 6px;
-                top: 50%;
-                transform: translateY(-50%);
-                font-size: 13px;
-                color: var(--border-color);
-            }
+        .input-container i {
+            position: absolute;
+            left: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 13px;
+            color: var(--border-color);
+        }
 
-            .input-container input {
-                width: 100%;
-                height: 30px;
-                padding: 0 6px 0 24px;
-                border: 1px solid var(--border-color);
-                border-radius: 12px;
-                background-color: var(--input-bg);
-                color: var(--text-color);
-                font-size: 17px;
-            }
+        .input-container input {
+            width: 100%;
+            height: 30px;
+            padding: 0 6px 0 24px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 17px;
+        }
 
         .radio-group p, .checkbox-group p {
             margin-bottom: 6px;
@@ -96,9 +91,9 @@
             margin-bottom: 6px;
         }
 
-            .radio-label input, .checkbox-label input {
-                margin-right: 6px;
-            }
+        .radio-label input, .checkbox-label input {
+            margin-right: 6px;
+        }
 
         .menu button {
             width: 100%;
@@ -107,17 +102,25 @@
             border-radius: 12px;
             background-color: var(--highlight);
             color: var(--icon-color);
-            font-size: 13px;
+            font-size: 14px; /* Increased for readability */
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
         }
 
-            .menu button:hover {
-                background-color: var(--hover-highlight);
-            }
+        .menu button:hover {
+            background-color: var(--hover-highlight);
+        }
+
+        #btnToggleLayout.layout1 {
+            background-color: var(--layout1-bg);
+        }
+
+        #btnToggleLayout.layout2 {
+            background-color: var(--layout2-bg);
+        }
 
         #tamanho-slider {
             width: 100%;
@@ -138,22 +141,19 @@
             padding: 20px;
             text-align: center;
             margin-top: 20px;
-         
             justify-content: space-between;
             width: 100%;
         }
 
-            .planilha img.logo {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                width: 190px;
-                height: fit-content;
-                display: none;
-                margin-left: 50px;
-
-            }
-
+        .planilha img.logo {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 190px;
+            height: fit-content;
+            display: none;
+            margin-left: 50px;
+        }
 
         .produto {
             font-weight: bold;
@@ -166,9 +166,9 @@
             margin-bottom: 3px;
         }
 
-            .info i {
-                margin-right: 20px;
-            }
+        .info i {
+            margin-right: 20px;
+        }
 
         .adicional {
             font-size: 27px;
@@ -198,9 +198,9 @@
             color: white;
         }
 
-            .checkbox-container input[type="checkbox"] {
-                display: none; /* Esconde o checkbox padrão */
-            }
+        .checkbox-container input[type="checkbox"] {
+            display: none;
+        }
 
         .checkbox-custom {
             width: 20px;
@@ -214,21 +214,19 @@
             flex-shrink: 0;
         }
 
-            .checkbox-custom i {
-                display: none; /* Esconde o ícone inicialmente */
-            }
-
-        /* Estilos quando o checkbox está marcado */
-        .checkbox-container input[type="checkbox"]:checked + .checkbox-custom {
-            background-color: #007bff; /* Cor de fundo quando marcado */
-            border-color: #007bff; /* Cor da borda quando marcado */
+        .checkbox-custom i {
+            display: none;
         }
 
-            .checkbox-container input[type="checkbox"]:checked + .checkbox-custom i {
-                display: block; /* Mostra o ícone quando marcado */
-                color: white; /* Cor do ícone quando marcado */
-            }
+        .checkbox-container input[type="checkbox"]:checked + .checkbox-custom {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
 
+        .checkbox-container input[type="checkbox"]:checked + .checkbox-custom i {
+            display: block;
+            color: white;
+        }
 
         .popup {
             display: none;
@@ -246,62 +244,47 @@
             animation: fadeIn 0.5s forwards;
         }
 
-            .popup .checkmark {
-                display: inline-block;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                background-color: #4caf50;
-                position: relative;
-                animation: pop-up 0.5s ease forwards;
-            }
+        .popup .checkmark {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #4caf50;
+            position: relative;
+            animation: pop-up 0.5s ease forwards;
+        }
 
-                .popup .checkmark::before {
-                    content: '';
-                    position: absolute;
-                    width: 15px;
-                    height: 30px;
-                    border-right: 5px solid white;
-                    border-bottom: 5px solid white;
-                    top: 10px;
-                    left: 18px;
-                    transform: rotate(45deg);
-                }
+        .popup .checkmark::before {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 30px;
+            border-right: 5px solid white;
+            border-bottom: 5px solid white;
+            top: 10px;
+            left: 18px;
+            transform: rotate(45deg);
+        }
 
-            .popup .message {
-                margin-top: 10px;
-                font-size: 18px;
-                color: antiquewhite;
-            }
+        .popup .message {
+            margin-top: 10px;
+            font-size: 18px;
+            color: antiquewhite;
+        }
 
         @keyframes pop-up {
-            0% {
-                transform: scale(0);
-            }
-
-            100% {
-                transform: scale(1);
-            }
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
         }
 
         @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-
-            100% {
-                opacity: 1;
-            }
+            0% { opacity: 0; }
+            100% { opacity: 1; }
         }
 
         @keyframes fadeOut {
-            0% {
-                opacity: 1;
-            }
-
-            100% {
-                opacity: 0;
-            }
+            0% { opacity: 1; }
+            100% { opacity: 0; }
         }
 
         .menuProdutos {
@@ -319,63 +302,46 @@
             animation: fadeIn 0.3s ease-out;
         }
 
-            .menuProdutos h3 {
-                margin: 0;
-                padding: 10px;
-                background-color: #0056b3;
-                color: white;
-                border-radius: 5px 5px 0 0;
-                text-align: center;
-                font-size: 18px;
-                animation: slideDown 0.3s ease-out;
-            }
+        .menuProdutos h3 {
+            margin: 0;
+            padding: 10px;
+            background-color: #0056b3;
+            color: white;
+            border-radius: 5px 5px 0 0;
+            text-align: center;
+            font-size: 18px;
+            animation: slideDown 0.3s ease-out;
+        }
 
-            .menuProdutos ul {
-                list-style-type: none;
-                padding: 0;
-                margin: 0;
-            }
+        .menuProdutos ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
 
-            .menuProdutos li {
-                cursor: pointer;
-                padding: 10px;
-                font-weight: bold;
-                color: #fff;
-                transition: background-color 0.2s ease-in-out;
-            }
+        .menuProdutos li {
+            cursor: pointer;
+            padding: 10px;
+            font-weight: bold;
+            color: #fff;
+            transition: background-color 0.2s ease-in-out;
+        }
 
-                .menuProdutos li:nth-child(even) {
-                    background-color: #0069d9;
-                }
+        .menuProdutos li:nth-child(even) {
+            background-color: #0069d9;
+        }
 
-                .menuProdutos li:hover {
-                    background-color: #0056b3;
-                }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
+        .menuProdutos li:hover {
+            background-color: #0056b3;
         }
 
         @keyframes slideDown {
-            from {
-                transform: translateY(-10px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .popupcordeiro {
-            display: none; /* Inicia escondido */
+            display: none;
             justify-content: center;
             align-items: center;
             position: fixed;
@@ -383,13 +349,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro semi-transparente */
+            background-color: rgba(0, 0, 0, 0.5);
             z-index: 9999;
         }
 
         .popupcordeiro-content {
-            width: 400px; /* Largura fixa do popup */
-            height: 500px; /* Altura fixa do popup */
+            width: 400px;
+            height: 500px;
             background-color: #fff;
             padding: 10px;
             border-radius: 10px;
@@ -404,46 +370,40 @@
         }
 
         .logocordeiro {
-            max-width: 200px; /* Reduzindo o tamanho da logo */
-            margin-bottom: 10px; /* Espaço abaixo da logo */
-            pointer-events: none; /* Desabilita eventos de mouse */
+            max-width: 200px;
+            margin-bottom: 10px;
+            pointer-events: none;
         }
 
-        /* Estilos para o loader */
         .loader {
             width: 40px;
             height: 40px;
             border-radius: 50%;
             display: inline-block;
-            border-top: 4px solid #2196F3; /* Azul */
+            border-top: 4px solid #2196F3;
             border-right: 4px solid transparent;
             box-sizing: border-box;
             animation: rotation 1s linear infinite;
-            margin-bottom: 10px; /* Espaço abaixo do loader */
+            margin-bottom: 10px;
         }
 
-            .loader::after {
-                content: '';
-                box-sizing: border-box;
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                border-left: 4px solid #000; /* Preto */
-                border-bottom: 4px solid transparent;
-                animation: rotation 0.5s linear infinite reverse;
-            }
+        .loader::after {
+            content: '';
+            box-sizing: border-box;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border-left: 4px solid #000;
+            border-bottom: 4px solid transparent;
+            animation: rotation 0.5s linear infinite reverse;
+        }
 
         @keyframes rotation {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .delete-icon {
@@ -457,14 +417,12 @@
 
         .edit-icon {
             position: absolute;
-            top: 50px; /* Ajuste este valor conforme necessário */
+            top: 50px;
             left: 10px;
             font-size: 20px;
             color: darkseagreen;
             cursor: pointer;
         }
-
-
 
         .resize-handle {
             width: 10px;
@@ -478,10 +436,10 @@
             border-radius: 5px;
         }
 
-            .resize-handle:hover {
-                background: linear-gradient(to right, #777, #444);
-                box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-            }
+        .resize-handle:hover {
+            background: linear-gradient(to right, #777, #444);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
 
         .containerDeletados {
             position: relative;
@@ -498,17 +456,9 @@
             animation: slideIn 0.5s ease-out;
         }
 
-        /* Animação de slide-in */
         @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .containerDeletados h4 {
@@ -518,7 +468,6 @@
             margin-bottom: 15px;
         }
 
-        /* Estilo da lista de produtos deletados */
         .containerDeletados ul {
             list-style-type: none;
             padding-left: 0;
@@ -537,10 +486,10 @@
             color: #444;
         }
 
-            .containerDeletados li i {
-                margin-right: 10px;
-                color: #ff6347; /* Cor vibrante para os ícones */
-            }
+        .containerDeletados li i {
+            margin-right: 10px;
+            color: #ff6347;
+        }
 
         .containerDeletados button {
             background-color: #4CAF50;
@@ -555,11 +504,10 @@
             transition: background-color 0.3s;
         }
 
-            .containerDeletados button:hover {
-                background-color: #45a049;
-            }
+        .containerDeletados button:hover {
+            background-color: #45a049;
+        }
 
-        /* Estilo do popup */
         #mensagemSucesso {
             position: fixed;
             top: 50%;
@@ -572,19 +520,16 @@
             display: none;
         }
 
-        /* Ícones e estilo da ação de deletar */
         .fa-trash {
             color: red;
         }
-
-
 
         #popupDeletaPrecos {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: #2980b9; /* Azul */
+            background-color: #2980b9;
             color: #fff;
             padding: 30px;
             border-radius: 12px;
@@ -595,84 +540,64 @@
             transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
         }
 
-            #popupDeletaPrecos.show {
-                display: block;
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
-            }
+        #popupDeletaPrecos.show {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
 
-            #popupDeletaPrecos h3 {
-                font-size: 22px;
-                margin-bottom: 20px;
-                font-weight: 600;
-                color: #ecf0f1;
-            }
+        #popupDeletaPrecos h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #ecf0f1;
+        }
 
-            #popupDeletaPrecos ul {
-                list-style-type: none;
-                padding: 0;
-                margin: 0;
-                font-size: 18px;
-                color: #ecf0f1;
-                text-align: left;
-                position: relative; /* Garante que os itens fiquem dentro do contêiner */
-            }
+        #popupDeletaPrecos ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            font-size: 18px;
+            color: #ecf0f1;
+            text-align: left;
+            position: relative;
+        }
 
-                /* Estilo dos itens da lista */
-                #popupDeletaPrecos ul li {
-                    background-color: #3498db; /* Azul mais claro */
-                    margin: 10px 0;
-                    padding: 10px;
-                    border-radius: 8px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: flex-start;
-                    opacity: 0; /* Começam invisíveis */
-                    transform: translateY(20px); /* Começam abaixo */
-                    animation: slideUp 0.5s ease-out forwards;
-                    transition: opacity 1s ease-out, transform 1s ease-out;
-                }
+        #popupDeletaPrecos ul li {
+            background-color: #3498db;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.5s ease-out forwards;
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
 
-                    /* Atraso entre os itens */
-                    #popupDeletaPrecos ul li:nth-child(1) {
-                        animation-delay: 0s;
-                    }
+        #popupDeletaPrecos ul li:nth-child(1) { animation-delay: 0s; }
+        #popupDeletaPrecos ul li:nth-child(2) { animation-delay: 0.2s; }
+        #popupDeletaPrecos ul li:nth-child(3) { animation-delay: 0.4s; }
 
-                    #popupDeletaPrecos ul li:nth-child(2) {
-                        animation-delay: 0.2s;
-                    }
-
-                    #popupDeletaPrecos ul li:nth-child(3) {
-                        animation-delay: 0.4s;
-                    }
-        /* Continue aumentando o delay para os outros itens */
-
-        /* Animação de subida dos itens */
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px); /* Começa abaixo */
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0); /* Subindo até a posição normal */
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         #popupDeletaPrecos ul li.deleting {
             opacity: 0;
-            transform: translateX(100%) rotate(30deg); /* Desliza para o lado e rotaciona */
+            transform: translateX(100%) rotate(30deg);
             transition: all 1s ease-out;
         }
 
         #popupDeletaPrecos ul li i {
             margin-right: 12px;
-            color: #e74c3c; /* Cor da lixeira */
+            color: #e74c3c;
             transition: all 1s ease-out;
         }
 
-        /* Estilo de lixeira para o ícone */
         .fa-trash {
             font-size: 20px;
             transition: transform 0.5s ease-in-out;
@@ -682,37 +607,124 @@
             transform: scale(1.2) rotate(100deg);
         }
 
+        /* Updated .tag layout styles */
+        .tag {
+            border: 4px solid #000 !important;
+            background: #fff !important;
+            position: relative;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: fit-content; /* Adjust width to content */
+            min-width: 340px; /* Minimum width to prevent collapse */
+            padding: 0; /* Remove padding to let child elements control spacing */
+        }
+
+        .topo {
+            background: #000 !important;
+            color: #fff !important;
+            text-align: center;
+            padding: 8px;
+            font-size: 25px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-transform: uppercase;
+            white-space: nowrap; /* Prevent line breaks */
+            overflow: visible; /* Allow content to extend beyond container */
+        }
+
+        .valor {
+            font-size: 60px;
+            text-align: center;
+            font-weight: bold;
+            margin: 6px 0;
+            color: #000 !important;
+            background: #fff !important;
+        }
+
+        .unitario {
+            font-size: 23px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #000 !important;
+            background: #fff !important;
+        }
+
+        .unitario i {
+            margin-right: 5px;
+        }
+
+        .rodape {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            border-top: 5px solid #000 !important;
+            background: #fff !important;
+        }
+
+        .codigo {
+            background: #000 !important;
+            color: #fff !important;
+            padding: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: bold;
+            font-size: 13px; /* Increased for larger barcode text */
+            width: auto;
+        }
+        .app-text {
+            font-size: 12px;
+            color: #000;
+            padding: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #fff !important;
+            white-space: nowrap;
+        }
+
+        .app-text i {
+            color: #2980B9;
+        }
+
+        .qr-code-container {
+            padding: 6px;
+            background: #fff !important;
+            display: flex;
+            align-items: center;
+        }
+
+        .data {
+            padding: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            width: 50%;
+            justify-content: flex-end;
+            font-weight: bold;
+            color: #000 !important;
+            background: #fff !important;
+        }
+
         @media print {
             .pagina-impressao {
-              
-                page-break-inside: avoid; /* Evita a quebra dentro da div */
+                page-break-inside: avoid;
                 break-inside: avoid;
             }
 
-            .planilha {
-                page-break-inside: avoid; /* Evita a quebra dentro de um item */
+            .planilha, .tag {
+                page-break-inside: avoid;
                 break-inside: avoid;
                 margin-bottom: 10px;
             }
-            .resize-handle {
-                display: none !important;
-            }
 
-            .delete-icon {
-                display: none !important;
-            }
-
-            .edit-icon {
-                display: none !important;
-            }
-            .menu {
-                display: none !important;
-            }
-            .menu-container {
-                display: none !important;
-            }
-
-            .menus {
+            .resize-handle, .delete-icon, .edit-icon, .menu, .menu-container, .menus, .input-container, .btn-container, .print-container {
                 display: none !important;
             }
 
@@ -720,23 +732,17 @@
                 margin: 0;
                 font-family: Arial, sans-serif;
                 display: flex;
-                align-items: flex-start; /* Alinha os itens ao topo */
-                justify-content: center; /* Centraliza horizontalmente */
-                height: 100vh; /* Altura total da viewport */
-            }
-
-
-            .input-container,
-            .btn-container,
-            .print-container {
-                display: none !important;
+                align-items: flex-start;
+                justify-content: center;
+                height: 100vh;
             }
 
             @page {
-                size: A4; /* Define o tamanho da página */
-                margin: 0; /* Remove as margens padrão */
+                size: A4;
+                margin: 0;
             }
         }
+
         .wrapper {
             display: flex;
             width: 120%;
@@ -754,10 +760,10 @@
             transition: background 0.3s, border 0.3s;
         }
 
-            .option i {
-                margin-left: 5px;
-                font-size: 14px;
-            }
+        .option i {
+            margin-left: 5px;
+            font-size: 14px;
+        }
 
         .dot {
             width: 12px;
@@ -769,57 +775,57 @@
             transition: background 0.3s;
         }
 
-            .dot::before {
-                content: "";
-                position: absolute;
-                top: 2px;
-                left: 2px;
-                width: 8px;
-                height: 8px;
-                background: #0069d9;
-                border-radius: 50%;
-                opacity: 0;
-                transition: opacity 0.3s, transform 0.3s;
-            }
-        input[type="radio"] {
-            display: none; /* Esconde apenas os inputs do tipo rádio */
+        .dot::before {
+            content: "";
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 8px;
+            height: 8px;
+            background: #0069d9;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
         }
 
-            input:checked + .option {
-                background: #0069d9;
-                border-color: #0069d9;
-                color: white;
-            }
+        input[type="radio"] {
+            display: none;
+        }
 
-                input:checked + .option .dot {
-                    background: #fff;
-                }
+        input:checked + .option {
+            background: #0069d9;
+            border-color: #0069d9;
+            color: white;
+        }
 
-                    input:checked + .option .dot::before {
-                        opacity: 1;
-                        transform: scale(1.2);
-                    }
+        input:checked + .option .dot {
+            background: #fff;
+        }
+
+        input:checked + .option .dot::before {
+            opacity: 1;
+            transform: scale(1.2);
+        }
 
         .option:hover {
             background: #f0f0f0;
         }
+
         .checkbox-group {
-    
             align-items: center;
             cursor: pointer;
             float: left;
-   
         }
 
-            .checkbox-group input {
-                position: absolute;
-                opacity: 0;
-                cursor: pointer;
-                height: 0;
-                width: 0;
-                outline: none;
-                -webkit-appearance: none;
-            }
+        .checkbox-group input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+            outline: none;
+            -webkit-appearance: none;
+        }
 
         .custom-checkbox {
             width: 18px;
@@ -831,13 +837,13 @@
             position: relative;
         }
 
-            .custom-checkbox svg {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-            }
+        .custom-checkbox svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
 
         .checkbox-group label.checkbox-label {
             font-size: 14px;
@@ -848,7 +854,7 @@
             white-space: nowrap;
             cursor: pointer;
         }
-        /* Check inicial escondido */
+
         .checkmark {
             fill: none;
             stroke: #3498db;
@@ -858,26 +864,22 @@
             opacity: 0;
             transition: opacity 0.2s ease;
         }
-        /* Ao marcar, revela o check e anima o traço */
+
         .checkbox-group input:checked ~ label.checkbox-label .custom-checkbox svg path {
             opacity: 1;
             animation: draw 0.5s forwards;
         }
 
         @keyframes draw {
-            from {
-                stroke-dashoffset: 48;
-            }
-
-            to {
-                stroke-dashoffset: 0;
-            }
+            from { stroke-dashoffset: 48; }
+            to { stroke-dashoffset: 0; }
         }
     </style>
 </head>
 <body>
     <div class="menu" id="menus">
         <img src="Orbit.gif" alt="Logo">
+        <!-- Toggle Layout Button -->
 
         <!-- Produto -->
         <div class="form-group">
@@ -886,7 +888,6 @@
                 <input type="text" id="produto-input" placeholder="Nome do produto">
             </div>
         </div>
-
         <!-- Data emitida -->
         <div class="form-group">
             <div class="input-container">
@@ -894,7 +895,6 @@
                 <input type="text" id="data-input" placeholder="Ex: 01/01/2025">
             </div>
         </div>
-
         <!-- Preço -->
         <div class="form-group">
             <div class="input-container">
@@ -902,7 +902,6 @@
                 <input type="number" id="precos" value="0.0" step="0.01" min="0.01" placeholder="Informe o preço">
             </div>
         </div>
-
         <!-- Código do Produto -->
         <div class="form-group">
             <div class="input-container">
@@ -910,7 +909,6 @@
                 <input type="text" id="codigo-input" placeholder="Procurar Produto / EAN 13" oninput="preencherProduto()">
             </div>
         </div>
-
         <!-- Quantidade (ML / Litro) -->
         <div class="form-group">
             <div class="input-container">
@@ -918,23 +916,12 @@
                 <input type="text" id="preco-litro-input" placeholder="Ex: 500 ML ou 1 Litro">
             </div>
         </div>
-
- 
-
-
-
         <div class="wrapper">
             <input type="radio" name="opcao" value="6" id="op1">
             <label class="option" for="op1"><div class="dot"></div> Fardo 6 uni <i class="fas fa-box"></i></label>
-
             <input type="radio" name="opcao" value="12" id="op2">
             <label class="option" for="op2"><div class="dot"></div> Fardo 12 uni <i class="fas fa-box"></i></label>
         </div>
-
-
-
-
-
         <!-- Opção Com Logo -->
         <div class="checkbox-group">
             <input type="checkbox" id="logo-checkbox">
@@ -944,10 +931,9 @@
                         <path class="checkmark" d="M4 12l5 5L20 7"></path>
                     </svg>
                 </div>
-                Com Qr code  baixar App Cordeiro?
+                Com Qr code baixar App Cordeiro?
             </label>
         </div>
-
         <!-- Botões de ação -->
         <div class="form-group">
             <button type="button" id="btnImprimir"><i class="fas fa-print"></i> Imprimir</button>
@@ -962,21 +948,19 @@
             <button type="button" id="btnAdicionar"><i class="fas fa-plus"></i> Adicionar</button>
         </div>
         <div class="form-group">
-            <button type="button" id="btnAlinhar" onclick="alternarAlinhamentoTexto('center')">Centralizar Texto</button>
+            <button type="button" id="btnToggleLayout" class="layout1"><i class="fas fa-exchange-alt"></i> Mudar layout novo</button>
         </div>
     </div>
-
     <div id="containerDeletados"></div>
     <div class="content">
         <div id="planilhas">
             <div class="planilha" id="planilha">
-                <img src="C:/Users/Artur/Downloads/BAIXE NOSSO APLICATIVO SCANEANDO O QR CODE.png" class="logo" id="logo-imagem" alt="Logo">
+                <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo">
                 <div class="produto" id="produto-nome">Produto A</div>
                 <div class="info"><i class=""></i><span class="preco" id="preco">R$ 19,99</span></div>
                 <div class="adicional"><span id="preco-por-litro">1 LITRO SAI POR R$ 00,99</span></div>
                 <div class="info"><i class="fas fa-calendar-alt"></i><span id="data-emitida">Data emitida: DD/MM/AAAA</span></div>
-                <div class="resize-handle"></div> <!-- Este elemento vai ser usado para redimensionar -->
-
+                <div class="resize-handle"></div>
             </div>
         </div>
     </div>
@@ -1058,11 +1042,14 @@
         const dataInput = document.getElementById('data-input');
         const precoInput = document.getElementById('precos');
         const codigoInput = document.getElementById('codigo-input');
-        const tamanhoSlider = document.getElementById('tamanho-slider');
         const logoCheckbox = document.getElementById('logo-checkbox');
+        const btnToggleLayout = document.getElementById('btnToggleLayout');
+
+        let isTagLayout = false;
 
         document.getElementById('btnImprimir').addEventListener('click', imprimirTabelas);
         document.getElementById('btnAdicionar').addEventListener('click', adicionarTabela);
+        btnToggleLayout.addEventListener('click', toggleLayout);
 
         function preencherProduto() {
             const mlInput = document.getElementById('preco-litro-input');
@@ -1118,7 +1105,7 @@
             let grupos = planilhaContainer.querySelectorAll('.grupo-impressao');
             let grupoAtual;
 
-            if (grupos.length === 0 || grupos[grupos.length - 1].querySelectorAll('.planilha').length >= 6) {
+            if (grupos.length === 0 || grupos[grupos.length - 1].querySelectorAll('.planilha, .tag').length >= 6) {
                 grupoAtual = document.createElement('div');
                 grupoAtual.classList.add('grupo-impressao');
                 planilhaContainer.appendChild(grupoAtual);
@@ -1140,11 +1127,9 @@
                 }
             }
 
-
             const today = new Date();
             const formattedDateTime = today.toLocaleString('pt-BR');
             dataInput.value = formattedDateTime;
-
 
             const produto = produtoInput.value || "Produto";
             const data = dataInput.value || "DD/MM/AAAA";
@@ -1168,14 +1153,29 @@
             }
 
             const novaPlanilha = document.createElement('div');
-            novaPlanilha.classList.add('planilha');
+            novaPlanilha.classList.add(isTagLayout ? 'tag' : 'planilha');
             novaPlanilha.style.breakInside = 'avoid';
-            novaPlanilha.innerHTML = `
+            novaPlanilha.dataset.codigo = codigo;
+
+            if (isTagLayout) {
+                novaPlanilha.innerHTML = `
                     <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
                     <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
-     
-
-                   <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${comLogo ? 'block' : 'none'};" width: fit-content; height: 190px; margin-left: 10px;">
+                    <img src="https://i.imgur.com/tIxuIE3.png" class="logo" alt="Logo" style="display: ${comLogo ? 'block' : 'none'}; position: absolute; top: 10px; right: 10px; width: 190px; height: fit-content; margin-left: 50px;">
+                    <div class="topo"><i class="fa-solid fa-box"></i> ${produto}</div>
+                    <div class="valor">R$ ${total.toFixed(2).replace('.', ',')}</div>
+                    <div class="unitario"><i class="fa-solid fa-droplet"></i>Preço por litro: R$ ${soma.toFixed(2).replace('.', ',')}</div>
+                    <div class="rodape">
+                        <div class="codigo"><i class="fa-solid fa-barcode"></i>${codigo}</div>
+                        <div class="data"><i class="fa-solid fa-calendar-day"></i>${data}</div>
+                    </div>
+                    <div class="resize-handle"></div>
+                `;
+            } else {
+                novaPlanilha.innerHTML = `
+                    <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                    <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+                    <img src="https://i.imgur.com/tIxuIE3.png" class="logo" alt="Logo" style="display: ${comLogo ? 'block' : 'none'}; width: 190px; height: fit-content; margin-left: 10px;">
                     <div class="content-container">
                         <div class="produto" id="produto-nome">${produto}</div>
                         <div class="info">
@@ -1191,23 +1191,113 @@
                     </div>
                     <div class="resize-handle"></div>
                 `;
+            }
 
             adicionarItemAPagina(planilhaContainer, novaPlanilha);
             ativarRedimensionamento(novaPlanilha);
             atualizarVisibilidadeLogo();
         }
 
+        function toggleLayout() {
+            isTagLayout = !isTagLayout;
+            const planilhaContainer = document.getElementById('planilhas');
+            const existingPlanilhas = planilhaContainer.querySelectorAll('.planilha, .tag');
 
-        let alinhamentoAtual = 'center';
-        function alternarAlinhamentoTexto() {
-            const alinhamentos = ['left', 'center', 'right'];
-            alinhamentoAtual = alinhamentos[(alinhamentos.indexOf(alinhamentoAtual) + 1) % alinhamentos.length];
-            const contentContainers = document.querySelectorAll('.planilha .content-container');
-            contentContainers.forEach(container => {
-                container.style.textAlign = alinhamentoAtual;
+            if (existingPlanilhas.length === 0) {
+                console.warn('No planilhas found to toggle layout.');
+                return;
+            }
+
+            existingPlanilhas.forEach(planilha => {
+                const produtoElement = planilha.querySelector(isTagLayout ? '.topo' : '#produto-nome');
+                if (!produtoElement) {
+                    console.error('Produto element not found in planilha:', planilha.outerHTML);
+                    return;
+                }
+                const produto = produtoElement.textContent.replace(/^\s*[\w\s]+\s*/, '').trim();
+
+                const precoElement = planilha.querySelector(isTagLayout ? '.valor' : '.preco');
+                if (!precoElement) {
+                    console.error('Preco element not found in planilha:', planilha.outerHTML);
+                    return;
+                }
+                const precoText = precoElement.textContent.replace('R$ ', '').replace(',', '.');
+
+                const precoPorLitroElement = planilha.querySelector(isTagLayout ? '.unitario' : '#preco-por-litro');
+                if (!precoPorLitroElement) {
+                    console.error('Preco por litro element not found in planilha:', planilha.outerHTML);
+                    return;
+                }
+                const precoPorLitroMatch = precoPorLitroElement.textContent.match(/R\$ \d+,\d{2}/);
+                if (!precoPorLitroMatch) {
+                    console.error('Preco por litro format invalid in planilha:', planilha.outerHTML);
+                    return;
+                }
+                const precoPorLitroText = precoPorLitroMatch[0].replace('R$ ', '').replace(',', '.');
+
+                const dataElement = planilha.querySelector(isTagLayout ? '.data' : '#data-emitida');
+                if (!dataElement) {
+                    console.error('Data element not found in planilha:', planilha.outerHTML);
+                    return;
+                }
+                const data = dataElement.textContent.replace('Data emitida: ', '').trim();
+
+                const codigoElement = isTagLayout ? planilha.querySelector('.codigo') : null;
+                const codigo = isTagLayout ? (codigoElement ? codigoElement.textContent.replace(/^\s*[\w\s]+\s*/, '').trim() : '123456789012') : (planilha.dataset.codigo || '123456789012');
+
+                const logoElement = planilha.querySelector('.logo');
+                const comLogo = logoElement ? logoElement.style.display === 'block' : false;
+
+                const novaPlanilha = document.createElement('div');
+                novaPlanilha.classList.add(isTagLayout ? 'tag' : 'planilha');
+                novaPlanilha.style.breakInside = 'avoid';
+                novaPlanilha.dataset.codigo = codigo;
+
+                if (isTagLayout) {
+                    novaPlanilha.innerHTML = `
+                        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                        <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+                        <img src="https://i.imgur.com/tIxuIE3.png" class="logo" alt="Logo" style="display: ${comLogo ? 'block' : 'none'}; position: absolute; top: 10px; right: 10px; width: 190px; height: fit-content; margin-left: 50px;">
+                        <div class="topo"><i class="fa-solid fa-box"></i> ${produto}</div>
+                        <div class="valor">R$ ${parseFloat(precoText).toFixed(2).replace('.', ',')}</div>
+                        <div class="unitario"><i class="fa-solid fa-droplet"></i>Preço por litro: R$ ${parseFloat(precoPorLitroText).toFixed(2).replace('.', ',')}</div>
+                        <div class="rodape">
+                            <div class="codigo"><i class="fa-solid fa-barcode"></i>${codigo}</div>
+                            <div class="data"><i class="fa-solid fa-calendar-day"></i>${data}</div>
+                        </div>
+                        <div class="resize-handle"></div>
+                    `;
+                } else {
+                    novaPlanilha.innerHTML = `
+                        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                        <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+                        <img src="https://i.imgur.com/tIxuIE3.png" class="logo" alt="Logo" style="display: ${comLogo ? 'block' : 'none'}; width: 190px; height: fit-content; margin-left: 10px;">
+                        <div class="content-container">
+                            <div class="produto" id="produto-nome">${produto}</div>
+                            <div class="info">
+                                <span class="preco">R$ ${parseFloat(precoText).toFixed(2).replace('.', ',')}</span>
+                            </div>
+                            <div class="adicional">
+                                <span id="preco-por-litro">1 LITRO SAI POR R$ ${parseFloat(precoPorLitroText).toFixed(2).replace('.', ',')}</span>
+                                <div class="info">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span id="data-emitida">Data emitida: ${data}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="resize-handle"></div>
+                    `;
+                }
+
+                planilha.replaceWith(novaPlanilha);
+                ativarRedimensionamento(novaPlanilha);
             });
-            document.getElementById('btnAlinhar').textContent = `Alinhar: ${alinhamentoAtual === 'left' ? 'Esquerda' : alinhamentoAtual === 'center' ? 'Meio' : 'Direita'}`;
+
+            btnToggleLayout.innerHTML = `<i class="fas fa-exchange-alt"></i> Mudar para ${isTagLayout ? 'Layaut Novo' : 'Layout Antigo'}`;
+            btnToggleLayout.classList.toggle('layout1', !isTagLayout);
+            btnToggleLayout.classList.toggle('layout2', isTagLayout);
         }
+
         function carregarDados() {
             axios({
                 method: "GET",
@@ -1243,25 +1333,49 @@
                             prelitro /= 1000;
                         }
 
+                        const codigo = Object.keys(produtos).find(key => produtos[key] === item.PRODUTO) || '123456789012';
+
                         const novaPlanilha = document.createElement('div');
-                        novaPlanilha.classList.add('planilha');
+                        novaPlanilha.classList.add(isTagLayout ? 'tag' : 'planilha');
                         novaPlanilha.style.breakInside = 'avoid';
-                        novaPlanilha.innerHTML = `
-                <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo" style="display: ${comLogo ? 'block' : 'none'};" width="200" height="190" style="margin-left: 10px;">
-                <div class="produto" id="produto-nome">${item.PRODUTO}</div>
-                <div class="info">
-                    <span class="preco">R$ ${precoTotal.toFixed(2).replace('.', ',')}</span>
-                </div>
-                <div class="adicional">
-                    <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2).replace('.', ',')}</span>
-                    <div class="info">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span id="data-emitida">Data emitida: ${formattedDate}</span>
-                    </div>
-                    <div class="resize-handle"></div>
-                </div>
-            `;
+                        novaPlanilha.dataset.codigo = codigo;
+
+                        if (isTagLayout) {
+                            novaPlanilha.innerHTML = `
+                                <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                                <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+                                <img src="https://i.imgur.com/tIxuIE3.png" class="logo" alt="Logo" style="display: ${comLogo ? 'block' : 'none'}; position: absolute; top: 10px; right: 10px; width: 190px; height: fit-content; margin-left: 50px;">
+                                <div class="topo"><i class="fa-solid fa-box"></i> ${item.PRODUTO}</div>
+                                <div class="valor">R$ ${precoTotal.toFixed(2).replace('.', ',')}</div>
+                                <div class="unitario"><i class="fa-solid fa-droplet"></i>Preço por litro: R$ ${prelitro.toFixed(2).replace('.', ',')}</div>
+                                <div class="rodape">
+                                    <div class="codigo"><i class="fa-solid fa-barcode"></i>${codigo}</div>
+                                    <div class="app-text"><i class="fas fa-qrcode"></i>Baixe nosso App Cordeiro+</div>
+                                    <div class="data"><i class="fa-solid fa-calendar-day"></i>${formattedDate}</div>
+                                </div>
+                                <div class="resize-handle"></div>
+                            `;
+                        } else {
+                            novaPlanilha.innerHTML = `
+                                <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                                <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+                                <img src="https://i.imgur.com/tIxuIE3.png" class="logo" alt="Logo" style="display: ${comLogo ? 'block' : 'none'}; width: 190px; height: fit-content; margin-left: 10px;">
+                                <div class="content-container">
+                                    <div class="produto" id="produto-nome">${item.PRODUTO}</div>
+                                    <div class="info">
+                                        <span class="preco">R$ ${precoTotal.toFixed(2).replace('.', ',')}</span>
+                                    </div>
+                                    <div class="adicional">
+                                        <span id="preco-por-litro">1 LITRO SAI POR R$ ${prelitro.toFixed(2).replace('.', ',')}</span>
+                                        <div class="info">
+                                            <i class="fas fa-calendar-alt"></i>
+                                            <span id="data-emitida">Data emitida: ${formattedDate}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="resize-handle"></div>
+                            `;
+                        }
 
                         paginaAtual.appendChild(novaPlanilha);
                         itensNaPagina++;
@@ -1275,24 +1389,23 @@
 
                         ativarRedimensionamento(novaPlanilha);
                     });
-
-                    // Aplica o alinhamento atual para os dados carregados
-                    alternarAlinhamentoTexto();
                 });
         }
-
 
         function ativarRedimensionamento(planilha) {
             let isResizing = false;
             let startWidth, startX;
 
-            planilha.querySelector(".resize-handle").addEventListener("mousedown", (e) => {
-                isResizing = true;
-                startWidth = planilha.offsetWidth;
-                startX = e.clientX;
-                document.addEventListener("mousemove", resize);
-                document.addEventListener("mouseup", stopResize);
-            });
+            const resizeHandle = planilha.querySelector(".resize-handle");
+            if (resizeHandle) {
+                resizeHandle.addEventListener("mousedown", (e) => {
+                    isResizing = true;
+                    startWidth = planilha.offsetWidth;
+                    startX = e.clientX;
+                    document.addEventListener("mousemove", resize);
+                    document.addEventListener("mouseup", stopResize);
+                });
+            }
 
             function resize(e) {
                 if (isResizing) {
@@ -1320,7 +1433,7 @@
                 cancelButtonColor: "#3085d6"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    limparPrecos(); // Função para limpar os preços
+                    limparPrecos();
                 }
             });
         };
@@ -1398,31 +1511,29 @@
         }
 
         function excluirTabela(element) {
-            const planilha = element.closest('.planilha');
+            const planilha = element.closest('.planilha, .tag');
             if (planilha) {
                 const grupo = planilha.closest('.grupo-impressao');
                 planilha.remove();
-                if (grupo && grupo.querySelectorAll('.planilha').length === 0) {
+                if (grupo && grupo.querySelectorAll('.planilha, .tag').length === 0) {
                     grupo.remove();
                 }
-                atualizarSlider();
             }
         }
 
         function editarTabela(element) {
-            const planilha = element.closest('.planilha');
-            const produtoNome = planilha.querySelector('#produto-nome');
-            const preco = planilha.querySelector('.preco');
-            const precoPorLitro = planilha.querySelector('#preco-por-litro');
-
-            const novoProdutoNome = prompt('Editar Nome do Produto:', produtoNome.innerText);
+            const planilha = element.closest('.planilha, .tag');
+            const produtoNome = planilha.querySelector(isTagLayout ? '.topo' : '#produto-nome');
+            const novoProdutoNome = prompt('Editar Nome do Produto:', produtoNome.textContent.replace(/^\s*[\w\s]+\s*/, '').trim());
             if (novoProdutoNome !== null) {
-                produtoNome.innerText = novoProdutoNome;
+                if (isTagLayout) {
+                    produtoNome.innerHTML = `<i class="fa-solid fa-box"></i> ${novoProdutoNome}`;
+                } else {
+                    produtoNome.innerText = novoProdutoNome;
+                }
             }
-
-
         }
-        // Mensagens alternadas de carregamento
+
         var messages = [
             "Carregando dados necessários...",
             "Por favor, aguarde um momento...",
@@ -1433,51 +1544,41 @@
         ];
         var messageIndex = 0;
 
-        // Função para alternar as mensagens
         function alternarMensagem() {
             document.getElementById('popup-message').textContent = messages[messageIndex];
-            messageIndex = (messageIndex + 1) % messages.length; // Avança para a próxima mensagem
+            messageIndex = (messageIndex + 1) % messages.length;
         }
 
-        // Simula o carregamento dos dados
         function carregarDadoss() {
-
-            var loader = document.querySelector('.loader');
             var interval = setInterval(function () {
-                alternarMensagem(); // Alterna as mensagens
-            }, 1000); // Tempo para alternar as mensagens (2 segundos)
+                alternarMensagem();
+            }, 1000);
 
             setTimeout(function () {
                 clearInterval(interval);
-
-                document.getElementById('popupcordeiro').style.display = 'none'; // Esconde o popup ao completar o carregamento
-            }, 6000); // Tempo total do carregamento simulado (10 segundos)
+                document.getElementById('popupcordeiro').style.display = 'none';
+            }, 6000);
         }
 
         function minhaAcao() {
             document.getElementById('popup').style.display = 'none';
         }
 
-        // Mostra o popup ao carregar a página
         document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('popupcordeiro').style.display = 'flex'; // Exibe o popup ao iniciar
-            carregarDadoss(); // Inicia o carregamento dos dados
-
+            document.getElementById('popupcordeiro').style.display = 'flex';
+            carregarDadoss();
         });
-
-
-
 
         function atualizarVisibilidadeLogo() {
             const comLogo = logoCheckbox.checked;
-            const logos = document.querySelectorAll('.planilha .logo');
+            const logos = document.querySelectorAll('.planilha .logo, .tag .logo');
             logos.forEach(logo => {
                 logo.style.display = comLogo ? 'block' : 'none';
-                const planilha = logo.closest('.planilha');
-                if (planilha) {
-                    const contentWidth = planilha.querySelector('.content-container').offsetWidth;
+                const planilha = logo.closest('.planilha, .tag');
+                if (planilha && !isTagLayout) {
+                    const contentWidth = planilha.querySelector('.content-container')?.offsetWidth || planilha.offsetWidth;
                     const logoWidth = comLogo ? logo.offsetWidth : 0;
-                    planilha.style.width = `${contentWidth + logoWidth + 60}px`; // 40px padding + 20px gap
+                    planilha.style.width = `${contentWidth + logoWidth + 60}px`;
                 }
             });
         }
