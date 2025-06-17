@@ -162,7 +162,7 @@
 
     .info p {
       margin-bottom: 8px;
-      font-size: 15px;
+      font-size: 14px;
       line-height: 1.5;
       display: flex;
       align-items: center;
@@ -170,13 +170,13 @@
     }
 
     .info p strong {
-      font-size: 17px;
+      font-size: 15px;
       color: #111827;
     }
 
     .info p i {
       color: #6b7280;
-      font-size: 14px;
+      font-size: 13px;
     }
 
     .total {
@@ -185,12 +185,12 @@
     }
 
     .valor-litro {
-      font-size: 14px;
+      font-size: 13px;
       color: #4b5563;
     }
 
     .code {
-      font-size: 13px;
+      font-size: 12px;
       color: #6b7280;
     }
 
@@ -217,7 +217,13 @@
         margin-right: 12px;
       }
       .info p {
+        font-size: 13px;
+      }
+      .info p strong {
         font-size: 14px;
+      }
+      .info p i {
+        font-size: 12px;
       }
       .clear-button {
         font-size: 14px;
@@ -235,6 +241,12 @@
       }
       .no-products i {
         font-size: 18px;
+      }
+      .valor-litro {
+        font-size: 12px;
+      }
+      .code {
+        font-size: 11px;
       }
     }
   </style>
@@ -291,10 +303,11 @@
             div.innerHTML = `
               <img src="${item["IMAGEM URL"] || fallbackImg}" onerror="this.src='${fallbackImg}'" alt="${item["PRODUTO"]}">
               <div class="info">
-                <p><strong>${item["PRODUTO"]}</strong><br><span class="code"><i class="fas fa-barcode"></i> Código: ${item["CODIGO"]}</span></p>
+                <p><strong>${item["PRODUTO"]}</strong></p>
                 <p><i class="fas fa-tag"></i> Preço: R$ ${preco.toFixed(2)} | Qtde: ${qtd}</p>
                 <p class="total"><i class="fas fa-wallet"></i> Total: R$ ${total}</p>
                 <p class="valor-litro"><i class="fas fa-tint"></i> Valor por litro: R$ ${porLitro}</p>
+                <p class="code"><i class="fas fa-barcode"></i> Código: ${item["CODIGO"]}</p>
               </div>
             `;
             lista.appendChild(div);
