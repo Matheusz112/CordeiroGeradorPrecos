@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lista de Produtos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      justify-content: center;
+      padding: 40px 15px;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+    }
+
+    .clear-button {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .clear-button:hover {
+      background: #b91c1c;
+      transform: scale(1.05);
+    }
+
+    .clear-button i {
+      font-size: 18px;
+    }
+
+    .message {
+      margin-bottom: 20px;
+      padding: 12px;
+      background: #dbeafe;
+      border-radius: 8px;
+      color: #1e40af;
+      font-size: 15px;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    .message i {
+      font-size: 18px;
+    }
+
+    .no-products {
+      padding: 20px;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      text-align: center;
+      color: #4b5563;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    .no-products i {
+      font-size: 20px;
+      color: #6b7280;
+    }
+
+    .loading {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 16px;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 10;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    .spinner {
+      border: 4px solid #e5e7eb;
+      border-top: 4px solid #0284c7;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    .loading p {
+      color: #1f2937;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .produto {
+      display: flex;
+      align-items: center;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .produto:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .produto img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-right: 15px;
+      border: 1px solid #e5e5e5;
+      background-color: #fff;
+    }
+
+    .info {
+      flex: 1;
+      color: #1f2937;
+    }
+
+    .info p {
+      margin-bottom: 8px;
+      font-size: 15px;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info p strong {
+      font-size: 17px;
+      color: #111827;
+    }
+
+    .info p i {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .total {
+      font-weight: 600;
+      color: #0284c7;
+    }
+
+    .valor-litro {
+      font-size: 14px;
+      color: #4b5563;
+    }
+
+    .code {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media(max-width: 480px) {
+      .container {
+        padding: 20px;
+      }
+      .produto {
+        padding: 12px;
+      }
+      .produto img {
+        width: 60px;
+        height: 60px;
+        margin-right: 12px;
+      }
+      .info p {
+        font-size: 14px;
+      }
+      .clear-button {
+        font-size: 14px;
+        padding: 10px 18px;
+      }
+      .loading p {
+        font-size: 14px;
+      }
+      .spinner {
+        width: 32px;
+        height: 32px;
+      }
+      .no-products {
+        font-size: 14px;
+      }
+      .no-products i {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="clear-button" onclick="clearPrices()"><i class="fas fa-trash-alt"></i> Limpar Preços</button>
+    <div id="message" class="message"><i class="fas fa-info-circle"></i> <span id="message-text"></span></div>
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Buscando preços...</p>
+    </div>
+    <div id="lista"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const fallbackImg = "https://static.vecteezy.com/ti/vetor-gratis/p1/16976338-arquivo-de-documento-nao-encontrado-pesquisa-sem-resultado-conceito-ilustracao-design-plano-eps10-elemento-grafico-moderno-para-pagina-de-destino-ui-de-estado-vazio-infografico-icone-vetor.jpg";
+    const token = "UkqZsuMMnwE59fMqs8OwXX60SASP7FOd";
+
+    function showLoading(show) {
+      const loadingDiv = document.getElementById("loading");
+      loadingDiv.style.display = show ? "flex" : "none";
+    }
+
+    function loadProducts() {
+      showLoading(true);
+      axios.get("https://api.baserow.io/api/database/rows/table/322640/?user_field_names=true", {
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      })
+      .then(res => {
+        const lista = document.getElementById("lista");
+        lista.innerHTML = ""; // Clear existing products
+
+        const filteredProducts = res.data.results.filter(item => item["PREÇO"] && !isNaN(parseFloat(item["PREÇO"])));
+
+        if (filteredProducts.length === 0) {
+          const noProductsDiv = document.createElement("div");
+          noProductsDiv.classList.add("no-products");
+          noProductsDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> Nenhum produto com preço encontrado.`;
+          lista.appendChild(noProductsDiv);
+        } else {
+          filteredProducts.forEach(item => {
+            const preco = parseFloat(item["PREÇO"]);
+            const qtd = parseFloat(item["QUANTIDADE"]) || 0;
+            const ml = parseFloat(item["ML"]) || 0;
+            const total = (preco * qtd).toFixed(2);
+            const porLitro = ml > 0 ? (preco * 1000 / ml).toFixed(2) : "–";
+
+            const div = document.createElement("div");
+            div.classList.add("produto");
+            div.innerHTML = `
+              <img src="${item["IMAGEM URL"] || fallbackImg}" onerror="this.src='${fallbackImg}'" alt="${item["PRODUTO"]}">
+              <div class="info">
+                <p><strong>${item["PRODUTO"]}</strong><br><span class="code"><i class="fas fa-barcode"></i> Código: ${item["CODIGO"]}</span></p>
+                <p><i class="fas fa-tag"></i> Preço: R$ ${preco.toFixed(2)} | Qtde: ${qtd}</p>
+                <p class="total"><i class="fas fa-wallet"></i> Total: R$ ${total}</p>
+                <p class="valor-litro"><i class="fas fa-tint"></i> Valor por litro: R$ ${porLitro}</p>
+              </div>
+            `;
+            lista.appendChild(div);
+          });
+        }
+        showLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        showLoading(false);
+        const lista = document.getElementById("lista");
+        lista.innerHTML = "";
+        const noProductsDiv = document.createElement("div");
+        noProductsDiv.classList.add("no-products");
+        noProductsDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> Erro ao carregar produtos.`;
+        lista.appendChild(noProductsDiv);
+      });
+    }
+
+    function clearPrices() {
+      const messageDiv = document.getElementById("message");
+      const messageText = document.getElementById("message-text");
+      messageDiv.style.display = "none";
+      messageText.innerHTML = "";
+      showLoading(true);
+
+      axios.get("https://api.baserow.io/api/database/rows/table/322640/?user_field_names=true", {
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      })
+      .then(res => {
+        const clearedProducts = [];
+        const updatePromises = res.data.results
+          .filter(item => item["PREÇO"] && !isNaN(parseFloat(item["PREÇO"])))
+          .map(item => {
+            clearedProducts.push(item["PRODUTO"]);
+            return axios({
+              method: "PATCH",
+              url: `https://api.baserow.io/api/database/rows/table/322640/${item.id}/?user_field_names=true`,
+              headers: {
+                Authorization: `Token ${token}`,
+                "Content-Type": "application/json"
+              },
+              data: {
+                "PREÇO": ""
+              }
+            });
+          });
+
+        Promise.all(updatePromises)
+          .then(() => {
+            if (clearedProducts.length > 0) {
+              messageText.innerHTML = `Preços limpos para: ${clearedProducts.join(", ")}`;
+              messageDiv.style.display = "flex";
+            } else {
+              messageText.innerHTML = "Nenhum preço foi limpo.";
+              messageDiv.style.display = "flex";
+            }
+            loadProducts(); // Reload products after clearing prices
+          })
+          .catch(err => {
+            console.error(err);
+            messageText.innerHTML = "Erro ao limpar preços.";
+            messageDiv.style.display = "flex";
+            showLoading(false);
+          });
+      })
+      .catch(err => {
+        console.error(err);
+        messageText.innerHTML = "Erro ao carregar produtos.";
+        messageDiv.style.display = "flex";
+        showLoading(false);
+      });
+    }
+
+    // Initial load
+    loadProducts();
+  </script>
+</body>
+</html>
