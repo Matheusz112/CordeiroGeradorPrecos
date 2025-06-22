@@ -14,8 +14,8 @@
             --hover-highlight: #1F618D;
             --icon-color: #FFFFFF;
             --border-color: #2980B9;
-            --layout1-bg: #3498DB; /* Lighter blue for Layout Simples */
-            --layout2-bg: #1F618D; /* Darker blue for Layout com QR Code */
+            --layout1-bg: #3498DB;
+            --layout2-bg: #1F618D;
         }
 
         * {
@@ -43,12 +43,12 @@
             left: 0;
         }
 
-        .menu img {
-            display: block;
-            margin: 0 auto;
-            width: 110px;
-            border-radius: 10%;
-        }
+            .menu img {
+                display: block;
+                margin: 0 auto;
+                width: 110px;
+                border-radius: 10%;
+            }
 
         .form-group {
             margin-bottom: 10px;
@@ -59,25 +59,25 @@
             width: 100%;
         }
 
-        .input-container i {
-            position: absolute;
-            left: 6px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 13px;
-            color: var(--border-color);
-        }
+            .input-container i {
+                position: absolute;
+                left: 6px;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 13px;
+                color: var(--border-color);
+            }
 
-        .input-container input {
-            width: 100%;
-            height: 30px;
-            padding: 0 6px 0 24px;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            background-color: var(--input-bg);
-            color: var(--text-color);
-            font-size: 17px;
-        }
+            .input-container input {
+                width: 100%;
+                height: 30px;
+                padding: 0 6px 0 24px;
+                border: 1px solid var(--border-color);
+                border-radius: 12px;
+                background-color: var(--input-bg);
+                color: var(--text-color);
+                font-size: 17px;
+            }
 
         .radio-group p, .checkbox-group p {
             margin-bottom: 6px;
@@ -91,9 +91,9 @@
             margin-bottom: 6px;
         }
 
-        .radio-label input, .checkbox-label input {
-            margin-right: 6px;
-        }
+            .radio-label input, .checkbox-label input {
+                margin-right: 6px;
+            }
 
         .menu button {
             width: 100%;
@@ -102,7 +102,7 @@
             border-radius: 12px;
             background-color: var(--highlight);
             color: var(--icon-color);
-            font-size: 14px; /* Increased for readability */
+            font-size: 14px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -110,9 +110,9 @@
             gap: 8px;
         }
 
-        .menu button:hover {
-            background-color: var(--hover-highlight);
-        }
+            .menu button:hover {
+                background-color: var(--hover-highlight);
+            }
 
         #btnToggleLayout.layout1 {
             background-color: var(--layout1-bg);
@@ -145,15 +145,15 @@
             width: 100%;
         }
 
-        .planilha img.logo {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 190px;
-            height: fit-content;
-            display: none;
-            margin-left: 50px;
-        }
+            .planilha img.logo {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                width: 190px;
+                height: fit-content;
+                display: none;
+                margin-left: 50px;
+            }
 
         .produto {
             font-weight: bold;
@@ -166,9 +166,9 @@
             margin-bottom: 3px;
         }
 
-        .info i {
-            margin-right: 20px;
-        }
+            .info i {
+                margin-right: 20px;
+            }
 
         .adicional {
             font-size: 27px;
@@ -198,9 +198,9 @@
             color: white;
         }
 
-        .checkbox-container input[type="checkbox"] {
-            display: none;
-        }
+            .checkbox-container input[type="checkbox"] {
+                display: none;
+            }
 
         .checkbox-custom {
             width: 20px;
@@ -214,19 +214,19 @@
             flex-shrink: 0;
         }
 
-        .checkbox-custom i {
-            display: none;
-        }
+            .checkbox-custom i {
+                display: none;
+            }
 
         .checkbox-container input[type="checkbox"]:checked + .checkbox-custom {
             background-color: #007bff;
             border-color: #007bff;
         }
 
-        .checkbox-container input[type="checkbox"]:checked + .checkbox-custom i {
-            display: block;
-            color: white;
-        }
+            .checkbox-container input[type="checkbox"]:checked + .checkbox-custom i {
+                display: block;
+                color: white;
+            }
 
         .popup {
             display: none;
@@ -244,47 +244,62 @@
             animation: fadeIn 0.5s forwards;
         }
 
-        .popup .checkmark {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #4caf50;
-            position: relative;
-            animation: pop-up 0.5s ease forwards;
-        }
+            .popup .checkmark {
+                display: inline-block;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background-color: #4caf50;
+                position: relative;
+                animation: pop-up 0.5s ease forwards;
+            }
 
-        .popup .checkmark::before {
-            content: '';
-            position: absolute;
-            width: 15px;
-            height: 30px;
-            border-right: 5px solid white;
-            border-bottom: 5px solid white;
-            top: 10px;
-            left: 18px;
-            transform: rotate(45deg);
-        }
+                .popup .checkmark::before {
+                    content: '';
+                    position: absolute;
+                    width: 15px;
+                    height: 30px;
+                    border-right: 5px solid white;
+                    border-bottom: 5px solid white;
+                    top: 10px;
+                    left: 18px;
+                    transform: rotate(45deg);
+                }
 
-        .popup .message {
-            margin-top: 10px;
-            font-size: 18px;
-            color: antiquewhite;
-        }
+            .popup .message {
+                margin-top: 10px;
+                font-size: 18px;
+                color: antiquewhite;
+            }
 
         @keyframes pop-up {
-            0% { transform: scale(0); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(0);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
         }
 
         @keyframes fadeOut {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
         }
 
         .menuProdutos {
@@ -302,42 +317,49 @@
             animation: fadeIn 0.3s ease-out;
         }
 
-        .menuProdutos h3 {
-            margin: 0;
-            padding: 10px;
-            background-color: #0056b3;
-            color: white;
-            border-radius: 5px 5px 0 0;
-            text-align: center;
-            font-size: 18px;
-            animation: slideDown 0.3s ease-out;
-        }
+            .menuProdutos h3 {
+                margin: 0;
+                padding: 10px;
+                background-color: #0056b3;
+                color: white;
+                border-radius: 5px 5px 0 0;
+                text-align: center;
+                font-size: 18px;
+                animation: slideDown 0.3s ease-out;
+            }
 
-        .menuProdutos ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
+            .menuProdutos ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+            }
 
-        .menuProdutos li {
-            cursor: pointer;
-            padding: 10px;
-            font-weight: bold;
-            color: #fff;
-            transition: background-color 0.2s ease-in-out;
-        }
+            .menuProdutos li {
+                cursor: pointer;
+                padding: 10px;
+                font-weight: bold;
+                color: #fff;
+                transition: background-color 0.2s ease-in-out;
+            }
 
-        .menuProdutos li:nth-child(even) {
-            background-color: #0069d9;
-        }
+                .menuProdutos li:nth-child(even) {
+                    background-color: #0069d9;
+                }
 
-        .menuProdutos li:hover {
-            background-color: #0056b3;
-        }
+                .menuProdutos li:hover {
+                    background-color: #0056b3;
+                }
 
         @keyframes slideDown {
-            from { transform: translateY(-10px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .popupcordeiro {
@@ -387,23 +409,28 @@
             margin-bottom: 10px;
         }
 
-        .loader::after {
-            content: '';
-            box-sizing: border-box;
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border-left: 4px solid #000;
-            border-bottom: 4px solid transparent;
-            animation: rotation 0.5s linear infinite reverse;
-        }
+            .loader::after {
+                content: '';
+                box-sizing: border-box;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                border-left: 4px solid #000;
+                border-bottom: 4px solid transparent;
+                animation: rotation 0.5s linear infinite reverse;
+            }
 
         @keyframes rotation {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .delete-icon {
@@ -436,10 +463,10 @@
             border-radius: 5px;
         }
 
-        .resize-handle:hover {
-            background: linear-gradient(to right, #777, #444);
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-        }
+            .resize-handle:hover {
+                background: linear-gradient(to right, #777, #444);
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            }
 
         .containerDeletados {
             position: relative;
@@ -457,8 +484,15 @@
         }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .containerDeletados h4 {
@@ -486,10 +520,10 @@
             color: #444;
         }
 
-        .containerDeletados li i {
-            margin-right: 10px;
-            color: #ff6347;
-        }
+            .containerDeletados li i {
+                margin-right: 10px;
+                color: #ff6347;
+            }
 
         .containerDeletados button {
             background-color: #4CAF50;
@@ -504,9 +538,9 @@
             transition: background-color 0.3s;
         }
 
-        .containerDeletados button:hover {
-            background-color: #45a049;
-        }
+            .containerDeletados button:hover {
+                background-color: #45a049;
+            }
 
         #mensagemSucesso {
             position: fixed;
@@ -540,50 +574,65 @@
             transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
         }
 
-        #popupDeletaPrecos.show {
-            display: block;
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-        }
+            #popupDeletaPrecos.show {
+                display: block;
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
 
-        #popupDeletaPrecos h3 {
-            font-size: 22px;
-            margin-bottom: 20px;
-            font-weight: 600;
-            color: #ecf0f1;
-        }
+            #popupDeletaPrecos h3 {
+                font-size: 22px;
+                margin-bottom: 20px;
+                font-weight: 600;
+                color: #ecf0f1;
+            }
 
-        #popupDeletaPrecos ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-            font-size: 18px;
-            color: #ecf0f1;
-            text-align: left;
-            position: relative;
-        }
+            #popupDeletaPrecos ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+                font-size: 18px;
+                color: #ecf0f1;
+                text-align: left;
+                position: relative;
+            }
 
-        #popupDeletaPrecos ul li {
-            background-color: #3498db;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: slideUp 0.5s ease-out forwards;
-            transition: opacity 1s ease-out, transform 1s ease-out;
-        }
+                #popupDeletaPrecos ul li {
+                    background-color: #3498db;
+                    margin: 10px 0;
+                    padding: 10px;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    opacity: 0;
+                    transform: translateY(20px);
+                    animation: slideUp 0.5s ease-out forwards;
+                    transition: opacity 1s ease-out, transform 1s ease-out;
+                }
 
-        #popupDeletaPrecos ul li:nth-child(1) { animation-delay: 0s; }
-        #popupDeletaPrecos ul li:nth-child(2) { animation-delay: 0.2s; }
-        #popupDeletaPrecos ul li:nth-child(3) { animation-delay: 0.4s; }
+                    #popupDeletaPrecos ul li:nth-child(1) {
+                        animation-delay: 0s;
+                    }
+
+                    #popupDeletaPrecos ul li:nth-child(2) {
+                        animation-delay: 0.2s;
+                    }
+
+                    #popupDeletaPrecos ul li:nth-child(3) {
+                        animation-delay: 0.4s;
+                    }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         #popupDeletaPrecos ul li.deleting {
@@ -607,7 +656,6 @@
             transform: scale(1.2) rotate(100deg);
         }
 
-        /* Updated .tag layout styles */
         .tag {
             border: 4px solid #000 !important;
             background: #fff !important;
@@ -615,32 +663,40 @@
             margin-top: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: fit-content; /* Adjust width to content */
-            min-width: 340px; /* Minimum width to prevent collapse */
-            padding: 0; /* Remove padding to let child elements control spacing */
+            width: fit-content;
+            min-width: 340px;
+            padding: 0;
         }
 
         .topo {
-            background: #000 !important;
+            background: linear-gradient(135deg, #1c2526, #2f3e46) !important;
             color: #fff !important;
             text-align: center;
-            padding: 8px;
-            font-size: 25px;
+            padding: 12px 16px;
+            font-size: 28px;
             font-weight: bold;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
             text-transform: uppercase;
-            white-space: nowrap; /* Prevent line breaks */
-            overflow: visible; /* Allow content to extend beyond container */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
+
+            .topo i {
+                font-size: 24px;
+            }
 
         .valor {
             font-size: 60px;
             text-align: center;
             font-weight: bold;
-            margin: 6px 0;
+            margin: 10px 0;
             color: #000 !important;
             background: #fff !important;
         }
@@ -654,9 +710,9 @@
             background: #fff !important;
         }
 
-        .unitario i {
-            margin-right: 5px;
-        }
+            .unitario i {
+                margin-right: 5px;
+            }
 
         .rodape {
             display: flex;
@@ -675,9 +731,10 @@
             align-items: center;
             gap: 6px;
             font-weight: bold;
-            font-size: 13px; /* Increased for larger barcode text */
+            font-size: 18px;
             width: auto;
         }
+
         .app-text {
             font-size: 12px;
             color: #000;
@@ -689,9 +746,9 @@
             white-space: nowrap;
         }
 
-        .app-text i {
-            color: #2980B9;
-        }
+            .app-text i {
+                color: #2980B9;
+            }
 
         .qr-code-container {
             padding: 6px;
@@ -724,7 +781,7 @@
                 margin-bottom: 10px;
             }
 
-            .resize-handle, .delete-icon, .edit-icon, .menu, .menu-container, .menus, .input-container, .btn-container, .print-container {
+            .resize-handle, .delete-icon, .edit-icon, .menu, .menu-container, .menus, .input-container, .btn-container, .print-container, .layout-modal, .layout-status {
                 display: none !important;
             }
 
@@ -760,10 +817,10 @@
             transition: background 0.3s, border 0.3s;
         }
 
-        .option i {
-            margin-left: 5px;
-            font-size: 14px;
-        }
+            .option i {
+                margin-left: 5px;
+                font-size: 14px;
+            }
 
         .dot {
             width: 12px;
@@ -772,21 +829,21 @@
             border-radius: 50%;
             margin-right: 8px;
             position: relative;
-            transition: background 0.3s;
+            transition: background 0;
         }
 
-        .dot::before {
-            content: "";
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 8px;
-            height: 8px;
-            background: #0069d9;
-            border-radius: 50%;
-            opacity: 0;
-            transition: opacity 0.3s, transform 0.3s;
-        }
+            .dot::before {
+                content: "";
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                width: 8px;
+                height: 8px;
+                background: #0069d9;
+                border-radius: 50%;
+                opacity: 0;
+                transition: opacity 0.3s, transform 0.3s;
+            }
 
         input[type="radio"] {
             display: none;
@@ -798,14 +855,14 @@
             color: white;
         }
 
-        input:checked + .option .dot {
-            background: #fff;
-        }
+            input:checked + .option .dot {
+                background: #fff;
+            }
 
-        input:checked + .option .dot::before {
-            opacity: 1;
-            transform: scale(1.2);
-        }
+                input:checked + .option .dot::before {
+                    opacity: 1;
+                    transform: scale(1.2);
+                }
 
         .option:hover {
             background: #f0f0f0;
@@ -817,15 +874,15 @@
             float: left;
         }
 
-        .checkbox-group input {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
-            height: 0;
-            width: 0;
-            outline: none;
-            -webkit-appearance: none;
-        }
+            .checkbox-group input {
+                position: absolute;
+                opacity: 0;
+                cursor: pointer;
+                height: 0;
+                width: 0;
+                outline: none;
+                -webkit-appearance: none;
+            }
 
         .custom-checkbox {
             width: 18px;
@@ -837,13 +894,13 @@
             position: relative;
         }
 
-        .custom-checkbox svg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
+            .custom-checkbox svg {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
 
         .checkbox-group label.checkbox-label {
             font-size: 14px;
@@ -871,45 +928,154 @@
         }
 
         @keyframes draw {
-            from { stroke-dashoffset: 48; }
-            to { stroke-dashoffset: 0; }
+            from {
+                stroke-dashoffset: 48;
+            }
+
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        /* Modal Styles */
+        .layout-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .layout-modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            width: 600px;
+            max-width: 90%;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease-out;
+        }
+
+            .layout-modal-content h2 {
+                font-size: 24px;
+                margin-bottom: 20px;
+                color: #333;
+            }
+
+        .layout-options {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+        }
+
+        .layout-card {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 15px;
+            width: 45%;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .layout-card:hover {
+                transform: scale(1.05);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+                background-color: #e3f2fd;
+            }
+
+            .layout-card.selected {
+                border: 2px solid #2980B9;
+                background-color: #d6eaf8;
+            }
+
+            .layout-card img {
+                width: 100%;
+                height: auto;
+                border-radius: 8px;
+                margin-bottom: 10px;
+            }
+
+            .layout-card h3 {
+                font-size: 18px;
+                margin: 10px 0;
+                color: #333;
+            }
+
+            .layout-card p {
+                font-size: 14px;
+                color: #555;
+            }
+
+        .layout-modal-content button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #2980B9;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+            .layout-modal-content button:hover {
+                background-color: #1F618D;
+            }
+
+        .layout-status {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #333;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .layout-options {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .layout-card {
+                width: 80%;
+            }
         }
     </style>
 </head>
 <body>
     <div class="menu" id="menus">
         <img src="Orbit.gif" alt="Logo">
-        <!-- Toggle Layout Button -->
-
-        <!-- Produto -->
         <div class="form-group">
             <div class="input-container">
                 <i class="fas fa-tag"></i>
-                <input type="text" id="produto-input" placeholder="Nome do produto">
+                <input type="text" id="produto-input" placeholder="Digite o produto para o formato de tag">
             </div>
         </div>
-        <!-- Data emitida -->
         <div class="form-group">
             <div class="input-container">
                 <i class="fas fa-calendar-alt"></i>
                 <input type="text" id="data-input" placeholder="Ex: 01/01/2025">
             </div>
         </div>
-        <!-- Preço -->
         <div class="form-group">
             <div class="input-container">
                 <i class="fas fa-dollar-sign"></i>
                 <input type="number" id="precos" value="0.0" step="0.01" min="0.01" placeholder="Informe o preço">
             </div>
         </div>
-        <!-- Código do Produto -->
         <div class="form-group">
             <div class="input-container">
                 <i class="fas fa-search"></i>
                 <input type="text" id="codigo-input" placeholder="Procurar Produto / EAN 13" oninput="preencherProduto()">
             </div>
         </div>
-        <!-- Quantidade (ML / Litro) -->
         <div class="form-group">
             <div class="input-container">
                 <i class="fas fa-tint"></i>
@@ -922,7 +1088,6 @@
             <input type="radio" name="opcao" value="12" id="op2">
             <label class="option" for="op2"><div class="dot"></div> Fardo 12 uni <i class="fas fa-box"></i></label>
         </div>
-        <!-- Opção Com Logo -->
         <div class="checkbox-group">
             <input type="checkbox" id="logo-checkbox">
             <label class="checkbox-label" for="logo-checkbox">
@@ -934,7 +1099,6 @@
                 Com Qr code baixar App Cordeiro?
             </label>
         </div>
-        <!-- Botões de ação -->
         <div class="form-group">
             <button type="button" id="btnImprimir"><i class="fas fa-print"></i> Imprimir</button>
         </div>
@@ -948,18 +1112,24 @@
             <button type="button" id="btnAdicionar"><i class="fas fa-plus"></i> Adicionar</button>
         </div>
         <div class="form-group">
-            <button type="button" id="btnToggleLayout" class="layout1"><i class="fas fa-exchange-alt"></i> Mudar layout novo</button>
+            <button type="button" id="btnToggleLayout" class="layout2"><i class="fas fa-exchange-alt"></i> Mudar layout</button>
         </div>
+        <div class="layout-status" id="layout-status">Formato atual: Tag</div>
     </div>
     <div id="containerDeletados"></div>
     <div class="content">
         <div id="planilhas">
-            <div class="planilha" id="planilha">
-                <img src="https://i.imgur.com/tIxuIE3.png" class="logo" id="logo-imagem" alt="Logo">
-                <div class="produto" id="produto-nome">Produto A</div>
-                <div class="info"><i class=""></i><span class="preco" id="preco">R$ 19,99</span></div>
-                <div class="adicional"><span id="preco-por-litro">1 LITRO SAI POR R$ 00,99</span></div>
-                <div class="info"><i class="fas fa-calendar-alt"></i><span id="data-emitida">Data emitida: DD/MM/AAAA</span></div>
+            <div class="tag" id="planilha">
+                <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+                <img src="https://i.imgur.com/tIxuIE3.png" class="logo" alt="Logo" style="display: none; position: absolute; top: 10px; right: 10px; width: 190px; height: fit-content; margin-left: 50px;">
+                <div class="topo"><i class="fa-solid fa-box"></i> PRECO DEMONSTRATIVO</div>
+                <div class="valor">R$ 19,99</div>
+                <div class="unitario"><i class="fa-solid fa-droplet"></i>Preço por litro: R$ 00,99</div>
+                <div class="rodape">
+                    <div class="codigo"><i class="fa-solid fa-barcode"></i>0000078936683</div>
+                    <div class="data"><i class="fa-solid fa-calendar-day"></i>DD/MM/AAAA</div>
+                </div>
                 <div class="resize-handle"></div>
             </div>
         </div>
@@ -982,6 +1152,25 @@
     <div id="popupDeletaPrecos">
         <h3>Alterações Realizadas</h3>
         <ul id="produtosDeletados"></ul>
+    </div>
+    <!-- Modal for Layout Selection -->
+    <div id="layoutModal" class="layout-modal">
+        <div class="layout-modal-content">
+            <h2>Escolha o Formato de Preço</h2>
+            <div class="layout-options">
+                <div class="layout-card" data-layout="antigo">
+                    <img src="https://i.postimg.cc/YqJ92LCR/produtoantigo.png" alt="Layout Antigo">
+                    <h3>Layout Antigo</h3>
+                    <p>Formato clássico com design de planilha, ideal para exibição detalhada.  Vantagem gastar menos tinta da impresora</p>
+                </div>
+                <div class="layout-card" data-layout="novo">
+                    <img src="https://i.postimg.cc/HxXG2jgY/produtonovo.png" alt="Layout Novo">
+                    <h3>Layout Novo</h3>
+                    <p>Formato moderno com design de tag, perfeito para visual compacto. Vantagem - Organizada E mais atraente</p>
+                </div>
+            </div>
+            <button id="confirmLayout">Confirmar Seleção</button>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -1044,16 +1233,38 @@
         const codigoInput = document.getElementById('codigo-input');
         const logoCheckbox = document.getElementById('logo-checkbox');
         const btnToggleLayout = document.getElementById('btnToggleLayout');
+        const layoutModal = document.getElementById('layoutModal');
+        const confirmLayoutBtn = document.getElementById('confirmLayout');
+        const layoutStatus = document.getElementById('layout-status');
 
-        let isTagLayout = false;
+        let isTagLayout = true; // Layout inicial é tag
+        let selectedLayout = 'novo'; // Layout tag pré-selecionado
+        let deletedProducts = []; // Lista para armazenar produtos deletados
+
+        // Dados do primeiro produto
+        const firstProduct = {
+            codigo: '0000078936683',
+            nome: 'PRODUTO DEMOSTRATIVO',
+            preco: '19.99',
+            precoPorLitro: '0.99'
+        };
 
         document.getElementById('btnImprimir').addEventListener('click', imprimirTabelas);
         document.getElementById('btnAdicionar').addEventListener('click', adicionarTabela);
-        btnToggleLayout.addEventListener('click', toggleLayout);
+        btnToggleLayout.addEventListener('click', showLayoutModal);
 
-        function preencherProduto() {
+        // Exibir o modal ao carregar a página com tag pré-selecionado
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('popupcordeiro').style.display = 'flex';
+            setTimeout(() => {
+                document.getElementById('popupcordeiro').style.display = 'none';
+            }, 2000);
+            showLayoutModal();
+        });
+
+        async function preencherProduto() {
             const mlInput = document.getElementById('preco-litro-input');
-            const termo = codigoInput.value.trim().toLowerCase();
+            const termo = (codigoInput.value || produtoInput.value).trim().toLowerCase();
             const sugestoes = document.getElementById('sugestoes');
             const menuProdutos = document.getElementById('menuProdutos');
             sugestoes.innerHTML = '';
@@ -1063,43 +1274,139 @@
                 return;
             }
 
-            const produtosSugeridos = Object.keys(produtos).filter(codigo => {
-                const nomeProduto = produtos[codigo].toLowerCase();
-                return codigo.startsWith(termo) || nomeProduto.includes(termo);
-            });
+            try {
+                let allProducts = [];
+                let nextUrl = 'https://api.baserow.io/api/database/rows/table/322640/?user_field_names=true';
 
-            if (produtosSugeridos.length === 0) {
-                menuProdutos.style.display = 'none';
-                return;
-            }
+                while (nextUrl) {
+                    const response = await axios({
+                        method: 'GET',
+                        url: nextUrl,
+                        headers: {
+                            Authorization: 'Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd'
+                        }
+                    });
 
-            menuProdutos.style.display = 'block';
-            produtosSugeridos.forEach(codigo => {
-                const li = document.createElement('li');
-                li.textContent = produtos[codigo];
-                li.onclick = () => {
-                    codigoInput.value = codigo;
-                    produtoInput.value = produtos[codigo];
+                    allProducts = allProducts.concat(response.data.results);
+                    nextUrl = response.data.next;
+                }
+
+                const produtosSugeridos = allProducts.filter(item => {
+                    const codigo = item.CODIGO ? item.CODIGO.toLowerCase() : '';
+                    const nomeProduto = item.PRODUTO ? item.PRODUTO.toLowerCase() : '';
+                    return codigo.includes(termo) || nomeProduto.includes(termo);
+                });
+
+                if (produtosSugeridos.length === 0) {
                     menuProdutos.style.display = 'none';
-                    const match = produtos[codigo].match(/(\d+)(ml|L)/i);
-                    if (match) {
-                        mlInput.value = match[1] + ' ' + match[2];
-                    } else {
-                        mlInput.value = '';
-                    }
-                    const quantidadeMatch = produtos[codigo].match(/(\d+)X/i);
-                    if (quantidadeMatch) {
-                        const quantidade = parseInt(quantidadeMatch[1], 10);
+                    return;
+                }
+
+                menuProdutos.style.display = 'block';
+                produtosSugeridos.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item.PRODUTO;
+                    li.dataset.codigo = item.CODIGO;
+                    li.onclick = () => {
+                        codigoInput.value = item.CODIGO;
+                        produtoInput.value = item.PRODUTO;
+                        precoInput.value = item.PREÇO || '0.0';
+                        mlInput.value = item.ML || '';
+                        const quantidade = parseInt(item.QUANTIDADE, 10);
                         if (quantidade === 6) {
                             document.querySelector('input[name="opcao"][value="6"]').checked = true;
                         } else if (quantidade === 12) {
                             document.querySelector('input[name="opcao"][value="12"]').checked = true;
                         }
-                    }
-                };
-                sugestoes.appendChild(li);
+                        menuProdutos.style.display = 'none';
+                    };
+                    sugestoes.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Erro ao buscar produtos da API:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro',
+                    text: 'Não foi possível carregar os produtos similares.'
+                });
+                menuProdutos.style.display = 'none';
+            }
+        }
+
+        function showLayoutModal() {
+            layoutModal.style.display = 'flex';
+            const cards = document.querySelectorAll('.layout-card');
+            cards.forEach(card => {
+                card.classList.remove('selected');
+                if (card.dataset.layout === 'novo') {
+                    card.classList.add('selected');
+                    selectedLayout = 'novo';
+                }
+                card.addEventListener('click', () => {
+                    cards.forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    selectedLayout = card.dataset.layout;
+                }, { once: true });
             });
         }
+
+        confirmLayoutBtn.addEventListener('click', () => {
+            if (selectedLayout) {
+                isTagLayout = selectedLayout === 'novo';
+                toggleLayout();
+
+                // Atualizar o campo de produto e preço com base no primeiro produto
+                produtoInput.value = firstProduct.nome;
+                produtoInput.placeholder = isTagLayout ? 'Digite o produto para o formato de tag' : 'Digite o produto para o formato de planilha';
+                layoutStatus.textContent = isTagLayout ? 'Formato atual: Tag' : 'Formato atual: Planilha';
+                precoInput.value = firstProduct.preco;
+                document.getElementById('preco-litro-input').value = firstProduct.precoPorLitro;
+                codigoInput.value = firstProduct.codigo;
+
+                // Atualizar o preço no topo da tag ou planilha
+                const planilhaContainer = document.getElementById('planilhas');
+                const currentPlanilha = planilhaContainer.querySelector('.planilha, .tag');
+                if (currentPlanilha) {
+                    const precoElement = currentPlanilha.querySelector(isTagLayout ? '.valor' : '.preco');
+                    if (precoElement) {
+                        precoElement.textContent = `R$ ${firstProduct.preco.replace('.', ',')}`;
+                    }
+                    const produtoElement = currentPlanilha.querySelector(isTagLayout ? '.topo' : '#produto-nome');
+                    if (produtoElement) {
+                        if (isTagLayout) {
+                            produtoElement.innerHTML = `<i class="fa-solid fa-box"></i> ${firstProduct.nome}`;
+                        } else {
+                            produtoElement.textContent = firstProduct.nome;
+                        }
+                    }
+                    const precoPorLitroElement = currentPlanilha.querySelector(isTagLayout ? '.unitario' : '#preco-por-litro');
+                    if (precoPorLitroElement) {
+                        precoPorLitroElement.innerHTML = isTagLayout
+                            ? `<i class="fa-solid fa-droplet"></i>Preço por litro: R$ ${firstProduct.precoPorLitro.replace('.', ',')}`
+                            : `1 LITRO SAI POR R$ ${firstProduct.precoPorLitro.replace('.', ',')}`;
+                    }
+                    const codigoElement = currentPlanilha.querySelector(isTagLayout ? '.codigo' : null);
+                    if (codigoElement) {
+                        codigoElement.innerHTML = `<i class="fa-solid fa-barcode"></i>${firstProduct.codigo}`;
+                    }
+                    currentPlanilha.dataset.codigo = firstProduct.codigo;
+                }
+
+                layoutModal.style.display = 'none';
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Layout Alterado',
+                    text: `O formato de preço foi alterado para ${isTagLayout ? 'Layout Novo' : 'Layout planilha'} e o preço foi atualizado para o primeiro produto! para visualizar melhor`
+                });
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Selecione um layout',
+                    text: 'Por favor, escolha um formato de preço antes de confirmar.'
+                });
+            }
+        });
 
         function adicionarItemAPagina(planilhaContainer, novaPlanilha) {
             let grupos = planilhaContainer.querySelectorAll('.grupo-impressao');
@@ -1131,12 +1438,12 @@
             const formattedDateTime = today.toLocaleString('pt-BR');
             dataInput.value = formattedDateTime;
 
-            const produto = produtoInput.value || "Produto";
+            const produto = produtoInput.value || firstProduct.nome;
             const data = dataInput.value || "DD/MM/AAAA";
-            const preco = parseFloat(precoInput.value.replace(',', '.')) || 0.0;
-            const codigo = codigoInput.value || "123456789012";
+            const preco = parseFloat(precoInput.value.replace(',', '.')) || parseFloat(firstProduct.preco);
+            const codigo = codigoInput.value || firstProduct.codigo;
             const precoLitroInput = document.getElementById('preco-litro-input').value.replace(/[^0-9.]/g, '');
-            const precoLitro = parseFloat(precoLitroInput) || 0.99;
+            const precoLitro = parseFloat(precoLitroInput) || parseFloat(firstProduct.precoPorLitro);
             const comLogo = logoCheckbox.checked;
 
             let soma = (preco / precoLitro) * 1000;
@@ -1159,38 +1466,38 @@
 
             if (isTagLayout) {
                 novaPlanilha.innerHTML = `
-                    <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                    <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
-                    <img src="https://i.imgur.com/tIxuIE3.png" class="logo" alt="Logo" style="display: ${comLogo ? 'block' : 'none'}; position: absolute; top: 10px; right: 10px; width: 190px; height: fit-content; margin-left: 50px;">
-                    <div class="topo"><i class="fa-solid fa-box"></i> ${produto}</div>
-                    <div class="valor">R$ ${total.toFixed(2).replace('.', ',')}</div>
-                    <div class="unitario"><i class="fa-solid fa-droplet"></i>Preço por litro: R$ ${soma.toFixed(2).replace('.', ',')}</div>
-                    <div class="rodape">
-                        <div class="codigo"><i class="fa-solid fa-barcode"></i>${codigo}</div>
-                        <div class="data"><i class="fa-solid fa-calendar-day"></i>${data}</div>
-                    </div>
-                    <div class="resize-handle"></div>
-                `;
+                        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                        <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+                        <img src="https://i.imgur.com/tIxuIE3.png" class="logo" alt="Logo" style="display: ${comLogo ? 'block' : 'none'}; position: absolute; top: 10px; right: 10px; width: 190px; height: fit-content; margin-left: 50px;">
+                        <div class="topo"><i class="fa-solid fa-box"></i> ${produto}</div>
+                        <div class="valor">R$ ${total.toFixed(2).replace('.', ',')}</div>
+                        <div class="unitario"><i class="fa-solid fa-droplet"></i>Preço por litro: R$ ${soma.toFixed(2).replace('.', ',')}</div>
+                        <div class="rodape">
+                            <div class="codigo"><i class="fa-solid fa-barcode"></i>${codigo}</div>
+                            <div class="data"><i class="fa-solid fa-calendar-day"></i>${data}</div>
+                        </div>
+                        <div class="resize-handle"></div>
+                    `;
             } else {
                 novaPlanilha.innerHTML = `
-                    <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                    <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
-                    <img src="https://i.imgur.com/tIxuIE3.png" class="logo" alt="Logo" style="display: ${comLogo ? 'block' : 'none'}; width: 190px; height: fit-content; margin-left: 10px;">
-                    <div class="content-container">
-                        <div class="produto" id="produto-nome">${produto}</div>
-                        <div class="info">
-                            <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
-                        </div>
-                        <div class="adicional">
-                            <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
+                        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                        <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+                        <img src="https://i.imgur.com/tIxuIE3.png" class="logo" alt="Logo" style="display: ${comLogo ? 'block' : 'none'}; width: 190px; height: fit-content; margin-left: 10px;">
+                        <div class="content-container">
+                            <div class="produto" id="produto-nome">${produto}</div>
                             <div class="info">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span id="data-emitida">Data emitida: ${data}</span>
+                                <span class="preco">R$ ${total.toFixed(2).replace('.', ',')}</span>
+                            </div>
+                            <div class="adicional">
+                                <span id="preco-por-litro">1 LITRO SAI POR R$ ${soma.toFixed(2).replace('.', ',')}</span>
+                                <div class="info">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span id="data-emitida">Data emitida: ${data}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="resize-handle"></div>
-                `;
+                        <div class="resize-handle"></div>
+                    `;
             }
 
             adicionarItemAPagina(planilhaContainer, novaPlanilha);
@@ -1199,7 +1506,6 @@
         }
 
         function toggleLayout() {
-            isTagLayout = !isTagLayout;
             const planilhaContainer = document.getElementById('planilhas');
             const existingPlanilhas = planilhaContainer.querySelectorAll('.planilha, .tag');
 
@@ -1209,45 +1515,49 @@
             }
 
             existingPlanilhas.forEach(planilha => {
+                // Extrair dados da tag ou planilha
+                let produto = firstProduct.nome;
+                let preco = firstProduct.preco;
+                let precoPorLitro = firstProduct.precoPorLitro;
+                let data = 'DD/MM/AAAA';
+                let codigo = firstProduct.codigo;
+                let comLogo = false;
+
+                // Tentar extrair dados do elemento atual
                 const produtoElement = planilha.querySelector(isTagLayout ? '.topo' : '#produto-nome');
-                if (!produtoElement) {
-                    console.error('Produto element not found in planilha:', planilha.outerHTML);
-                    return;
+                if (produtoElement) {
+                    produto = produtoElement.textContent.replace(/^\s*[\w\s]+\s*/, '').trim() || firstProduct.nome;
                 }
-                const produto = produtoElement.textContent.replace(/^\s*[\w\s]+\s*/, '').trim();
 
                 const precoElement = planilha.querySelector(isTagLayout ? '.valor' : '.preco');
-                if (!precoElement) {
-                    console.error('Preco element not found in planilha:', planilha.outerHTML);
-                    return;
+                if (precoElement) {
+                    preco = precoElement.textContent.replace('R$ ', '').replace(',', '.') || firstProduct.preco;
                 }
-                const precoText = precoElement.textContent.replace('R$ ', '').replace(',', '.');
 
                 const precoPorLitroElement = planilha.querySelector(isTagLayout ? '.unitario' : '#preco-por-litro');
-                if (!precoPorLitroElement) {
-                    console.error('Preco por litro element not found in planilha:', planilha.outerHTML);
-                    return;
+                if (precoPorLitroElement) {
+                    const match = precoPorLitroElement.textContent.match(/R\$ \d+,\d{2}/);
+                    precoPorLitro = match ? match[0].replace('R$ ', '').replace(',', '.') : firstProduct.precoPorLitro;
                 }
-                const precoPorLitroMatch = precoPorLitroElement.textContent.match(/R\$ \d+,\d{2}/);
-                if (!precoPorLitroMatch) {
-                    console.error('Preco por litro format invalid in planilha:', planilha.outerHTML);
-                    return;
-                }
-                const precoPorLitroText = precoPorLitroMatch[0].replace('R$ ', '').replace(',', '.');
 
                 const dataElement = planilha.querySelector(isTagLayout ? '.data' : '#data-emitida');
-                if (!dataElement) {
-                    console.error('Data element not found in planilha:', planilha.outerHTML);
-                    return;
+                if (dataElement) {
+                    data = dataElement.textContent.replace('Data emitida: ', '').trim() || 'DD/MM/AAAA';
                 }
-                const data = dataElement.textContent.replace('Data emitida: ', '').trim();
 
                 const codigoElement = isTagLayout ? planilha.querySelector('.codigo') : null;
-                const codigo = isTagLayout ? (codigoElement ? codigoElement.textContent.replace(/^\s*[\w\s]+\s*/, '').trim() : '123456789012') : (planilha.dataset.codigo || '123456789012');
+                if (codigoElement) {
+                    codigo = codigoElement.textContent.replace(/^\s*[\w\s]+\s*/, '').trim() || firstProduct.codigo;
+                } else {
+                    codigo = planilha.dataset.codigo || firstProduct.codigo;
+                }
 
                 const logoElement = planilha.querySelector('.logo');
-                const comLogo = logoElement ? logoElement.style.display === 'block' : false;
+                if (logoElement) {
+                    comLogo = logoElement.style.display === 'block';
+                }
 
+                // Criar novo elemento no layout oposto
                 const novaPlanilha = document.createElement('div');
                 novaPlanilha.classList.add(isTagLayout ? 'tag' : 'planilha');
                 novaPlanilha.style.breakInside = 'avoid';
@@ -1255,93 +1565,100 @@
 
                 if (isTagLayout) {
                     novaPlanilha.innerHTML = `
-                        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                        <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
-                        <img src="https://i.imgur.com/tIxuIE3.png" class="logo" alt="Logo" style="display: ${comLogo ? 'block' : 'none'}; position: absolute; top: 10px; right: 10px; width: 190px; height: fit-content; margin-left: 50px;">
-                        <div class="topo"><i class="fa-solid fa-box"></i> ${produto}</div>
-                        <div class="valor">R$ ${parseFloat(precoText).toFixed(2).replace('.', ',')}</div>
-                        <div class="unitario"><i class="fa-solid fa-droplet"></i>Preço por litro: R$ ${parseFloat(precoPorLitroText).toFixed(2).replace('.', ',')}</div>
-                        <div class="rodape">
-                            <div class="codigo"><i class="fa-solid fa-barcode"></i>${codigo}</div>
-                            <div class="data"><i class="fa-solid fa-calendar-day"></i>${data}</div>
-                        </div>
-                        <div class="resize-handle"></div>
-                    `;
+                            <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                            <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+                            <img src="https://i.imgur.com/tIxuIE3.png" class="logo" alt="Logo" style="display: ${comLogo ? 'block' : 'none'}; position: absolute; top: 10px; right: 10px; width: 190px; height: fit-content; margin-left: 50px;">
+                            <div class="topo"><i class="fa-solid fa-box"></i> ${produto}</div>
+                            <div class="valor">R$ ${parseFloat(preco).toFixed(2).replace('.', ',')}</div>
+                            <div class="unitario"><i class="fa-solid fa-droplet"></i>Preço por litro: R$ ${parseFloat(precoPorLitro).toFixed(2).replace('.', ',')}</div>
+                            <div class="rodape">
+                                <div class="codigo"><i class="fa-solid fa-barcode"></i>${codigo}</div>
+                                <div class="data"><i class="fa-solid fa-calendar-day"></i>${data}</div>
+                            </div>
+                            <div class="resize-handle"></div>
+                        `;
                 } else {
                     novaPlanilha.innerHTML = `
-                        <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
-                        <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
-                        <img src="https://i.imgur.com/tIxuIE3.png" class="logo" alt="Logo" style="display: ${comLogo ? 'block' : 'none'}; width: 190px; height: fit-content; margin-left: 10px;">
-                        <div class="content-container">
-                            <div class="produto" id="produto-nome">${produto}</div>
-                            <div class="info">
-                                <span class="preco">R$ ${parseFloat(precoText).toFixed(2).replace('.', ',')}</span>
-                            </div>
-                            <div class="adicional">
-                                <span id="preco-por-litro">1 LITRO SAI POR R$ ${parseFloat(precoPorLitroText).toFixed(2).replace('.', ',')}</span>
+                            <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
+                            <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
+                            <img src="https://i.imgur.com/tIxuIE3.png" class="logo" alt="Logo" style="display: ${comLogo ? 'block' : 'none'}; width: 190px; height: fit-content; margin-left: 10px;">
+                            <div class="content-container">
+                                <div class="produto" id="produto-nome">${produto}</div>
                                 <div class="info">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    <span id="data-emitida">Data emitida: ${data}</span>
+                                    <span class="preco">R$ ${parseFloat(preco).toFixed(2).replace('.', ',')}</span>
+                                </div>
+                                <div class="adicional">
+                                    <span id="preco-por-litro">1 LITRO SAI POR R$ ${parseFloat(precoPorLitro).toFixed(2).replace('.', ',')}</span>
+                                    <div class="info">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span id="data-emitida">Data emitida: ${data}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="resize-handle"></div>
-                    `;
+                            <div class="resize-handle"></div>
+                        `;
                 }
 
                 planilha.replaceWith(novaPlanilha);
                 ativarRedimensionamento(novaPlanilha);
             });
 
-            btnToggleLayout.innerHTML = `<i class="fas fa-exchange-alt"></i> Mudar para ${isTagLayout ? 'Layaut Novo' : 'Layout Antigo'}`;
+            btnToggleLayout.innerHTML = `<i class="fas fa-exchange-alt"></i> Mudar layout`;
             btnToggleLayout.classList.toggle('layout1', !isTagLayout);
             btnToggleLayout.classList.toggle('layout2', isTagLayout);
         }
 
-        function carregarDados() {
-            axios({
-                method: "GET",
-                url: "https://api.baserow.io/api/database/rows/table/322640/?user_field_names=true",
-                headers: {
-                    Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd"
-                }
-            })
-                .then(response => {
-                    let dados = response.data.results;
-                    let resultadosComPreco = dados.filter(item => item.PREÇO !== "");
+        async function carregarDados() {
+            try {
+                let allProducts = [];
+                let nextUrl = 'https://api.baserow.io/api/database/rows/table/322640/?user_field_names=true';
 
-                    const planilhaContainer = document.getElementById('planilhas');
-                    planilhaContainer.innerHTML = "";
-                    const today = new Date();
-                    const formattedDate = today.toLocaleDateString('pt-BR');
-                    dataInput.value = formattedDate;
-
-                    let somaTotal = 0;
-                    let paginaAtual = document.createElement('div');
-                    paginaAtual.classList.add('pagina-impressao');
-                    planilhaContainer.appendChild(paginaAtual);
-                    const logoCheckbox = document.getElementById('logo-checkbox');
-                    const comLogo = logoCheckbox.checked;
-                    let itensNaPagina = 0;
-
-                    resultadosComPreco.forEach((item, index) => {
-                        const precoTotal = item.PREÇO * item.QUANTIDADE;
-                        somaTotal += precoTotal;
-
-                        let prelitro = item.PREÇO / item.ML * 1000;
-                        if (item.PRODUTO.toLowerCase().includes('leite')) {
-                            prelitro /= 1000;
+                while (nextUrl) {
+                    const response = await axios({
+                        method: 'GET',
+                        url: nextUrl,
+                        headers: {
+                            Authorization: 'Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd'
                         }
+                    });
 
-                        const codigo = Object.keys(produtos).find(key => produtos[key] === item.PRODUTO) || '123456789012';
+                    allProducts = allProducts.concat(response.data.results);
+                    nextUrl = response.data.next;
+                }
 
-                        const novaPlanilha = document.createElement('div');
-                        novaPlanilha.classList.add(isTagLayout ? 'tag' : 'planilha');
-                        novaPlanilha.style.breakInside = 'avoid';
-                        novaPlanilha.dataset.codigo = codigo;
+                const resultadosComPreco = allProducts.filter(item => item.PREÇO && item.PREÇO !== "");
 
-                        if (isTagLayout) {
-                            novaPlanilha.innerHTML = `
+                const planilhaContainer = document.getElementById('planilhas');
+                planilhaContainer.innerHTML = "";
+                const today = new Date();
+                const formattedDate = today.toLocaleDateString('pt-BR');
+                dataInput.value = formattedDate;
+
+                let somaTotal = 0;
+                let paginaAtual = document.createElement('div');
+                paginaAtual.classList.add('pagina-impressao');
+                planilhaContainer.appendChild(paginaAtual);
+                const comLogo = logoCheckbox.checked;
+                let itensNaPagina = 0;
+
+                resultadosComPreco.forEach((item, index) => {
+                    const precoTotal = parseFloat(item.PREÇO) * parseInt(item.QUANTIDADE, 10);
+                    somaTotal += precoTotal;
+
+                    let prelitro = parseFloat(item.PREÇO) / parseFloat(item.ML) * 1000;
+                    if (item.PRODUTO.toLowerCase().includes('leite')) {
+                        prelitro /= 1000;
+                    }
+
+                    const codigo = item.CODIGO || firstProduct.codigo;
+
+                    const novaPlanilha = document.createElement('div');
+                    novaPlanilha.classList.add(isTagLayout ? 'tag' : 'planilha');
+                    novaPlanilha.style.breakInside = 'avoid';
+                    novaPlanilha.dataset.codigo = codigo;
+
+                    if (isTagLayout) {
+                        novaPlanilha.innerHTML = `
                                 <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
                                 <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
                                 <img src="https://i.imgur.com/tIxuIE3.png" class="logo" alt="Logo" style="display: ${comLogo ? 'block' : 'none'}; position: absolute; top: 10px; right: 10px; width: 190px; height: fit-content; margin-left: 50px;">
@@ -1350,13 +1667,12 @@
                                 <div class="unitario"><i class="fa-solid fa-droplet"></i>Preço por litro: R$ ${prelitro.toFixed(2).replace('.', ',')}</div>
                                 <div class="rodape">
                                     <div class="codigo"><i class="fa-solid fa-barcode"></i>${codigo}</div>
-                                    <div class="app-text"><i class="fas fa-qrcode"></i>Baixe nosso App Cordeiro+</div>
                                     <div class="data"><i class="fa-solid fa-calendar-day"></i>${formattedDate}</div>
                                 </div>
                                 <div class="resize-handle"></div>
                             `;
-                        } else {
-                            novaPlanilha.innerHTML = `
+                    } else {
+                        novaPlanilha.innerHTML = `
                                 <i class="fas fa-times-circle delete-icon" onclick="excluirTabela(this)"></i>
                                 <i class="fas fa-edit edit-icon" onclick="editarTabela(this)"></i>
                                 <img src="https://i.imgur.com/tIxuIE3.png" class="logo" alt="Logo" style="display: ${comLogo ? 'block' : 'none'}; width: 190px; height: fit-content; margin-left: 10px;">
@@ -1375,133 +1691,197 @@
                                 </div>
                                 <div class="resize-handle"></div>
                             `;
-                        }
+                    }
 
-                        paginaAtual.appendChild(novaPlanilha);
-                        itensNaPagina++;
+                    if (itensNaPagina >= 6) {
+                        paginaAtual = document.createElement('div');
+                        paginaAtual.classList.add('pagina-impressao');
+                        planilhaContainer.appendChild(paginaAtual);
+                        itensNaPagina = 0;
+                    }
 
-                        if (itensNaPagina === 7) {
-                            paginaAtual = document.createElement('div');
-                            paginaAtual.classList.add('pagina-impressao');
-                            planilhaContainer.appendChild(paginaAtual);
-                            itensNaPagina = 0;
-                        }
-
-                        ativarRedimensionamento(novaPlanilha);
-                    });
+                    paginaAtual.appendChild(novaPlanilha);
+                    itensNaPagina++;
+                    ativarRedimensionamento(novaPlanilha);
                 });
-        }
 
-        function ativarRedimensionamento(planilha) {
-            let isResizing = false;
-            let startWidth, startX;
-
-            const resizeHandle = planilha.querySelector(".resize-handle");
-            if (resizeHandle) {
-                resizeHandle.addEventListener("mousedown", (e) => {
-                    isResizing = true;
-                    startWidth = planilha.offsetWidth;
-                    startX = e.clientX;
-                    document.addEventListener("mousemove", resize);
-                    document.addEventListener("mouseup", stopResize);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Dados Carregados',
+                    text: `Foram carregados ${resultadosComPreco.length} produtos com preço.`
                 });
-            }
-
-            function resize(e) {
-                if (isResizing) {
-                    let newWidth = startWidth + (e.clientX - startX);
-                    planilha.style.width = `${Math.max(200, newWidth)}px`;
-                }
-            }
-
-            function stopResize() {
-                isResizing = false;
-                document.removeEventListener("mousemove", resize);
-                document.removeEventListener("mouseup", stopResize);
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro',
+                    text: 'Não foi possível carregar os dados.'
+                });
             }
         }
 
-        window.onafterprint = () => {
-            Swal.fire({
-                title: "🖨️ Impressão concluída!",
-                text: "A impressão saiu corretamente?\n\n⚠️ Ao clicar em ✅ OK, os preços serão LIMPOS e precisarão ser gerados novamente.\n❌ Se cancelar, nada será alterado. Recomendamos que ao imprimir os preços clicar em ✅",
-                icon: "question",
-                showCancelButton: true,
-                confirmButtonText: "✅ Sim, limpar preços",
-                cancelButtonText: "❌ Manter como está",
-                confirmButtonColor: "#d33",
-                cancelButtonColor: "#3085d6"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    limparPrecos();
-                }
+        function excluirTabela(element) {
+            const planilha = element.closest('.planilha, .tag');
+            const produtoElement = planilha.querySelector(isTagLayout ? '.topo' : '#produto-nome');
+            const produtoNome = produtoElement ? produtoElement.textContent.replace(/^\s*[\w\s]+\s*/, '').trim() : 'Produto Desconhecido';
+            const codigo = planilha.dataset.codigo || 'Sem Código';
+
+            deletedProducts.push({ nome: produtoNome, codigo: codigo });
+
+            const popupDeletaPrecos = document.getElementById('popupDeletaPrecos');
+            const produtosDeletados = document.getElementById('produtosDeletados');
+            produtosDeletados.innerHTML = '';
+
+            deletedProducts.forEach(prod => {
+                const li = document.createElement('li');
+                li.innerHTML = `<i class="fas fa-trash"></i>${prod.nome} (Cód: ${prod.codigo})`;
+                produtosDeletados.appendChild(li);
             });
-        };
 
-        function imprimirTabelas() {
-            document.getElementById('planilhas').style.marginLeft = '-230px';
-            window.print();
+            popupDeletaPrecos.classList.add('show');
+
             setTimeout(() => {
-                document.getElementById('planilhas').style.marginLeft = '0';
-            }, 300);
+                const lis = produtosDeletados.querySelectorAll('li');
+                lis.forEach((li, index) => {
+                    setTimeout(() => {
+                        li.classList.add('deleting');
+                        setTimeout(() => {
+                            li.remove();
+                            if (index === lis.length - 1) {
+                                popupDeletaPrecos.classList.remove('show');
+                                deletedProducts = [];
+                            }
+                        }, 1000);
+                    }, index * 200);
+                });
+            }, 2000);
+
+            planilha.remove();
+        }
+
+        function editarTabela(element) {
+            const planilha = element.closest('.planilha, .tag');
+            const produtoElement = planilha.querySelector(isTagLayout ? '.topo' : '#produto-nome');
+            const precoElement = planilha.querySelector(isTagLayout ? '.valor' : '.preco');
+            const precoPorLitroElement = planilha.querySelector(isTagLayout ? '.unitario' : '#preco-por-litro');
+            const dataElement = planilha.querySelector(isTagLayout ? '.data' : '#data-emitida');
+            const codigoElement = isTagLayout ? planilha.querySelector('.codigo') : null;
+
+            const produto = produtoElement ? produtoElement.textContent.replace(/^\s*[\w\s]+\s*/, '').trim() : '';
+            const preco = precoElement ? precoElement.textContent.replace('R$ ', '').replace(',', '.') : '';
+            const precoPorLitro = precoPorLitroElement ? precoPorLitroElement.textContent.match(/R\$ \d+,\d{2}/)[0].replace('R$ ', '').replace(',', '.') : '';
+            const data = dataElement ? dataElement.textContent.replace('Data emitida: ', '').trim() : '';
+            const codigo = codigoElement ? codigoElement.textContent.replace(/^\s*[\w\s]+\s*/, '').trim() : planilha.dataset.codigo;
+
+            produtoInput.value = produto;
+            precoInput.value = preco;
+            document.getElementById('preco-litro-input').value = precoPorLitro;
+            dataInput.value = data;
+            codigoInput.value = codigo;
+
+            Swal.fire({
+                icon: 'info',
+                title: 'Editando Produto',
+                text: 'Os dados do produto foram carregados nos campos para edição. Altere e clique em "Adicionar" para criar uma nova tabela.'
+            });
         }
 
         async function limparPrecos() {
             try {
-                const response = await axios({
-                    method: "GET",
-                    url: "https://api.baserow.io/api/database/rows/table/322640/?user_field_names=true",
-                    headers: {
-                        Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd"
-                    }
-                });
+                // Limpar preços no banco de dados
+                let allProducts = [];
+                let nextUrl = 'https://api.baserow.io/api/database/rows/table/322640/?user_field_names=true';
 
-                const dados = response.data.results;
-                const produtosDeletadosList = document.getElementById("produtosDeletados");
-                produtosDeletadosList.innerHTML = "";
+                while (nextUrl) {
+                    const response = await axios({
+                        method: 'GET',
+                        url: nextUrl,
+                        headers: {
+                            Authorization: 'Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd'
+                        }
+                    });
 
-                for (let item of dados) {
+                    allProducts = allProducts.concat(response.data.results);
+                    nextUrl = response.data.next;
+                }
+
+                const produtosDeletadosList = document.getElementById('produtosDeletados');
+                produtosDeletadosList.innerHTML = '';
+                deletedProducts = [];
+
+                for (let item of allProducts) {
                     const preco = item.PREÇO;
                     const produtoId = item.id || item.ID;
-                    const nomeProduto = item.PRODUTO || "Sem Nome";
+                    const nomeProduto = item.PRODUTO || 'Sem Nome';
+                    const codigo = item.CODIGO || 'Sem Código';
 
-                    if (preco && preco !== "") {
+                    if (preco && preco !== '') {
                         try {
                             await axios({
-                                method: "PATCH",
+                                method: 'PATCH',
                                 url: `https://api.baserow.io/api/database/rows/table/322640/${produtoId}/?user_field_names=true`,
                                 headers: {
-                                    Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd"
+                                    Authorization: 'Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd'
                                 },
-                                data: { "PREÇO": "" }
+                                data: { PREÇO: '' }
                             });
 
-                            const li = document.createElement("li");
-                            li.innerHTML = `<i class="fas fa-trash"></i> Deletado: ${nomeProduto}`;
-                            produtosDeletadosList.appendChild(li);
-
-                            setTimeout(() => {
-                                li.classList.add("deleting");
-                            }, 500);
-
-                            const popup = document.getElementById("popupDeletaPrecos");
-                            if (popup.style.display !== "block") {
-                                popup.style.display = "block";
-                                popup.classList.add("show");
-                                setTimeout(() => {
-                                    popup.classList.remove("show");
-                                    setTimeout(() => {
-                                        popup.style.display = "none";
-                                    }, 500);
-                                }, 2000);
-                            }
+                            deletedProducts.push({ nome: nomeProduto, codigo: codigo });
                         } catch (error) {
-                            console.error("Erro ao limpar preço do produto:", nomeProduto, error);
+                            console.error(`Erro ao limpar preço do produto ${nomeProduto}:`, error);
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Erro Parcial',
+                                text: `Não foi possível limpar o preço do produto ${nomeProduto}.`
+                            });
                         }
                     }
                 }
+
+                // Limpar preços na interface
+                const planilhas = document.querySelectorAll('.planilha, .tag');
+                planilhas.forEach(planilha => {
+                    const produtoElement = planilha.querySelector(isTagLayout ? '.topo' : '#produto-nome');
+                    const produtoNome = produtoElement ? produtoElement.textContent.replace(/^\s*[\w\s]+\s*/, '').trim() : 'Produto Desconhecido';
+                    const codigo = planilha.dataset.codigo || 'Sem Código';
+                    if (!deletedProducts.some(p => p.nome === produtoNome && p.codigo === codigo)) {
+                        deletedProducts.push({ nome: produtoNome, codigo: codigo });
+                    }
+                });
+
+                // Exibir popup com produtos deletados
+                const popupDeletaPrecos = document.getElementById('popupDeletaPrecos');
+                deletedProducts.forEach(prod => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fas fa-trash"></i>${prod.nome} (Cód: ${prod.codigo})`;
+                    produtosDeletadosList.appendChild(li);
+                });
+
+                popupDeletaPrecos.classList.add('show');
+
+                setTimeout(() => {
+                    const lis = produtosDeletadosList.querySelectorAll('li');
+                    lis.forEach((li, index) => {
+                        setTimeout(() => {
+                            li.classList.add('deleting');
+                            setTimeout(() => {
+                                li.remove();
+                                if (index === lis.length - 1) {
+                                    popupDeletaPrecos.classList.remove('show');
+                                    document.getElementById('planilhas').innerHTML = '';
+                                    deletedProducts = [];
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Preços Limpos',
+                                        text: 'Todos os preços foram removidos com sucesso da interface e do banco de dados!'
+                                    });
+                                }
+                            }, 1000);
+                        }, index * 200);
+                    });
+                }, 2000);
             } catch (error) {
-                console.error("Erro ao buscar produtos:", error);
+                console.error('Erro ao limpar preços:', error);
                 Swal.fire({
                     icon: 'error',
                     title: 'Erro',
@@ -1510,77 +1890,41 @@
             }
         }
 
-        function excluirTabela(element) {
-            const planilha = element.closest('.planilha, .tag');
-            if (planilha) {
-                const grupo = planilha.closest('.grupo-impressao');
-                planilha.remove();
-                if (grupo && grupo.querySelectorAll('.planilha, .tag').length === 0) {
-                    grupo.remove();
-                }
-            }
-        }
-
-        function editarTabela(element) {
-            const planilha = element.closest('.planilha, .tag');
-            const produtoNome = planilha.querySelector(isTagLayout ? '.topo' : '#produto-nome');
-            const novoProdutoNome = prompt('Editar Nome do Produto:', produtoNome.textContent.replace(/^\s*[\w\s]+\s*/, '').trim());
-            if (novoProdutoNome !== null) {
-                if (isTagLayout) {
-                    produtoNome.innerHTML = `<i class="fa-solid fa-box"></i> ${novoProdutoNome}`;
-                } else {
-                    produtoNome.innerText = novoProdutoNome;
-                }
-            }
-        }
-
-        var messages = [
-            "Carregando dados necessários...",
-            "Por favor, aguarde um momento...",
-            "Preparando recurso banco de dados by matheus",
-            "Buscando melhor rota ao servidor",
-            "Quase lá...",
-            "Finalizando carregamento..."
-        ];
-        var messageIndex = 0;
-
-        function alternarMensagem() {
-            document.getElementById('popup-message').textContent = messages[messageIndex];
-            messageIndex = (messageIndex + 1) % messages.length;
-        }
-
-        function carregarDadoss() {
-            var interval = setInterval(function () {
-                alternarMensagem();
-            }, 1000);
-
-            setTimeout(function () {
-                clearInterval(interval);
-                document.getElementById('popupcordeiro').style.display = 'none';
-            }, 6000);
-        }
-
-        function minhaAcao() {
-            document.getElementById('popup').style.display = 'none';
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('popupcordeiro').style.display = 'flex';
-            carregarDadoss();
-        });
-
         function atualizarVisibilidadeLogo() {
             const comLogo = logoCheckbox.checked;
-            const logos = document.querySelectorAll('.planilha .logo, .tag .logo');
+            const logos = document.querySelectorAll('.logo');
             logos.forEach(logo => {
                 logo.style.display = comLogo ? 'block' : 'none';
-                const planilha = logo.closest('.planilha, .tag');
-                if (planilha && !isTagLayout) {
-                    const contentWidth = planilha.querySelector('.content-container')?.offsetWidth || planilha.offsetWidth;
-                    const logoWidth = comLogo ? logo.offsetWidth : 0;
-                    planilha.style.width = `${contentWidth + logoWidth + 60}px`;
-                }
             });
+        }
+
+        function ativarRedimensionamento(element) {
+            const resizeHandle = element.querySelector('.resize-handle');
+            if (!resizeHandle) return;
+
+            resizeHandle.addEventListener('mousedown', initResize);
+
+            function initResize(e) {
+                e.preventDefault();
+                window.addEventListener('mousemove', resize);
+                window.addEventListener('mouseup', stopResize);
+            }
+
+            function resize(e) {
+                const minWidth = 200;
+                let newWidth = e.clientX - element.getBoundingClientRect().left;
+                if (newWidth < minWidth) newWidth = minWidth;
+                element.style.width = `${newWidth}px`;
+            }
+
+            function stopResize() {
+                window.removeEventListener('mousemove', resize);
+                window.removeEventListener('mouseup', stopResize);
+            }
+        }
+
+        function imprimirTabelas() {
+            window.print();
         }
     </script>
 </body>
