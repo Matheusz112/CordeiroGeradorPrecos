@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEITOR APRIMORADO</title>
+    <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.7.7/dist/axios.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.25.6/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.0/dist/tesseract.min.js"></script>
+    <style>
+        @keyframes scanPulse {
+            0% { transform: translateY(0); opacity: 0.3; }
+            50% { transform: translateY(100%); opacity: 0.8; }
+            100% { transform: translateY(0); opacity: 0.3; }
+        }
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8); }
+            100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-scan-pulse {
+            animation: scanPulse 2s infinite;
+        }
+        .animate-glow {
+            animation: glow 1.5s infinite;
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        .image-container {
+            height: 400px;
+            overflow: hidden;
+            position: relative;
+        }
+        .scanning-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(59, 130, 246, 0) 0%,
+                rgba(59, 130, 246, 0.3) 50%,
+                rgba(59, 130, 246, 0) 100%
+            );
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+    <div id="root"></div>
+    <script type="text/babel">
+        const bancoDeDados = [
+            { id: 3, PRODUTO: 'CERV LAGER HEINEKEN LN 6X330ml', ML: 330 },
+            { id: 4, PRODUTO: 'CERV STELLA ARTOIS LN 6X330ml', ML: 330 },
+            { id: 5, PRODUTO: 'CERV LAGER CORONA LN 6X330ml', ML: 330 },
+            { id: 6, PRODUTO: 'CERV LAGER BUDWEISER LN 6X330ml', ML: 330 },
+            { id: 7, PRODUTO: 'CERV HEINEKEN ZERO ALC LN 6X330ml', ML: 330 },
+            { id: 8, PRODUTO: 'CERV P MALTE SPATEM LN 6X355ml', ML: 355 },
+            { id: 9, PRODUTO: 'CERV BRAHMA ZERO ÁLCOOL 12X350ml', ML: 350 },
+            { id: 10, PRODUTO: 'CERV HEINEKEN ZERO ÁLCOOL 12X350ml', ML: 350 },
+            { id: 11, PRODUTO: 'CERV EISENBAHN 12X473ml', ML: 473 },
+            { id: 12, PRODUTO: 'CERVEJA LAGER AMSTEL 12X473ml', ML: 473 },
+            { id: 13, PRODUTO: 'CERV HEINEKEN LT 12X473ml', ML: 473 },
+            { id: 14, PRODUTO: 'CERVEJA KAISER 12X473ml', ML: 473 },
+            { id: 15, PRODUTO: 'CERV PILSEN ANTARTICA 12X473ml', ML: 473 },
+            { id: 16, PRODUTO: 'CERV ANTARCTICA ORIGINAL 12X473ml', ML: 473 },
+            { id: 17, PRODUTO: 'CERVEJA BRAHMA 12X473ml', ML: 473 },
+            { id: 18, PRODUTO: 'CERVEJA STELLA ARTOIS 12X473ml', ML: 473 },
+            { id: 19, PRODUTO: 'CERVEJA P MALTE BOHEMIA 473ml', ML: 473 },
+            { id: 20, PRODUTO: 'CERV P MALTE SPATEM LT 12X473ml', ML: 473 },
+            { id: 21, PRODUTO: 'CERV ANTARCTICA SUB ZERO 473ml', ML: 473 },
+            { id: 22, PRODUTO: 'LEITE ITAMBÊ INTEGRAL 12X1L', ML: 1 },
+            { id: 23, PRODUTO: 'LEITE ITAMBÊ DESNATADO 12X1L', ML: 1 },
+            { id: 24, PRODUTO: 'LEITE ITAMBÊ SEMIDESNATADO 12X1L', ML: 1 },
+            { id: 25, PRODUTO: 'LEITE PORTO ALEGRE INTEGRAL 12X1L', ML: 1 },
+            { id: 26, PRODUTO: 'LEITE QUATA INTEGRAL 12X1L', ML: 1 },
+            { id: 27, PRODUTO: 'LEITE PIRACANJUBA INTEGRAL 12X1L', ML: 1 },
+            { id: 28, PRODUTO: 'ÁGUA IGARAPE SEM GÁS 12X500ml', ML: 500 },
+            { id: 29, PRODUTO: 'ÁGUA IGARAPÉ COM GÁS 12X500ml', ML: 500 },
+            { id: 30, PRODUTO: 'REFRI COCA COLA MINI PET 12X200ml', ML: 200 },
+            { id: 31, PRODUTO: 'REFRI SUKITA LARANJA PET 12X200ml', ML: 200 },
+            { id: 32, PRODUTO: 'REFRI SODA LIMONADA PET 12X200ml', ML: 200 },
+            { id: 33, PRODUTO: 'REFRI GUARANÁ ANTARTICA PET 12X200ml', ML: 200 },
+            { id: 34, PRODUTO: 'REFRI GUARANÁ ZERO PET 12X200ml', ML: 200 },
+            { id: 35, PRODUTO: 'REFRI PEPSI PET 12X200ml', ML: 200 },
+            { id: 36, PRODUTO: 'ÓLEO DE SOJA VELEIRO 6X900ml', ML: 900 },
+            { id: 37, PRODUTO: 'ÓLEO DE SOJA LIZA 6X900ml', ML: 900 },
+            { id: 38, PRODUTO: 'CERV MALZBIER BRAHMA 6X355ml', ML: 355 },
+            { id: 39, PRODUTO: 'CERV PILSEN IMPERIO 12X473ml', ML: 473 },
+            { id: 40, PRODUTO: 'CERV PILSEN BUDWEISER 12X473ml', ML: 473 },
+            { id: 67, PRODUTO: 'LEITE INTEGRAL ITA 12X1L', ML: 1 },
+            { id: 68, PRODUTO: 'LEITE INTEGRAL ITALAC 12X1L', ML: 1 },
+            { id: 69, PRODUTO: 'AGUA MIN GRAO MOGOL 12X500ml', ML: 500 },
+            { id: 70, PRODUTO: 'CERV P MALTE SPATEM LN 6X355ml', ML: 355 },
+            { id: 71, PRODUTO: 'CERV LAGER HEINEKEN LN 6X355ml', ML: 330 },
+            { id: 72, PRODUTO: 'CERV PILSEN BRUDER BX GASTRO 12X473ml', ML: 473 },
+            { id: 73, PRODUTO: 'CERV PILSEN LAUT 12X473ml', ML: 473 },
+            { id: 74, PRODUTO: 'CERV P MALTE PETRA 12X473ml', ML: 473 },
+            { id: 75, PRODUTO: 'CERV PILSEN ITAIPAVA LT 12X473ml', ML: 473 },
+            { id: 76, PRODUTO: 'CERV PILSEN SKOL LT 12X473ml', ML: 473 },
+            { id: 100, PRODUTO: 'CERV LAGER CORONA LN 6X330ml', ML: 330 },
+            { id: 133, PRODUTO: 'CERV LAGER BUDWEISER LN 6X330ml', ML: 330 },
+            { id: 167, PRODUTO: 'CERV PILSEN LAUT 12X473ml', ML: 473 },
+            { id: 199, PRODUTO: 'REFRI CAÇULINHA SODA 12X200ml', ML: 200 },
+            { id: 232, PRODUTO: 'CERV LAGER HEINEKEN LN 6X330ml', ML: 330 },
+            { id: 233, PRODUTO: 'CERV LAGER HEINEKEN LN 6X330ml', ML: 330 },
+            { id: 265, PRODUTO: 'CERVEJA KAISER 12X473ml', ML: 473 },
+            { id: 266, PRODUTO: 'CERV MALZIBIER CARACU 12X350ml', ML: 350 },
+            { id: 298, PRODUTO: 'LEITE INTEGRAL CEMIL 12X1L', ML: 1 },
+            { id: 331, PRODUTO: 'CERV ZERO ALC BUDWEISER LN 6x330ml', ML: 330 },
+            { id: 364, PRODUTO: 'CERV AMERICA IPA EISENBAHN LN 6X355ml', ML: 355 },
+            { id: 365, PRODUTO: 'CERV PALE ALE EISENBAHN LN 6X355ml', ML: 355 },
+            { id: 366, PRODUTO: 'CERV PILSEN BRAHMA LN 6X355ml', ML: 355 },
+            { id: 367, PRODUTO: 'CERV UTRA AMSTEL LN 6X275ml', ML: 275 },
+            { id: 368, PRODUTO: 'FANTA LARANJA ZERO 12x2l', ML: 2 },
+            { id: 397, PRODUTO: 'COQ COROTE LIMÃO 12X500ml', ML: 500 }
+        ];
+
+        const keywords = [
+            'COQ', 'COROTE', 'LIMAO', 'MARACUJA', 'CERV', 'CERVEJA', 'LAGER', 'PILSEN',
+            'HEINEKEN', 'STELLA', 'ARTOIS', 'CORONA', 'BUDWEISER', 'ZERO', 'ALC', 'MALTE',
+            'SPATEM', 'BRAHMA', 'EISENBAHN', 'AMSTEL', 'KAISER', 'ANTARTICA', 'ORIGINAL',
+            'SUB', 'BOHEMIA', 'LEITE', 'ITAMBE', 'INTEGRAL', 'DESNATADO', 'SEMIDESNATADO',
+            'PORTO', 'ALEGRE', 'QUATA', 'PIRACANJUBA', 'AGUA', 'IGARAPE', 'GAS', 'REFRI',
+            'COCA', 'COLA', 'SUKITA', 'LARANJA', 'SODA', 'LIMONADA', 'GUARANA', 'PEPSI',
+            'OLEO', 'SOJA', 'VELEIRO', 'LIZA', 'MALZBIER', 'IMPERIO', 'ITA', 'ITALAC',
+            'GRAO', 'MOGOL', 'BRUDER', 'LAUT', 'PETRA', 'ITAIPAVA', 'SKOL', 'CACULINHA',
+            'CEMIL', 'AMERICA', 'IPA', 'PALE', 'ALE', 'UTRA', 'FANTA'
+        ];
+
+        function validatePrice(price, isCervProduct) {
+            if (!price) return null;
+            let numPrice = parseFloat(price.replace(',', '.'));
+            if (isCervProduct && numPrice < 0.20) return null;
+            if (numPrice > 12.00) return '12.00';
+            return numPrice.toFixed(2).replace('.', ',');
+        }
+
+        function normalizeText(text) {
+            return text
+                .toUpperCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/\s+/g, ' ')
+                .replace(/[O0]/g, '0')
+                .trim();
+        }
+
+        function App() {
+            const [imageUrl, setImageUrl] = React.useState('');
+            const [ocrResult, setOcrResult] = React.useState(null);
+            const [loading, setLoading] = React.useState(false);
+            const [error, setError] = React.useState(null);
+            const [editPrice, setEditPrice] = React.useState(false);
+            const [newPrice, setNewPrice] = React.useState('');
+
+            React.useEffect(() => {
+                const fetchImage = async () => {
+                    setLoading(true);
+                    try {
+                        const response = await axios({
+                            method: "GET",
+                            url: "https://api.baserow.io/api/database/rows/table/587819/2/?user_field_names=true",
+                            headers: {
+                                Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd"
+                            }
+                        });
+                        setImageUrl(response.data.urlimagem);
+                    } catch (err) {
+                        setError('Falha ao buscar imagem do Baserow');
+                        console.error(err);
+                    } finally {
+                        setLoading(false);
+                    }
+                };
+                fetchImage();
+            }, []);
+
+            React.useEffect(() => {
+                if (imageUrl) {
+                    processImage(imageUrl);
+                }
+            }, [imageUrl]);
+
+            const processImage = async (url) => {
+                setLoading(true);
+                setError(null);
+                try {
+                    const response = await axios.get(url, { responseType: 'blob' });
+                    const reader = new FileReader();
+                    reader.readAsDataURL(response.data);
+                    reader.onloadend = async () => {
+                        const base64Image = reader.result.split(',')[1];
+
+                        let ocrText = '';
+                        let ocrPrice = null;
+                        let textDetected = false;
+
+                        // Try OCR.Space first
+                        try {
+                            const formData = new FormData();
+                            formData.append('base64Image', `data:image/jpeg;base64,${base64Image}`);
+                            formData.append('language', 'por');
+                            formData.append('isOverlayRequired', 'false');
+                            formData.append('OCREngine', '2');
+
+                            const ocrSpaceResponse = await axios.post(
+                                'https://api.ocr.space/parse/image',
+                                formData,
+                                {
+                                    headers: {
+                                        'apikey': 'K86154304788957',
+                                        'Content-Type': 'multipart/form-data'
+                                    },
+                                    timeout: 30000
+                                }
+                            );
+
+                            ocrText = ocrSpaceResponse.data.ParsedResults[0]?.ParsedText || '';
+                            ocrPrice = ocrText.match(/\d+[,.]\d{2}/)?.[0] || null;
+                            textDetected = ocrText.trim().length > 0;
+                            console.log('OCR.Space succeeded:', ocrText);
+                        } catch (err) {
+                            console.error('OCR.Space failed:', err);
+                        }
+
+                        // Fallback to API-Ninjas if OCR.Space fails
+                        if (!textDetected) {
+                            try {
+                                const ninjaResponse = await axios.post(
+                                    'https://api.api-ninjas.com/v1/imagetotext',
+                                    { image: base64Image },
+                                    {
+                                        headers: {
+                                            'X-Api-Key': 'vIh5z24lRQ/9DvyLnxIHPw==ZieWg3caCClUYpn2',
+                                            'Content-Type': 'application/json'
+                                        },
+                                        timeout: 30000
+                                    }
+                                );
+
+                                ocrText = ninjaResponse.data.map(item => item.text).join(' ');
+                                ocrPrice = ocrText.match(/\d+[,.]\d{2}/)?.[0] || null;
+                                textDetected = ocrText.trim().length > 0;
+                                console.log('API-Ninjas succeeded:', ocrText);
+                            } catch (err) {
+                                console.error('API-Ninjas OCR failed:', err);
+                            }
+                        }
+
+                        // Fallback to Tesseract.js if both OCR.Space and API-Ninjas fail
+                        if (!textDetected) {
+                            try {
+                                const { data: { text } } = await Tesseract.recognize(
+                                    `data:image/jpeg;base64,${base64Image}`,
+                                    'por',
+                                    {
+                                        logger: (m) => console.log('Tesseract progress:', m)
+                                    }
+                                );
+                                ocrText = text;
+                                ocrPrice = ocrText.match(/\d+[,.]\d{2}/)?.[0] || null;
+                                textDetected = ocrText.trim().length > 0;
+                                console.log('Tesseract succeeded:', ocrText);
+                            } catch (err) {
+                                console.error('Tesseract failed:', err);
+                            }
+                        }
+
+                        // Process OCR results
+                        if (textDetected) {
+                            const normalizedText = normalizeText(ocrText);
+                            const matchedProduct = bancoDeDados.find(product => {
+                                const normalizedProduct = normalizeText(product.PRODUTO);
+                                return keywords.some(keyword => 
+                                    normalizedText.includes(keyword) && 
+                                    normalizedProduct.includes(keyword)
+                                );
+                            });
+
+                            const isCervProduct = normalizedText.includes('CERV') || normalizedText.includes('CERVEJA');
+                            const validatedPrice = validatePrice(ocrPrice, isCervProduct);
+
+                            setOcrResult({
+                                product: matchedProduct ? matchedProduct.PRODUTO : 'Produto não identificado',
+                                volume: matchedProduct ? matchedProduct.ML : null,
+                                price: validatedPrice ? `R$ ${validatedPrice}` : 'Preço não identificado',
+                                id: matchedProduct ? matchedProduct.id : null
+                            });
+                            setNewPrice(validatedPrice || '');
+                        } else {
+                            setError('Nenhum texto detectado na imagem');
+                        }
+                    };
+                } catch (err) {
+                    setError('Falha ao processar a imagem');
+                    console.error(err);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            const handlePriceChange = () => {
+                if (newPrice) {
+                    const isCervProduct = ocrResult.product.includes('CERV') || ocrResult.product.includes('CERVEJA');
+                    const validatedPrice = validatePrice(newPrice, isCervProduct);
+                    if (validatedPrice) {
+                        setOcrResult({ ...ocrResult, price: `R$ ${validatedPrice}` });
+                    } else {
+                        setError('Preço inválido');
+                    }
+                }
+                setEditPrice(false);
+            };
+
+            const handleSubmit = async () => {
+                if (!ocrResult || !ocrResult.id || ocrResult.price === 'Preço não identificado') {
+                    setError('Não foi possível enviar: produto ou preço inválido');
+                    return;
+                }
+
+                setLoading(true);
+                setError(null);
+                try {
+                    const priceToSend = ocrResult.price.replace('R$ ', '').replace(',', '.');
+                    await axios({
+                        method: "PATCH",
+                        url: `https://api.baserow.io/api/database/rows/table/322640/${ocrResult.id}/?user_field_names=true`,
+                        headers: {
+                            Authorization: "Token QNhuEjQ6tUb2CmQyN2B5ipfhC61gLfXe",
+                            "Content-Type": "application/json"
+                        },
+                        data: {
+                            "PREÇO": priceToSend
+                        }
+                    });
+                    alert(`Produto: ${ocrResult.product}\nVolume: ${ocrResult.volume ? `${ocrResult.volume}ml` : 'N/A'}\nPreço: ${ocrResult.price}\nPreço enviado com sucesso!`);
+                } catch (err) {
+                    setError('Falha ao enviar o preço para o Baserow');
+                    console.error('Baserow PATCH failed:', err);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 flex flex-col items-center justify-center p-6">
+                    <header className="w-full max-w-3xl mx-auto mb-10 text-center">
+                        <h1 className="text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 animate-fade-in-up">
+                            OCR CORDEIRO IA
+                        </h1>
+                        <p className="text-lg md:text-xl text-gray-300 mt-3 opacity-90 animate-fade-in-up animation-delay-200">
+                            Escaneie produtos com precisão e atualize preços em tempo real
+                        </p>
+                    </header>
+
+                    <main className="w-full max-w-md bg-gray-800 rounded-2xl shadow-2xl p-6 transform transition-all duration-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] animate-glow">
+                        {loading && (
+                            <div className="flex justify-center items-center mb-6">
+                                <div className="relative">
+                                    <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-blue-400"></div>
+                                    <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-blue-400 font-semibold">Escaneando...</span>
+                                </div>
+                            </div>
+                        )}
+
+                        {error && (
+                            <div className="bg-red-900/50 text-red-300 p-4 rounded-lg mb-6 animate-fade-in-up">
+                                {error}
+                            </div>
+                        )}
+
+                        {imageUrl && (
+                            <div className="image-container mb-6 rounded-lg overflow-hidden shadow-md relative">
+                                <img 
+                                    src={imageUrl} 
+                                    alt="Produto Escaneado" 
+                                    className="w-full h-full object-cover transform transition-transform duration-300 hover:scale-105" 
+                                />
+                                {loading && (
+                                    <div className="scanning-overlay animate-scan-pulse"></div>
+                                )}
+                            </div>
+                        )}
+
+                        {ocrResult && (
+                            <div className="bg-gray-900/50 p-6 rounded-lg shadow-inner animate-fade-in-up">
+                                <h2 className="text-2xl font-semibold text-blue-300 mb-4">Resultados do Escaneamento</h2>
+                                <div className="space-y-4">
+                                    <p className="text-gray-200 text-lg">
+                                        <strong className="text-blue-400">Produto:</strong> {ocrResult.product}
+                                    </p>
+                                    <p className="text-gray-200 text-lg">
+                                        <strong className="text-blue-400">Volume:</strong> {ocrResult.volume ? `${ocrResult.volume}ml` : 'N/A'}
+                                    </p>
+                                    <div className="text-gray-200 text-lg flex items-center space-x-3">
+                                        <strong className="text-blue-400">Preço:</strong>
+                                        {editPrice ? (
+                                            <div className="flex items-center space-x-2">
+                                                <input
+                                                    type="text"
+                                                    value={newPrice}
+                                                    onChange={(e) => setNewPrice(e.target.value)}
+                                                    className="bg-gray-700 text-white px-3 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                                    placeholder="Digite o preço"
+                                                />
+                                                <button
+                                                    onClick={handlePriceChange}
+                                                    className="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 transition-colors duration-200"
+                                                >
+                                                    Salvar
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center space-x-3">
+                                                <span>{ocrResult.price}</span>
+                                                <button
+                                                    onClick={() => setEditPrice(true)}
+                                                    className="text-blue-400 hover:text-blue-300 transition-colors duration-200"
+                                                >
+                                                    Editar
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="mt-8 flex justify-center space-x-4">
+                            <button 
+                                onClick={() => processImage(imageUrl)} 
+                                className="bg-blue-500 text-white px-8 py-3 rounded-full hover:bg-blue-600 transition-colors duration-300 transform hover:scale-105 disabled:opacity-50 text-lg font-semibold"
+                                disabled={loading}
+                            >
+                                Escanear Novamente
+                            </button>
+                            {ocrResult && (
+                                <button 
+                                    onClick={handleSubmit}
+                                    className="bg-purple-500 text-white px-8 py-3 rounded-full hover:bg-purple-600 transition-colors duration-300 transform hover:scale-105 text-lg font-semibold"
+                                    disabled={loading}
+                                >
+                                    Enviar
+                                </button>
+                            )}
+                        </div>
+                    </main>
+
+                    <footer className="mt-10 text-gray-400 text-center opacity-80 animate-fade-in-up animation break-word animation-delay-400">
+                        <p>Desenvolvido com ❤️ usando React e Tailwind CSS</p>
+                        <p className="mt-2">© 2025 OCR Product Scanner</p>
+                    </footer>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
