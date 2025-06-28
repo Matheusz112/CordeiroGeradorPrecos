@@ -11,31 +11,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.25.6/babel.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.0/dist/tesseract.min.js"></script>
     <style>
-        @keyframes scanPulse {
-            0% { transform: translateY(0); opacity: 0.3; }
-            50% { transform: translateY(100%); opacity: 0.8; }
-            100% { transform: translateY(0); opacity: 0.3; }
-        }
-        @keyframes glow {
-            0% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
-            50% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.8); }
-            100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-scan-pulse {
-            animation: scanPulse 2s infinite;
-        }
-        .animate-glow {
-            animation: glow 1.5s infinite;
-        }
-        .animate-fade-in-up {
-            animation: fadeInUp 0.6s ease-out;
-        }
         .image-container {
-            height: 400px;
+            height: 30vh;
             overflow: hidden;
             position: relative;
         }
@@ -52,10 +29,16 @@
                 rgba(59, 130, 246, 0) 100%
             );
             pointer-events: none;
+            animation: scanPulse 2s infinite;
+        }
+        @keyframes scanPulse {
+            0% { transform: translateY(0); opacity: 0.3; }
+            50% { transform: translateY(100%); opacity: 0.8; }
+            100% { transform: translateY(0); opacity: 0.3; }
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white font-sans">
+<body class="bg-gray-900 text-white font-sans min-h-screen flex items-center justify-center p-2">
     <div id="root"></div>
     <script type="text/babel">
         const bancoDeDados = [
@@ -176,7 +159,7 @@
                         });
                         setImageUrl(response.data.urlimagem);
                     } catch (err) {
-                        setError('Falha ao buscar imagem do Baserow');
+                        setError('Erro ao buscar imagem');
                         console.error(err);
                     } finally {
                         setLoading(false);
@@ -205,7 +188,6 @@
                         let ocrPrice = null;
                         let textDetected = false;
 
-                        // Try OCR.Space first
                         try {
                             const formData = new FormData();
                             formData.append('base64Image', `data:image/jpeg;base64,${base64Image}`);
@@ -233,7 +215,6 @@
                             console.error('OCR.Space failed:', err);
                         }
 
-                        // Fallback to API-Ninjas if OCR.Space fails
                         if (!textDetected) {
                             try {
                                 const ninjaResponse = await axios.post(
@@ -257,7 +238,6 @@
                             }
                         }
 
-                        // Fallback to Tesseract.js if both OCR.Space and API-Ninjas fail
                         if (!textDetected) {
                             try {
                                 const { data: { text } } = await Tesseract.recognize(
@@ -276,7 +256,6 @@
                             }
                         }
 
-                        // Process OCR results
                         if (textDetected) {
                             const normalizedText = normalizeText(ocrText);
                             const matchedProduct = bancoDeDados.find(product => {
@@ -298,11 +277,11 @@
                             });
                             setNewPrice(validatedPrice || '');
                         } else {
-                            setError('Nenhum texto detectado na imagem');
+                            setError('Nenhum texto detectado');
                         }
                     };
                 } catch (err) {
-                    setError('Falha ao processar a imagem');
+                    setError('Erro ao processar imagem');
                     console.error(err);
                 } finally {
                     setLoading(false);
@@ -324,7 +303,7 @@
 
             const handleSubmit = async () => {
                 if (!ocrResult || !ocrResult.id || ocrResult.price === 'Preço não identificado') {
-                    setError('Não foi possível enviar: produto ou preço inválido');
+                    setError('Produto ou preço inválido');
                     return;
                 }
 
@@ -345,7 +324,7 @@
                     });
                     alert(`Produto: ${ocrResult.product}\nVolume: ${ocrResult.volume ? `${ocrResult.volume}ml` : 'N/A'}\nPreço: ${ocrResult.price}\nPreço enviado com sucesso!`);
                 } catch (err) {
-                    setError('Falha ao enviar o preço para o Baserow');
+                    setError('Erro ao enviar preço');
                     console.error('Baserow PATCH failed:', err);
                 } finally {
                     setLoading(false);
@@ -353,101 +332,93 @@
             };
 
             return (
-                <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 flex flex-col items-center justify-center p-6">
-                    <header className="w-full max-w-3xl mx-auto mb-10 text-center">
-                        <h1 className="text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 animate-fade-in-up">
-                            OCR CORDEIRO IA
-                        </h1>
-                        <p className="text-lg md:text-xl text-gray-300 mt-3 opacity-90 animate-fade-in-up animation-delay-200">
-                            Escaneie produtos com precisão e atualize preços em tempo real
-                        </p>
+                <div className="w-full max-w-md flex flex-col gap-2">
+                    <header className="text-center">
+                        <h1 className="text-2xl font-bold text-blue-400">OCR CORDEIRO</h1>
                     </header>
 
-                    <main className="w-full max-w-md bg-gray-800 rounded-2xl shadow-2xl p-6 transform transition-all duration-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] animate-glow">
+                    <main className="bg-gray-800 rounded-lg p-3 flex flex-col gap-2">
                         {loading && (
-                            <div className="flex justify-center items-center mb-6">
+                            <div className="flex justify-center">
                                 <div className="relative">
-                                    <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-blue-400"></div>
-                                    <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-blue-400 font-semibold">Escaneando...</span>
+                                    <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-blue-400"></div>
+                                    <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text-blue-400">Escaneando</span>
                                 </div>
                             </div>
                         )}
 
                         {error && (
-                            <div className="bg-red-900/50 text-red-300 p-4 rounded-lg mb-6 animate-fade-in-up">
+                            <div className="bg-red-900/50 text-red-300 p-2 rounded text-sm text-center">
                                 {error}
                             </div>
                         )}
 
                         {imageUrl && (
-                            <div className="image-container mb-6 rounded-lg overflow-hidden shadow-md relative">
+                            <div className="image-container rounded overflow-hidden">
                                 <img 
                                     src={imageUrl} 
-                                    alt="Produto Escaneado" 
-                                    className="w-full h-full object-cover transform transition-transform duration-300 hover:scale-105" 
+                                    alt="Produto" 
+                                    className="w-full h-full object-cover" 
                                 />
                                 {loading && (
-                                    <div className="scanning-overlay animate-scan-pulse"></div>
+                                    <div className="scanning-overlay"></div>
                                 )}
                             </div>
                         )}
 
                         {ocrResult && (
-                            <div className="bg-gray-900/50 p-6 rounded-lg shadow-inner animate-fade-in-up">
-                                <h2 className="text-2xl font-semibold text-blue-300 mb-4">Resultados do Escaneamento</h2>
-                                <div className="space-y-4">
-                                    <p className="text-gray-200 text-lg">
-                                        <strong className="text-blue-400">Produto:</strong> {ocrResult.product}
-                                    </p>
-                                    <p className="text-gray-200 text-lg">
-                                        <strong className="text-blue-400">Volume:</strong> {ocrResult.volume ? `${ocrResult.volume}ml` : 'N/A'}
-                                    </p>
-                                    <div className="text-gray-200 text-lg flex items-center space-x-3">
-                                        <strong className="text-blue-400">Preço:</strong>
-                                        {editPrice ? (
-                                            <div className="flex items-center space-x-2">
-                                                <input
-                                                    type="text"
-                                                    value={newPrice}
-                                                    onChange={(e) => setNewPrice(e.target.value)}
-                                                    className="bg-gray-700 text-white px-3 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                                    placeholder="Digite o preço"
-                                                />
-                                                <button
-                                                    onClick={handlePriceChange}
-                                                    className="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 transition-colors duration-200"
-                                                >
-                                                    Salvar
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            <div className="flex items-center space-x-3">
-                                                <span>{ocrResult.price}</span>
-                                                <button
-                                                    onClick={() => setEditPrice(true)}
-                                                    className="text-blue-400 hover:text-blue-300 transition-colors duration-200"
-                                                >
-                                                    Editar
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
+                            <div className="bg-gray-900/50 p-3 rounded flex flex-col gap-2 text-sm">
+                                <p>
+                                    <strong className="text-blue-400">Produto:</strong> {ocrResult.product}
+                                </p>
+                                <p>
+                                    <strong className="text-blue-400">Volume:</strong> {ocrResult.volume ? `${ocrResult.volume}ml` : 'N/A'}
+                                </p>
+                                <div className="flex items-center gap-2">
+                                    <strong className="text-blue-400">Preço:</strong>
+                                    {editPrice ? (
+                                        <div className="flex items-center gap-1">
+                                            <input
+                                                type="text"
+                                                value={newPrice}
+                                                onChange={(e) => setNewPrice(e.target.value)}
+                                                className="bg-gray-700 text-white px-2 py-1 rounded text-sm w-20"
+                                                placeholder="Preço"
+                                            />
+                                            <button
+                                                onClick={handlePriceChange}
+                                                className="bg-green-500 text-white px-2 py-1 rounded text-xs"
+                                            >
+                                                OK
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center gap-2">
+                                            <span>{ocrResult.price}</span>
+                                            <button
+                                                onClick={() => setEditPrice(true)}
+                                                className="text-blue-400 text-xs"
+                                            >
+                                                Editar
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}
 
-                        <div className="mt-8 flex justify-center space-x-4">
+                        <div className="flex justify-center gap-2">
                             <button 
                                 onClick={() => processImage(imageUrl)} 
-                                className="bg-blue-500 text-white px-8 py-3 rounded-full hover:bg-blue-600 transition-colors duration-300 transform hover:scale-105 disabled:opacity-50 text-lg font-semibold"
+                                className="bg-blue-500 text-white px-4 py-2 rounded text-sm disabled:opacity-50"
                                 disabled={loading}
                             >
-                                Escanear Novamente
+                                Escanear
                             </button>
                             {ocrResult && (
                                 <button 
                                     onClick={handleSubmit}
-                                    className="bg-purple-500 text-white px-8 py-3 rounded-full hover:bg-purple-600 transition-colors duration-300 transform hover:scale-105 text-lg font-semibold"
+                                    className="bg-purple-500 text-white px-4 py-2 rounded text-sm disabled:opacity-50"
                                     disabled={loading}
                                 >
                                     Enviar
@@ -456,9 +427,8 @@
                         </div>
                     </main>
 
-                    <footer className="mt-10 text-gray-400 text-center opacity-80 animate-fade-in-up animation break-word animation-delay-400">
-                        <p>Desenvolvido com ❤️ usando React e Tailwind CSS</p>
-                        <p className="mt-2">© 2025 OCR Product Scanner</p>
+                    <footer className="text-gray-400 text-center text-xs">
+                        <p>© 2025 OCR Product Scanner</p>
                     </footer>
                 </div>
             );
