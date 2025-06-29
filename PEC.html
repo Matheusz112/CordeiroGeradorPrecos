@@ -11,10 +11,53 @@
     <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.25.6/babel.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.0/dist/tesseract.min.js"></script>
     <style>
+        body {
+            background: linear-gradient(135deg, #0d1b2a, #1b263b, #3a0ca3);
+            position: relative;
+            overflow: hidden;
+        }
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+            animation: float 15s infinite;
+            pointer-events: none;
+        }
+        .bubble:nth-child(1) { width: 50px; height: 50px; top: 15%; left: 20%; animation-duration: 12s; }
+        .bubble:nth-child(2) { width: 30px; height: 30px; top: 55%; left: 30%; animation-duration: 18s; }
+        .bubble:nth-child(3) { width: 70px; height: 70px; top: 25%; left: 65%; animation-duration: 14s; }
+        .bubble:nth-child(4) { width: 40px; height: 40px; top: 75%; left: 45%; animation-duration: 16s; }
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); opacity: 0.3; }
+            50% { transform: translateY(-80px) scale(1.1); opacity: 0.5; }
+            100% { transform: translateY(0) scale(1); opacity: 0.3; }
+        }
+        .star {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        .star:nth-child(5) { width: 2px; height: 2px; top: 10%; left: 10%; animation-duration: 2s; }
+        .star:nth-child(6) { width: 3px; height: 3px; top: 20%; left: 80%; animation-duration: 2.5s; }
+        .star:nth-child(7) { width: 1px; height: 1px; top: 70%; left: 30%; animation-duration: 3s; }
+        .star:nth-child(8) { width: 2px; height: 2px; top: 40%; left: 60%; animation-duration: 2.2s; }
+        @keyframes twinkle {
+            0% { opacity: 0.2; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.2; }
+        }
         .image-container {
-            height: 30vh;
+            height: 300px;
             overflow: hidden;
             position: relative;
+        }
+        .image-container img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            object-position: top;
         }
         .scanning-overlay {
             position: absolute;
@@ -22,23 +65,53 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(
-                to bottom,
-                rgba(59, 130, 246, 0) 0%,
-                rgba(59, 130, 246, 0.3) 50%,
-                rgba(59, 130, 246, 0) 100%
-            );
             pointer-events: none;
-            animation: scanPulse 2s infinite;
         }
-        @keyframes scanPulse {
-            0% { transform: translateY(0); opacity: 0.3; }
-            50% { transform: translateY(100%); opacity: 0.8; }
-            100% { transform: translateY(0); opacity: 0.3; }
+        .scanning-overlay::before {
+            content: '';
+            position: absolute;
+            width: 120%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.8), transparent);
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+            animation: scanWave 2s infinite ease-in-out;
+            transform: translateX(-10%);
+        }
+        @keyframes scanWave {
+            0% { 
+                transform: translateY(-10%) translateX(-10%) skewX(20deg); 
+                opacity: 0.3; 
+            }
+            50% { 
+                transform: translateY(110%) translateX(-10%) skewX(-20deg); 
+                opacity: 0.8; 
+            }
+            100% { 
+                transform: translateY(-10%) translateX(-10%) skewX(20deg); 
+                opacity: 0.3; 
+            }
+        }
+        .icon { display: inline-block; vertical-align: middle; width: 24px; height: 24px; }
+        .neon-button {
+            background: #60a5fa;
+            box-shadow: 0 0 5px #60a5fa, 0 0 10px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        .neon-button:hover:not(:disabled) {
+            box-shadow: 0 0 8px #60a5fa, 0 0 15px rgba(59, 130, 246, 0.5);
+            transform: scale(1.02);
         }
     </style>
 </head>
 <body class="bg-gray-900 text-white font-sans min-h-screen flex items-center justify-center p-2">
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
     <div id="root"></div>
     <script type="text/babel">
         const bancoDeDados = [
@@ -135,7 +208,70 @@
                 .replace(/[\u0300-\u036f]/g, '')
                 .replace(/\s+/g, ' ')
                 .replace(/[O0]/g, '0')
+                .replace(/[^A-Z0-9\s]/g, '')
                 .trim();
+        }
+
+        function findBestMatch(normalizedText, database) {
+            let bestMatch = null;
+            let highestScore = 0;
+            const volumeMatch = normalizedText.match(/(\d+)(ML|L)/i)?.[1];
+            const volume = volumeMatch ? parseInt(volumeMatch) : null;
+
+            database.forEach(product => {
+                const normalizedProduct = normalizeText(product.PRODUTO);
+                const productWords = normalizedProduct.split(' ');
+                const textWords = normalizedText.split(' ');
+                
+                let score = 0;
+                productWords.forEach(word => {
+                    if (keywords.includes(word) && textWords.includes(word)) {
+                        score += 10;
+                    } else if (textWords.includes(word)) {
+                        score += 2;
+                    }
+                });
+
+                if (volume && product.ML === volume) {
+                    score += 20;
+                } else if (volume && Math.abs(product.ML - volume) <= 50) {
+                    score += 5;
+                }
+
+                const criticalKeywords = ['HEINEKEN', 'STELLA', 'CORONA', 'BUDWEISER', 'PETRA', 'BRAHMA', 'EISENBAHN', 'AMSTEL', 'KAISER', 'ANTARTICA', 'SKOL', 'ITAIPAVA'];
+                criticalKeywords.forEach(keyword => {
+                    if (normalizedProduct.includes(keyword) && !normalizedText.includes(keyword)) {
+                        score -= 5;
+                    }
+                });
+
+                if (score > highestScore) {
+                    highestScore = score;
+                    bestMatch = product;
+                }
+            });
+
+            return highestScore > 10 ? bestMatch : null;
+        }
+
+        class ErrorBoundary extends React.Component {
+            state = { error: null };
+            static getDerivedStateFromError(error) {
+                return { error: error.message };
+            }
+            render() {
+                if (this.state.error) {
+                    return (
+                        <div className="bg-red-900/50 text-red-300 p-2 rounded text-base text-center">
+                            <svg className="icon mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Erro no script: {this.state.error}
+                        </div>
+                    );
+                }
+                return this.props.children;
+            }
         }
 
         function App() {
@@ -157,10 +293,11 @@
                                 Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd"
                             }
                         });
+                        console.log('Baserow API response:', response.data);
                         setImageUrl(response.data.urlimagem);
                     } catch (err) {
-                        setError('Erro ao buscar imagem');
-                        console.error(err);
+                        setError('Erro ao buscar imagem: ' + err.message);
+                        console.error('Baserow API failed:', err);
                     } finally {
                         setLoading(false);
                     }
@@ -170,6 +307,7 @@
 
             React.useEffect(() => {
                 if (imageUrl) {
+                    console.log('Processing image:', imageUrl);
                     processImage(imageUrl);
                 }
             }, [imageUrl]);
@@ -258,13 +396,8 @@
 
                         if (textDetected) {
                             const normalizedText = normalizeText(ocrText);
-                            const matchedProduct = bancoDeDados.find(product => {
-                                const normalizedProduct = normalizeText(product.PRODUTO);
-                                return keywords.some(keyword => 
-                                    normalizedText.includes(keyword) && 
-                                    normalizedProduct.includes(keyword)
-                                );
-                            });
+                            console.log('Normalized OCR text:', normalizedText);
+                            const matchedProduct = findBestMatch(normalizedText, bancoDeDados);
 
                             const isCervProduct = normalizedText.includes('CERV') || normalizedText.includes('CERVEJA');
                             const validatedPrice = validatePrice(ocrPrice, isCervProduct);
@@ -281,8 +414,8 @@
                         }
                     };
                 } catch (err) {
-                    setError('Erro ao processar imagem');
-                    console.error(err);
+                    setError('Erro ao processar imagem: ' + err.message);
+                    console.error('Image processing failed:', err);
                 } finally {
                     setLoading(false);
                 }
@@ -324,7 +457,7 @@
                     });
                     alert(`Produto: ${ocrResult.product}\nVolume: ${ocrResult.volume ? `${ocrResult.volume}ml` : 'N/A'}\nPreço: ${ocrResult.price}\nPreço enviado com sucesso!`);
                 } catch (err) {
-                    setError('Erro ao enviar preço');
+                    setError('Erro ao enviar preço: ' + err.message);
                     console.error('Baserow PATCH failed:', err);
                 } finally {
                     setLoading(false);
@@ -332,109 +465,125 @@
             };
 
             return (
-                <div className="w-full max-w-md flex flex-col gap-2">
-                    <header className="text-center">
-                        <h1 className="text-2xl font-bold text-blue-400">OCR CORDEIRO</h1>
-                    </header>
+                <ErrorBoundary>
+                    <div className="w-full max-w-md flex flex-col gap-2 relative z-10">
+                        <header className="text-center">
+                            <h1 className="text-3xl font-bold text-blue-300 drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]">
+                                <svg className="icon mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7m-9 5v6h4v-6m-7-7h10" />
+                                </svg>
+                                OCR CORDEIRO
+                            </h1>
+                        </header>
 
-                    <main className="bg-gray-800 rounded-lg p-3 flex flex-col gap-2">
-                        {loading && (
-                            <div className="flex justify-center">
-                                <div className="relative">
-                                    <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-blue-400"></div>
-                                    <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text-blue-400">Escaneando</span>
+                        <main className="bg-gray-800/80 rounded-lg p-4 flex flex-col gap-3 backdrop-blur-sm">
+                            {loading && (
+                                <div className="flex justify-center">
+                                    <div className="relative">
+                                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-blue-400"></div>
+                                        <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-sm text-blue-400">Escaneando</span>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
 
-                        {error && (
-                            <div className="bg-red-900/50 text-red-300 p-2 rounded text-sm text-center">
-                                {error}
-                            </div>
-                        )}
+                            {error && (
+                                <div className="bg-red-900/50 text-red-300 p-2 rounded text-base text-center">
+                                    <svg className="icon mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    {error}
+                                </div>
+                            )}
 
-                        {imageUrl && (
-                            <div className="image-container rounded overflow-hidden">
-                                <img 
-                                    src={imageUrl} 
-                                    alt="Produto" 
-                                    className="w-full h-full object-cover" 
-                                />
-                                {loading && (
-                                    <div className="scanning-overlay"></div>
-                                )}
-                            </div>
-                        )}
-
-                        {ocrResult && (
-                            <div className="bg-gray-900/50 p-3 rounded flex flex-col gap-2 text-sm">
-                                <p>
-                                    <strong className="text-blue-400">Produto:</strong> {ocrResult.product}
-                                </p>
-                                <p>
-                                    <strong className="text-blue-400">Volume:</strong> {ocrResult.volume ? `${ocrResult.volume}ml` : 'N/A'}
-                                </p>
-                                <div className="flex items-center gap-2">
-                                    <strong className="text-blue-400">Preço:</strong>
-                                    {editPrice ? (
-                                        <div className="flex items-center gap-1">
-                                            <input
-                                                type="text"
-                                                value={newPrice}
-                                                onChange={(e) => setNewPrice(e.target.value)}
-                                                className="bg-gray-700 text-white px-2 py-1 rounded text-sm w-20"
-                                                placeholder="Preço"
-                                            />
-                                            <button
-                                                onClick={handlePriceChange}
-                                                className="bg-green-500 text-white px-2 py-1 rounded text-xs"
-                                            >
-                                                OK
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <div className="flex items-center gap-2">
-                                            <span>{ocrResult.price}</span>
-                                            <button
-                                                onClick={() => setEditPrice(true)}
-                                                className="text-blue-400 text-xs"
-                                            >
-                                                Editar
-                                            </button>
-                                        </div>
+                            {imageUrl && (
+                                <div className="image-container rounded overflow-hidden">
+                                    <img 
+                                        src={imageUrl} 
+                                        alt="Produto" 
+                                        className="w-full h-auto object-cover object-top" 
+                                    />
+                                    {(loading || ocrResult) && (
+                                        <div className="scanning-overlay"></div>
                                     )}
                                 </div>
-                            </div>
-                        )}
-
-                        <div className="flex justify-center gap-2">
-                            <button 
-                                onClick={() => processImage(imageUrl)} 
-                                className="bg-blue-500 text-white px-4 py-2 rounded text-sm disabled:opacity-50"
-                                disabled={loading}
-                            >
-                                Escanear
-                            </button>
-                            {ocrResult && (
-                                <button 
-                                    onClick={handleSubmit}
-                                    className="bg-purple-500 text-white px-4 py-2 rounded text-sm disabled:opacity-50"
-                                    disabled={loading}
-                                >
-                                    Enviar
-                                </button>
                             )}
-                        </div>
-                    </main>
 
-                    <footer className="text-gray-400 text-center text-xs">
-                        <p>© 2025 OCR Product Scanner</p>
-                    </footer>
-                </div>
+                            {ocrResult && (
+                                <div className="bg-gray-900/50 p-4 rounded flex flex-col gap-3 text-base">
+                                    <p>
+                                        <svg className="icon mr-2 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                        </svg>
+                                        <strong className="text-blue-400">Produto:</strong> {ocrResult.product}
+                                    </p>
+                                    <p>
+                                        <svg className="icon mr-2 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                        </svg>
+                                        <strong className="text-blue-400">Volume:</strong> {ocrResult.volume ? `${ocrResult.volume}ml` : 'N/A'}
+                                    </p>
+                                    <div className="flex items-center gap-2">
+                                        <svg className="icon mr-2 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <strong className="text-blue-400">Preço:</strong>
+                                        {editPrice ? (
+                                            <div className="flex items-center gap-1">
+                                                <input
+                                                    type="text"
+                                                    value={newPrice}
+                                                    onChange={(e) => setNewPrice(e.target.value)}
+                                                    className="bg-gray-700 text-white px-2 py-1 rounded text-base w-24"
+                                                    placeholder="Preço"
+                                                />
+                                                <button
+                                                    onClick={handlePriceChange}
+                                                    className="bg-green-500 text-white px-2 py-1 rounded text-sm"
+                                                >
+                                                    OK
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center gap-2">
+                                                <span>{ocrResult.price}</span>
+                                                <button
+                                                    onClick={() => setEditPrice(true)}
+                                                    className="text-blue-400 text-sm"
+                                                >
+                                                    Editar
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+
+                            {ocrResult && (
+                                <div className="flex justify-center">
+                                    <button 
+                                        onClick={handleSubmit}
+                                        className="w-full neon-button text-white px-4 py-2 rounded text-base disabled:opacity-50 flex items-center justify-center"
+                                        disabled={loading}
+                                    >
+                                        <svg className="icon mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        Enviar
+                                    </button>
+                                </div>
+                            )}
+                        </main>
+
+                        <footer className="text-gray-400 text-center text-sm mt-2">
+                            <p>© 2025 OCR Product Scanner</p>
+                        </footer>
+                    </div>
+                </ErrorBoundary>
             );
         }
 
-        ReactDOM.render(<App />, document.getElementById('root'));
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
