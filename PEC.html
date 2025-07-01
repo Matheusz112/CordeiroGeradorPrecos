@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LEITOR APRIMORADO</title>
+    <title>OCR Cordeiro</title>
     <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios@1.7.7/dist/axios.min.js"></script>
@@ -14,52 +14,36 @@
     <style>
         body {
             background: linear-gradient(135deg, #0d1b2a, #1b263b, #3a0ca3);
-            position: relative;
-            overflow: hidden;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             color: white;
             font-family: sans-serif;
+            font-size: 0.85rem;
         }
         .bubble {
             position: absolute;
             border-radius: 50%;
             background: rgba(59, 130, 246, 0.1);
-            box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
             animation: float 15s infinite;
             pointer-events: none;
         }
-        .bubble:nth-child(1) { width: 50px; height: 50px; top: 15%; left: 20%; animation-duration: 12s; }
-        .bubble:nth-child(2) { width: 30px; height: 30px; top: 55%; left: 30%; animation-duration: 18s; }
-        .bubble:nth-child(3) { width: 70px; height: 70px; top: 25%; left: 65%; animation-duration: 14s; }
-        .bubble:nth-child(4) { width: 40px; height: 40px; top: 75%; left: 45%; animation-duration: 16s; }
+        .bubble:nth-child(1) { width: 40px; height: 40px; top: 10%; left: 15%; animation-duration: 12s; }
+        .bubble:nth-child(2) { width: 25px; height: 25px; top: 50%; left: 25%; animation-duration: 18s; }
+        .bubble:nth-child(3) { width: 50px; height: 50px; top: 20%; left: 60%; animation-duration: 14s; }
+        .bubble:nth-child(4) { width: 30px; height: 30px; top: 70%; left: 40%; animation-duration: 16s; }
         @keyframes float {
             0% { transform: translateY(0) scale(1); opacity: 0.3; }
-            50% { transform: translateY(-80px) scale(1.1); opacity: 0.5; }
+            50% { transform: translateY(-60px) scale(1.1); opacity: 0.5; }
             100% { transform: translateY(0) scale(1); opacity: 0.3; }
         }
-        .star {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            animation: twinkle 3s infinite;
-        }
-        .star:nth-child(5) { width: 2px; height: 2px; top: 10%; left: 10%; animation-duration: 2s; }
-        .star:nth-child(6) { width: 3px; height: 3px; top: 20%; left: 80%; animation-duration: 2.5s; }
-        .star:nth-child(7) { width: 1px; height: 1px; top: 70%; left: 30%; animation-duration: 3s; }
-        .star:nth-child(8) { width: 2px; height: 2px; top: 40%; left: 60%; animation-duration: 2.2s; }
-        @keyframes twinkle {
-            0% { opacity: 0.2; }
-            50% { opacity: 0.8; }
-            100% { opacity: 0.2; }
-        }
         .image-container {
-            height: 300px;
+            height: 150px;
             overflow: hidden;
             position: relative;
-            border-radius: 8px;
+            border-radius: 6px;
         }
         .image-container img {
             width: 100%;
@@ -79,9 +63,9 @@
             content: '';
             position: absolute;
             width: 120%;
-            height: 4px;
+            height: 3px;
             background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.8), transparent);
-            box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+            box-shadow: 0 0 6px rgba(59, 130, 246, 0.5);
             animation: scanWave 2s infinite ease-in-out;
             transform: translateX(-10%);
         }
@@ -91,30 +75,117 @@
             100% { transform: translateY(-10%) translateX(-10%) skewX(20deg); opacity: 0.3; }
         }
         .icon {
-            display: inline-block;
+            width: 20px;
+            height: 20px;
             vertical-align: middle;
-            width: 24px;
-            height: 24px;
         }
         .neon-button {
             background: #60a5fa;
-            box-shadow: 0 0 5px #60a5fa, 0 0 10px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 4px #60a5fa, 0 0 8px rgba(59, 130, 246, 0.3);
             transition: all 0.3s ease;
         }
         .neon-button:hover:not(:disabled) {
-            box-shadow: 0 0 8px #60a5fa, 0 0 15px rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 6px #60a5fa, 0 0 12px rgba(59, 130, 246, 0.5);
             transform: scale(1.02);
         }
         .success-modal {
             animation: popIn 0.5s ease-out;
             background: rgba(34, 197, 94, 0.9);
-            border-radius: 8px;
-            padding: 16px;
+            border-radius: 6px;
+            padding: 8px;
             text-align: center;
+        }
+        .full-screen-success {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(34, 197, 94, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: popIn 0.5s ease-out;
+            z-index: 1000;
+        }
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 2;
+            stroke: #fff;
+            stroke-miterlimit: 10;
+            box-shadow: inset 0px 0px 0px #22c55e;
+            animation: fill 0.4s ease-in-out 0.4s forwards, scale 0.3s ease-in-out 0.9s both;
+        }
+        .checkmark__circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 2;
+            stroke-miterlimit: 10;
+            stroke: #22c55e;
+            fill: none;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+        @keyframes stroke {
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes scale {
+            0%, 100% { transform: none; }
+            50% { transform: scale3d(1.1, 1.1, 1); }
+        }
+        @keyframes fill {
+            100% { box-shadow: inset 0px 0px 0px 30px #22c55e; }
         }
         @keyframes popIn {
             0% { transform: scale(0.8); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
+        }
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #60a5fa;
+            transition: width 0.3s ease;
+        }
+        .confidence-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(to right, #ef4444, #eab308, #22c55e);
+            transition: width 0.5s ease-in-out;
+        }
+        .confidence-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 4px;
+            font-size: 0.75rem;
+            color: #d1d5db;
+        }
+        .warning-modal {
+            animation: popIn 0.5s ease-out;
+            background: rgba(239, 68, 68, 0.9);
+            border-radius: 6px;
+            padding: 8px;
+            text-align: center;
         }
     </style>
 </head>
@@ -123,11 +194,67 @@
     <div class="bubble"></div>
     <div class="bubble"></div>
     <div class="bubble"></div>
-    <div class="star"></div>
-    <div class="star"></div>
-    <div class="star"></div>
-    <div class="star"></div>
     <div id="root"></div>
+    <script>
+        console.log('Starting script initialization');
+        window.addEventListener('load', () => {
+            console.log('Window loaded');
+            const requiredScripts = ['React', 'ReactDOM', 'axios', 'tailwind', 'Babel', 'Tesseract', 'confetti'];
+            const missingScripts = requiredScripts.filter(script => !window[script]);
+            if (missingScripts.length > 0) {
+                console.error('Erro: Scripts CDN não carregados:', missingScripts);
+                document.getElementById('root').innerHTML = `
+                    <div style="color: red; text-align: center; padding: 10px;">
+                        Erro crítico: Falha ao carregar ${missingScripts.join(', ')}. Verifique sua conexão ou tente outro navegador.
+                    </div>
+                `;
+            } else {
+                console.log('All scripts loaded successfully');
+            }
+        });
+
+        window.addEventListener('error', (event) => {
+            console.error('Erro global:', event.message, event.filename, event.lineno, event.colno, event.error?.stack || 'No stack trace');
+            document.getElementById('root').innerHTML = `
+                <div style="color: red; text-align: center; padding: 10px;">
+                    Erro crítico: ${event.message} (Linha: ${event.lineno}, Coluna: ${event.colno}). Verifique o console para mais detalhes.
+                </div>
+            `;
+        });
+
+        function preprocessImage(base64Image, zoomLevel, callback) {
+            console.log(`Preprocessing image at zoom ${zoomLevel}x`);
+            try {
+                const img = new Image();
+                img.src = `data:image/jpeg;base64,${base64Image}`;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = img.width * zoomLevel;
+                    canvas.height = img.height * zoomLevel;
+                    ctx.scale(zoomLevel, zoomLevel);
+                    ctx.drawImage(img, 0, 0);
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const data = imageData.data;
+                    const contrast = 1.5;
+                    for (let i = 0; i < data.length; i += 4) {
+                        data[i] = Math.min(255, Math.max(0, (data[i] - 128) * contrast + 128));
+                        data[i + 1] = Math.min(255, Math.max(0, (data[i + 1] - 128) * contrast + 128));
+                        data[i + 2] = Math.min(255, Math.max(0, (data[i + 2] - 128) * contrast + 128));
+                    }
+                    ctx.putImageData(imageData, 0, 0);
+                    callback(canvas.toDataURL('image/jpeg').split(',')[1]);
+                };
+                img.onerror = () => {
+                    console.error('Erro ao carregar imagem para preprocessamento');
+                    callback(null);
+                };
+            } catch (err) {
+                console.error('Erro no preprocessamento:', err.message);
+                callback(null);
+            }
+        }
+    </script>
     <script type="text/babel">
         const bancoDeDados = [
             { id: 3, PRODUTO: 'CERV LAGER HEINEKEN LN 6X330ml', ML: 330 },
@@ -189,11 +316,11 @@
             { id: 298, PRODUTO: 'LEITE INTEGRAL CEMIL 12X1L', ML: 1 },
             { id: 331, PRODUTO: 'CERV ZERO ALC BUDWEISER LN 6x330ml', ML: 330 },
             { id: 364, PRODUTO: 'CERV AMERICA IPA EISENBAHN LN 6X355ml', ML: 355 },
-            { id: 365, PRODUTO: 'CERV PALE ALE EISENBAHN LN 6X355ml', ML: 355 },
+            { id: 65, PRODUTO: 'CERV PALE ALE EISENBAHN LN 6X355ml', ML: 355 },
             { id: 366, PRODUTO: 'CERV PILSEN BRAHMA LN 6X355ml', ML: 355 },
             { id: 367, PRODUTO: 'CERV UTRA AMSTEL LN 6X275ml', ML: 275 },
             { id: 368, PRODUTO: 'FANTA LARANJA ZERO 12x2l', ML: 2 },
-            { id: 397, PRODUTO: 'COQ COROTE LIMÃO 12X500ml', ML: 500 }
+            { id: 397, PRODUTO: 'COQ COROTE LIMÃO 12X500ml', ML: 500 }
         ];
 
         const keywords = [
@@ -208,12 +335,169 @@
             'CEMIL', 'AMERICA', 'IPA', 'PALE', 'ALE', 'UTRA', 'FANTA'
         ];
 
-        function validatePrice(price, isCervProduct) {
-            if (!price) return null;
-            let numPrice = parseFloat(price.replace(',', '.'));
-            if (isCervProduct && numPrice < 0.20) return null;
-            if (numPrice > 12.00) return '12.00';
-            return numPrice.toFixed(2).replace('.', ',');
+        const brandPrefixes = [
+            { prefix: 'HEI', brand: 'HEINEKEN', score: 50 },
+            { prefix: 'ANT', brand: 'ANTARTICA', score: 50 },
+            { prefix: 'BRA', brand: 'BRAHMA', score: 50 },
+            { prefix: 'SKO', brand: 'SKOL', score: 50 },
+            { prefix: 'STE', brand: 'STELLA', score: 50 },
+            { prefix: 'COR', brand: 'CORONA', score: 50 },
+            { prefix: 'BUD', brand: 'BUDWEISER', score: 50 },
+            { prefix: 'EIS', brand: 'EISENBAHN', score: 50 },
+            { prefix: 'AMS', brand: 'AMSTEL', score: 50 },
+            { prefix: 'KAI', brand: 'KAISER', score: 50 },
+            { prefix: 'PET', brand: 'PETRA', score: 50 },
+            { prefix: 'ITA', brand: 'ITAIPAVA', score: 50 }
+        ];
+
+        const volumeHeuristics = [
+            { startsWith: '4', volume: 473 },
+            { startsWith: '33', volume: 330 },
+            { startsWith: '35', volume: 350 },
+            { startsWith: '5', volume: 500 },
+            { startsWith: '2', volume: 200 },
+            { startsWith: '9', volume: 900 },
+            { startsWith: '1', volume: 1 }
+        ];
+
+        const knownVolumes = [473, 330, 350, 500, 200, 900, 1, 355, 275, 2];
+
+        function calculatePriceConfidence(price, rawText, isTesseract, otherOcrPrice) {
+            console.log(`Calculating confidence for price: ${price}, rawText: ${rawText}, isTesseract: ${isTesseract}, otherOcrPrice: ${otherOcrPrice}`);
+            let score = 0;
+
+            // Formato do preço
+            if (/R\$\s*\d+[,.]\d{2}/.test(rawText)) {
+                score += 50; // R$ 4,39 ou R$ 4.39
+            } else if (/R\$\s*\d+/.test(rawText)) {
+                score += 40; // R$ 4
+            } else if (/\d+[,.]\d{2}/.test(price)) {
+                score += 30; // 4,39 ou 4.39 sem R$
+            } else if (/\d+[,.]\d/.test(price)) {
+                score += 20; // 4,7 ou 4.7
+            } else if (/^\d+$/.test(price) && !knownVolumes.includes(parseInt(price))) {
+                score += 10; // 438 (não é volume)
+            }
+
+            // Contexto do texto
+            if (/(PREÇO|VALOR|R\$|RS)/i.test(rawText)) {
+                score += 10;
+            }
+
+            // Confiabilidade do OCR
+            score += isTesseract ? 5 : 10;
+
+            // Coincidência entre OCRs
+            if (otherOcrPrice) {
+                const priceNum = parseFloat(price.replace(',', '.'));
+                const otherPriceNum = parseFloat(otherOcrPrice.replace(',', '.'));
+                if (Math.abs(priceNum - otherPriceNum) <= 0.10) {
+                    score += 30;
+                } else if (Math.abs(priceNum - otherPriceNum) <= 1.00) {
+                    score += 15;
+                }
+            }
+
+            // Normalizar para 0-100
+            const confidence = Math.min(100, Math.max(0, score));
+            let emoji, label;
+            if (confidence >= 80) {
+                emoji = '😎';
+                label = 'Muito Bom';
+            } else if (confidence >= 50) {
+                emoji = '😊';
+                label = 'Bom';
+            } else if (confidence >= 20) {
+                emoji = '😐';
+                label = 'Médio';
+            } else {
+                emoji = '😞';
+                label = 'Ruim';
+            }
+
+            console.log(`Confidence score: ${confidence}%, Emoji: ${emoji}, Label: ${label}`);
+            return { confidence, emoji, label };
+        }
+
+        function validatePrice(price, isCervProduct, rawText, otherOcrPrice, isTesseract) {
+            console.log(`Validating price: ${price}, isCervProduct: ${isCervProduct}, rawText: ${rawText}, otherOcrPrice: ${otherOcrPrice}, isTesseract: ${isTesseract}`);
+            if (!price) return { price: '0,00', confidence: 0 };
+            let numPrice;
+            const volumeLike = ['473', '330', '350', '500', '200', '900', '1', '355', '275', '2'];
+
+            if (typeof price === 'string') {
+                price = price.replace(',', '.').replace(/[^\d.]/g, '');
+                if (isTesseract) {
+                    if (/^\d+$/.test(price) && volumeLike.includes(price) && price !== otherOcrPrice) {
+                        const altPriceMatch = rawText.match(/(R\$)?\s*(\d+[,.]\d{2}|\d+[,.]\d|\d{1,2})/)?.[0];
+                        if (altPriceMatch && (altPriceMatch.includes(',') || altPriceMatch.includes('.'))) {
+                            price = altPriceMatch.replace(/R\$/, '').trim();
+                        } else if (altPriceMatch && !volumeLike.includes(altPriceMatch)) {
+                            price = `${altPriceMatch[0]},${altPriceMatch.slice(1) || '00'}`;
+                        } else {
+                            price = '0,00';
+                        }
+                    } else if (/^\d+[,.]\d$/.test(price) && price !== otherOcrPrice) {
+                        const altPriceMatch = rawText.match(/(R\$)?\s*(\d+[,.]\d{2}|\d+[,.]\d|\d{1,2})/)?.[0];
+                        if (altPriceMatch && (altPriceMatch.includes(',') || altPriceMatch.includes('.'))) {
+                            price = altPriceMatch.replace(/R\$/, '').trim();
+                        } else if (altPriceMatch && !volumeLike.includes(altPriceMatch)) {
+                            price = `${altPriceMatch[0]},${altPriceMatch.slice(1) || '00'}`;
+                        } else {
+                            price = '0,00';
+                        }
+                    } else if (/^\d+$/.test(price) && !volumeLike.includes(price)) {
+                        price = `${price[0]},${price.slice(1) || '00'}`;
+                    }
+                } else {
+                    if (/^\d+$/.test(price)) {
+                        price = `${price[0]},${price.slice(1) || '00'}`;
+                    }
+                }
+                numPrice = parseFloat(price);
+            } else {
+                numPrice = parseFloat(price);
+            }
+
+            if (isNaN(numPrice)) {
+                return { price: '0,00', confidence: 0 };
+            }
+            if (isCervProduct && numPrice < 0.20) {
+                return { price: '0,00', confidence: 0 };
+            }
+            if (numPrice > 12.00) {
+                numPrice = 12.00;
+            }
+
+            const finalPrice = numPrice.toFixed(2).replace('.', ',');
+            const { confidence, emoji, label } = calculatePriceConfidence(finalPrice, rawText, isTesseract, otherOcrPrice);
+            return { price: finalPrice, confidence, emoji, label };
+        }
+
+        function correctOcrText(text) {
+            console.log('Correcting OCR text:', text);
+            const corrections = [
+                { wrong: /\b(GEN|GEM|GIN|CEU|CEF|CEJ|CEP|EP)\b/gi, correct: 'CERV' },
+                { wrong: /\b(MALTL|NUT|NRITL|NALTE|NHAYT|NHAT|MOUT|MILT|MRTI|MOULT)\b/gi, correct: 'MALTE' },
+                { wrong: /\b0\b/gi, correct: 'O' },
+                { wrong: /\b1\b/gi, correct: 'I' },
+                { wrong: /\b(\d+)(NL|N1|NT|NI|M1|N7)\b/gi, correct: '$1 ML' },
+                { 
+                    wrong: /\b(473|330|350|500|200|900|1|355|275|2)(\d+)?\b/gi, 
+                    correct: (match, p1) => knownVolumes.includes(parseInt(p1)) ? `${p1} ML` : match 
+                },
+                { wrong: /\b(RS|RZ|S)\b/gi, correct: 'R$' },
+                { 
+                    wrong: /\b(R\$)\s*(\d{3})\b/gi, 
+                    correct: (match, p1, p2) => `${p1} ${p2[0]},${p2.slice(1)}` 
+                },
+                { wrong: /\b(\d+)[,.](\d{1,2})\b/gi, correct: '$1,$2' }
+            ];
+            let corrected = text;
+            corrections.forEach(({ wrong, correct }) => {
+                corrected = corrected.replace(wrong, typeof correct === 'function' ? correct : correct);
+            });
+            return { correctedText: corrected };
         }
 
         function normalizeText(text) {
@@ -222,66 +506,144 @@
                 .normalize('NFD')
                 .replace(/[\u0300-\u036f]/g, '')
                 .replace(/\s+/g, ' ')
-                .replace(/[O0]/g, '0')
                 .replace(/[^A-Z0-9\s]/g, '')
                 .trim();
         }
 
+        function levenshteinDistance(a, b) {
+            try {
+                const matrix = Array(b.length + 1).fill().map(() => Array(a.length + 1).fill(0));
+                for (let i = 0; i <= a.length; i++) matrix[0][i] = i;
+                for (let j = 0; j <= b.length; j++) matrix[j][0] = j;
+                for (let j = 1; j <= b.length; j++) {
+                    for (let i = 1; i <= a.length; i++) {
+                        const indicator = a[i - 1] === b[j - 1] ? 0 : 1;
+                        matrix[j][i] = Math.min(
+                            matrix[j][i - 1] + 1,
+                            matrix[j - 1][i] + 1,
+                            matrix[j - 1][i - 1] + indicator
+                        );
+                    }
+                }
+                return matrix[b.length][a.length];
+            } catch (err) {
+                console.error('Erro no cálculo de Levenshtein:', err.message);
+                return Infinity;
+            }
+        }
+
         function findBestMatch(normalizedText, database) {
-            let bestMatch = null;
-            let highestScore = 0;
-            const volumeMatch = normalizedText.match(/(\d+)(ML|L)/i)?.[1];
-            const volume = volumeMatch ? parseInt(volumeMatch) : null;
+            console.log('Finding best match for:', normalizedText);
+            try {
+                let bestMatch = database[0];
+                let highestScore = -Infinity;
+                const volumeMatch = normalizedText.match(/(\d+)(ML|L)/i)?.[1];
+                let volume = volumeMatch ? parseInt(volumeMatch) : null;
+                const criticalKeywords = ['HEINEKEN', 'STELLA', 'CORONA', 'BUDWEISER', 'PETRA', 'BRAHMA', 'EISENBAHN', 'AMSTEL', 'KAISER', 'ANTARTICA', 'SKOL', 'ITAIPAVA', 'IMPERIO'];
 
-            database.forEach(product => {
-                const normalizedProduct = normalizeText(product.PRODUTO);
-                const productWords = normalizedProduct.split(' ');
-                const textWords = normalizedText.split(' ');
-                
-                let score = 0;
-                productWords.forEach(word => {
-                    if (keywords.includes(word) && textWords.includes(word)) {
+                if (volume) {
+                    const volumeStr = volume.toString();
+                    for (const heuristic of volumeHeuristics) {
+                        if (volumeStr.startsWith(heuristic.startsWith)) {
+                            volume = heuristic.volume;
+                            break;
+                        }
+                    }
+                }
+
+                database.forEach(product => {
+                    const normalizedProduct = normalizeText(product.PRODUTO);
+                    const productWords = normalizedProduct.split(' ');
+                    const textWords = normalizedText.split(' ');
+                    
+                    let score = 0;
+
+                    productWords.forEach(word => {
+                        if (criticalKeywords.includes(word) && textWords.includes(word)) {
+                            score += 70;
+                        } else if (keywords.includes(word) && textWords.includes(word)) {
+                            score += 15;
+                        } else if (textWords.includes(word)) {
+                            score += 5;
+                        }
+                    });
+
+                    brandPrefixes.forEach(({ prefix, brand, score: prefixScore }) => {
+                        if (normalizedText.includes(prefix) && normalizedProduct.includes(brand)) {
+                            score += prefixScore;
+                        }
+                    });
+
+                    if (volume && product.ML === volume) {
+                        score += 40;
+                    } else if (volume && Math.abs(product.ML - volume) <= 50) {
                         score += 10;
-                    } else if (textWords.includes(word)) {
-                        score += 2;
+                    }
+
+                    criticalKeywords.forEach(keyword => {
+                        if (normalizedProduct.includes(keyword) && !normalizedText.includes(keyword)) {
+                            score -= 10;
+                        }
+                    });
+
+                    const distance = levenshteinDistance(normalizedText, normalizedProduct);
+                    const maxLength = Math.max(normalizedText.length, normalizedProduct.length);
+                    const similarityScore = (1 - distance / maxLength) * 30;
+                    score += similarityScore;
+
+                    if (score > highestScore) {
+                        highestScore = score;
+                        bestMatch = product;
                     }
                 });
 
-                if (volume && product.ML === volume) {
-                    score += 20;
-                } else if (volume && Math.abs(product.ML - volume) <= 50) {
-                    score += 5;
+                console.log('Best match:', bestMatch, 'Score:', highestScore);
+                return bestMatch;
+            } catch (err) {
+                console.error('Erro no findBestMatch:', err.message);
+                return database[0];
+            }
+        }
+
+        async function retryOperation(fn, maxRetries = 3, delay = 1000) {
+            for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                try {
+                    return await fn();
+                } catch (err) {
+                    console.log(`Tentativa ${attempt} falhou: ${err.message}, tentando novamente em ${delay}ms`);
+                    if (attempt === maxRetries) throw err;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2;
                 }
+            }
+        }
 
-                const criticalKeywords = ['HEINEKEN', 'STELLA', 'CORONA', 'BUDWEISER', 'PETRA', 'BRAHMA', 'EISENBAHN', 'AMSTEL', 'KAISER', 'ANTARTICA', 'SKOL', 'ITAIPAVA'];
-                criticalKeywords.forEach(keyword => {
-                    if (normalizedProduct.includes(keyword) && !normalizedText.includes(keyword)) {
-                        score -= 5;
-                    }
-                });
-
-                if (score > highestScore) {
-                    highestScore = score;
-                    bestMatch = product;
-                }
-            });
-
-            return highestScore > 10 ? bestMatch : null;
+        function ConfidenceBar({ confidence, emoji, label }) {
+            return (
+                <div className="confidence-bar">
+                    <div className="confidence-fill" style={{ width: `${confidence}%` }}></div>
+                    <div className="confidence-label">
+                        <span>{emoji}</span>
+                        <span>{label} ({confidence}%)</span>
+                    </div>
+                </div>
+            );
         }
 
         class ErrorBoundary extends React.Component {
             state = { error: null };
             static getDerivedStateFromError(error) {
+                console.error('ErrorBoundary:', error.message, error.stack);
                 return { error: error.message };
             }
             render() {
                 if (this.state.error) {
                     return (
-                        <div className="bg-red-900/50 text-red-300 p-2 rounded text-base text-center">
-                            <svg className="icon mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <div className="bg-red-900/50 text-red-300 p-2 rounded text-center">
+                            <svg className="icon mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            Erro no script: {this.state.error}
+                            Erro crítico: {this.state.error}. Verifique o console para mais detalhes.
                         </div>
                     );
                 }
@@ -298,23 +660,33 @@
             const [editPrice, setEditPrice] = React.useState(false);
             const [newPrice, setNewPrice] = React.useState('');
             const [success, setSuccess] = React.useState(false);
+            const [fullScreenSuccess, setFullScreenSuccess] = React.useState(false);
+            const [priceDetected, setPriceDetected] = React.useState(false);
+            const [progress, setProgress] = React.useState(0);
+            const [zoomLevel, setZoomLevel] = React.useState(1);
+            const [priceMismatch, setPriceMismatch] = React.useState(false);
+            const [confidenceData, setConfidenceData] = React.useState({ confidence: 0, emoji: '😞', label: 'Ruim' });
 
             React.useEffect(() => {
+                console.log('Fetching image from Baserow');
                 const fetchImage = async () => {
                     setLoading(true);
                     try {
-                        const response = await axios.get(
-                            "https://api.baserow.io/api/database/rows/table/587819/2/?user_field_names=true",
-                            {
-                                headers: {
-                                    Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd"
-                                },
-                                timeout: 10000
-                            }
+                        const response = await retryOperation(() =>
+                            axios.get(
+                                "https://api.baserow.io/api/database/rows/table/587819/2/?user_field_names=true",
+                                {
+                                    headers: { Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd" },
+                                    timeout: 8000
+                                }
+                            )
                         );
+                        console.log('Image URL fetched:', response.data.urlimagem);
                         setImageUrl(response.data.urlimagem);
                     } catch (err) {
-                        setError('Erro ao buscar imagem: ' + err.message);
+                        console.error('Erro ao buscar imagem do Baserow:', err.message, err.stack);
+                        setError(`Erro crítico ao buscar imagem do Baserow: ${err.message}. Verifique o console.`);
+                        setImageUrl('');
                     } finally {
                         setLoading(false);
                     }
@@ -324,6 +696,7 @@
 
             React.useEffect(() => {
                 if (imageUrl) {
+                    console.log('Processing image:', imageUrl);
                     processImage(imageUrl);
                 }
             }, [imageUrl]);
@@ -331,173 +704,372 @@
             const processImage = async (url) => {
                 setLoading(true);
                 setError(null);
+                setProgress(0);
+                setZoomLevel(1);
                 try {
-                    const response = await axios.get(url, { responseType: 'blob', timeout: 10000 });
+                    console.log('Fetching image data');
+                    const response = await retryOperation(() =>
+                        axios.get(url, { responseType: 'blob', timeout: 8000 })
+                    );
                     const reader = new FileReader();
                     reader.readAsDataURL(response.data);
-                    reader.onloadend = async () => {
+                    reader.onloadend = () => {
+                        console.log('Image converted to base64');
                         const base64Image = reader.result.split(',')[1];
-                        const results = {};
+                        preprocessImage(base64Image, 1, async (processedImage) => {
+                            if (!processedImage) {
+                                setError('Erro crítico ao preprocessar imagem. Verifique o console.');
+                                setLoading(false);
+                                return;
+                            }
+                            const results = {};
 
-                        // OCR.Space
-                        try {
-                            const formData = new FormData();
-                            formData.append('base64Image', `data:image/jpeg;base64,${base64Image}`);
-                            formData.append('language', 'por');
-                            formData.append('isOverlayRequired', 'false');
-                            formData.append('OCREngine', '2');
+                            const ocrPromises = [
+                                (async () => {
+                                    console.log('Starting OCR.Space processing');
+                                    try {
+                                        const formData = new FormData();
+                                        formData.append('base64Image', `data:image/jpeg;base64,${processedImage}`);
+                                        formData.append('language', 'por');
+                                        formData.append('isOverlayRequired', 'false');
+                                        formData.append('OCREngine', '2');
 
-                            const ocrSpaceResponse = await axios.post(
-                                'https://api.ocr.space/parse/image',
-                                formData,
-                                {
-                                    headers: {
-                                        'apikey': 'K86154304788957',
-                                        'Content-Type': 'multipart/form-data'
-                                    },
-                                    timeout: 30000
+                                        const ocrSpaceResponse = await retryOperation(() =>
+                                            axios.post(
+                                                'https://api.ocr.space/parse/image',
+                                                formData,
+                                                {
+                                                    headers: { 'apikey': 'K86154304788957', 'Content-Type': 'multipart/form-data' },
+                                                    timeout: 8000
+                                                }
+                                            )
+                                        );
+
+                                        const ocrText = ocrSpaceResponse.data.ParsedResults[0]?.ParsedText || '';
+                                        console.log('OCR.Space result:', ocrText);
+                                        const { correctedText } = correctOcrText(ocrText);
+                                        const normalizedText = normalizeText(correctedText);
+                                        let ocrPrice = correctedText.match(/(R\$)?\s*\d+[,.]\d{2}/)?.[0] || 
+                                                      correctedText.match(/(R\$)?\s*\d+[,.]\d/)?.[0] || 
+                                                      correctedText.match(/(R\$)?\s*\d{1,2}/)?.[0] || '';
+                                        ocrPrice = ocrPrice.replace(/R\$/, '').trim();
+                                        if (!ocrPrice) {
+                                            const numberMatch = correctedText.match(/\d{1,2}/)?.[0];
+                                            ocrPrice = numberMatch ? `${numberMatch[0]},${numberMatch.slice(1) || '00'}` : '0,00';
+                                        }
+                                        const matchedProduct = findBestMatch(normalizedText, bancoDeDados);
+                                        const isCervProduct = normalizedText.includes('CERV') || normalizedText.includes('CERVEJA');
+                                        const { price: validatedPrice, confidence, emoji, label } = validatePrice(
+                                            ocrPrice, 
+                                            isCervProduct, 
+                                            correctedText, 
+                                            results.tesseract?.price?.replace('R$ ', ''), 
+                                            false
+                                        );
+
+                                        results.ocrspace = {
+                                            source: 'ocrspace',
+                                            result: {
+                                                product: matchedProduct.PRODUTO,
+                                                volume: matchedProduct.ML,
+                                                price: `R$ ${validatedPrice}`,
+                                                id: matchedProduct.id,
+                                                rawText: correctedText,
+                                                confidence,
+                                                emoji,
+                                                label
+                                            }
+                                        };
+                                        return results.ocrspace;
+                                    } catch (err) {
+                                        console.error('Erro no OCR.Space:', err.message, err.stack);
+                                        return { source: 'ocrspace', result: { error: `Erro no OCR.Space: ${err.message}`, rawText: '' } };
+                                    }
+                                })(),
+                                (async () => {
+                                    console.log('Starting Tesseract processing');
+                                    try {
+                                        const tesseractResults = [];
+                                        const priceCounts = {};
+                                        const productCounts = {};
+                                        const rawPrices = [];
+                                        for (let zoom = 1; zoom <= 6; zoom++) {
+                                            setProgress((zoom / 6) * 100);
+                                            setZoomLevel(zoom);
+                                            console.log(`Tesseract zoom ${zoom}x`);
+                                            const result = await new Promise((resolve) => {
+                                                preprocessImage(base64Image, zoom, async (zoomedImage) => {
+                                                    if (!zoomedImage) {
+                                                        resolve({ error: `Erro no preprocessamento (zoom ${zoom}x)`, rawText: '' });
+                                                        return;
+                                                    }
+                                                    try {
+                                                        const { data: { text } } = await Tesseract.recognize(
+                                                            `data:image/jpeg;base64,${zoomedImage}`,
+                                                            'por',
+                                                            { logger: () => {} }
+                                                        );
+                                                        const ocrText = text;
+                                                        console.log(`Tesseract zoom ${zoom}x result:`, ocrText);
+                                                        const { correctedText } = correctOcrText(ocrText);
+                                                        const normalizedText = normalizeText(correctedText);
+                                                        let ocrPrice = correctedText.match(/(R\$)?\s*\d+[,.]\d{2}/)?.[0] || 
+                                                                      correctedText.match(/(R\$)?\s*\d+[,.]\d/)?.[0] || 
+                                                                      correctedText.match(/(R\$)?\s*\d{1,2}/)?.[0] || '';
+                                                        ocrPrice = ocrPrice.replace(/R\$/, '').trim();
+                                                        if (!ocrPrice) {
+                                                            const numberMatch = correctedText.match(/\d{1,2}/)?.[0];
+                                                            ocrPrice = numberMatch ? `${numberMatch[0]},${numberMatch.slice(1) || '00'}` : '0,00';
+                                                        }
+                                                        rawPrices.push(ocrPrice);
+                                                        const matchedProduct = findBestMatch(normalizedText, bancoDeDados);
+                                                        const isCervProduct = normalizedText.includes('CERV') || normalizedText.includes('CERVEJA');
+                                                        const { price: validatedPrice, confidence, emoji, label } = validatePrice(
+                                                            ocrPrice, 
+                                                            isCervProduct, 
+                                                            correctedText, 
+                                                            results.ocrspace?.price?.replace('R$ ', ''), 
+                                                            true
+                                                        );
+                                                        if (validatedPrice) {
+                                                            const priceStr = `R$ ${validatedPrice}`;
+                                                            priceCounts[priceStr] = (priceCounts[priceStr] || 0) + 1;
+                                                        }
+                                                        const productStr = matchedProduct.PRODUTO;
+                                                        productCounts[productStr] = (productCounts[productStr] || 0) + 1;
+                                                        resolve({
+                                                            rawText: ocrText,
+                                                            product: matchedProduct.PRODUTO,
+                                                            volume: matchedProduct.ML,
+                                                            price: validatedPrice ? `R$ ${validatedPrice}` : 'R$ 0,00',
+                                                            id: matchedProduct.id,
+                                                            confidence,
+                                                            emoji,
+                                                            label
+                                                        });
+                                                    } catch (err) {
+                                                        console.error(`Erro no Tesseract (zoom ${zoom}x):`, err.message, err.stack);
+                                                        resolve({ error: `Erro no Tesseract (zoom ${zoom}x): ${err.message}`, rawText: '' });
+                                                    }
+                                                });
+                                            });
+                                            tesseractResults.push(result);
+                                        }
+
+                                        let selectedPrice = '';
+                                        let maxPriceCount = 0;
+                                        let selectedProduct = null;
+                                        let maxProductCount = 0;
+                                        let selectedResult = tesseractResults[0];
+
+                                        for (const price in priceCounts) {
+                                            if (priceCounts[price] >= 3) {
+                                                if (priceCounts[price] > maxPriceCount) {
+                                                    maxPriceCount = priceCounts[price];
+                                                    selectedPrice = price;
+                                                }
+                                            }
+                                        }
+
+                                        if (!selectedPrice) {
+                                            const priceFreq = Object.entries(priceCounts).sort((a, b) => b[1] - a[1]);
+                                            selectedPrice = priceFreq[0]?.[0] || rawPrices.find(p => p) || 'R$ 0,00';
+                                        }
+
+                                        for (const product in productCounts) {
+                                            if (productCounts[product] >= 3) {
+                                                if (productCounts[product] > maxProductCount) {
+                                                    maxProductCount = productCounts[product];
+                                                    selectedProduct = product;
+                                                }
+                                            }
+                                        }
+
+                                        if (!selectedProduct) {
+                                            const productFreq = Object.entries(productCounts).sort((a, b) => b[1] - a[1]);
+                                            selectedProduct = productFreq[0]?.[0] || results.ocrspace?.product || bancoDeDados[0].PRODUTO;
+                                            selectedResult = tesseractResults.find(result => result.product === selectedProduct) || tesseractResults[0];
+                                        }
+
+                                        if (selectedPrice && selectedProduct) {
+                                            selectedResult = tesseractResults.find(
+                                                result => result.price === selectedPrice && result.product === selectedProduct
+                                            ) || tesseractResults[0];
+                                        } else if (selectedPrice) {
+                                            selectedResult = tesseractResults.find(result => result.price === selectedPrice) || tesseractResults[0];
+                                        } else if (selectedProduct) {
+                                            selectedResult = tesseractResults.find(result => result.product === selectedProduct) || tesseractResults[0];
+                                        } else if (results.ocrspace?.product) {
+                                            selectedResult = results.ocrspace;
+                                        }
+
+                                        console.log('Tesseract price counts:', priceCounts);
+                                        console.log('Tesseract product counts:', productCounts);
+                                        console.log('Selected Tesseract price:', selectedPrice);
+                                        console.log('Selected Tesseract product:', selectedProduct);
+
+                                        return { source: 'tesseract', result: selectedResult };
+                                    } catch (err) {
+                                        console.error('Erro crítico no Tesseract:', err.message, err.stack);
+                                        setError(`Erro crítico no Tesseract: ${err.message}. Verifique o console.`);
+                                        return { source: 'tesseract', result: { error: `Erro no Tesseract: ${err.message}`, rawText: '' } };
+                                    }
+                                })()
+                            ];
+
+                            console.log('Waiting for OCR results');
+                            try {
+                                const allResults = await Promise.all(ocrPromises.map(p => p.catch(e => ({ source: null, result: { error: e.message } }))));
+                                allResults.forEach(({ source, result }) => {
+                                    if (source) results[source] = result;
+                                });
+
+                                if (Object.keys(results).length > 0) {
+                                    const validSource = Object.keys(results).find(source => !results[source].error) || 'tesseract';
+                                    console.log('OCR results:', results);
+                                    setOcrResults(results);
+                                    setSelectedOcr(validSource);
+                                    setNewPrice(results[validSource]?.price?.replace('R$ ', '') || '0,00');
+                                    setConfidenceData({
+                                        confidence: results[validSource]?.confidence || 0,
+                                        emoji: results[validSource]?.emoji || '😞',
+                                        label: results[validSource]?.label || 'Ruim'
+                                    });
+
+                                    if (results[validSource]?.price) {
+                                        console.log('Price detected, showing animation');
+                                        setPriceDetected(true);
+                                        confetti({
+                                            particleCount: 150,
+                                            spread: 80,
+                                            origin: { y: 0.6 },
+                                            colors: ['#22c55e', '#ffffff', '#3b82f6']
+                                        });
+                                        setTimeout(() => setPriceDetected(false), 2000);
+                                    }
+
+                                    const ocrSpacePrice = results.ocrspace?.price?.replace('R$ ', '') || null;
+                                    const tesseractPrice = results.tesseract?.price?.replace('R$ ', '') || null;
+                                    if (ocrSpacePrice && tesseractPrice && !results.ocrspace.error && !results.tesseract.error) {
+                                        const ocrSpaceNum = parseFloat(ocrSpacePrice.replace(',', '.'));
+                                        const tesseractNum = parseFloat(tesseractPrice.replace(',', '.'));
+                                        if (Math.abs(ocrSpaceNum - tesseractNum) <= 0.10) {
+                                            console.log('Prices match, auto-submitting');
+                                            handleSubmit();
+                                        } else {
+                                            console.log('Price mismatch detected');
+                                            setPriceMismatch(true);
+                                        }
+                                    }
+                                } else {
+                                    console.error('No valid OCR results');
+                                    setError('Erro crítico: Nenhum resultado OCR válido. Verifique o console.');
+                                    setOcrResults({ tesseract: { error: 'Nenhum resultado OCR válido', rawText: '' } });
+                                    setSelectedOcr('tesseract');
                                 }
-                            );
-
-                            const ocrText = ocrSpaceResponse.data.ParsedResults[0]?.ParsedText || '';
-                            const ocrPrice = ocrText.match(/\d+[,.]\d{2}/)?.[0] || null;
-                            const normalizedText = normalizeText(ocrText);
-                            const matchedProduct = findBestMatch(normalizedText, bancoDeDados);
-                            const isCervProduct = normalizedText.includes('CERV') || normalizedText.includes('CERVEJA');
-                            const validatedPrice = validatePrice(ocrPrice, isCervProduct);
-
-                            results.ocrspace = {
-                                product: matchedProduct ? matchedProduct.PRODUTO : 'Produto não identificado',
-                                volume: matchedProduct ? matchedProduct.ML : null,
-                                price: validatedPrice ? `R$ ${validatedPrice}` : 'Preço não identificado',
-                                id: matchedProduct ? matchedProduct.id : null
-                            };
-                        } catch (err) {
-                            results.ocrspace = { error: 'Erro no OCR.Space: ' + err.message };
-                        }
-
-                        // API-Ninjas
-                        try {
-                            const ninjaResponse = await axios.post(
-                                'https://api.api-ninjas.com/v1/imagetotext',
-                                { image: base64Image },
-                                {
-                                    headers: {
-                                        'X-Api-Key': 'vIh5z24lRQ/9DvyLnxIHPw==ZieWg3caCClUYpn2',
-                                        'Content-Type': 'application/json',
-                                        'Accept': 'application/json'
-                                    },
-                                    timeout: 30000
-                                }
-                            );
-
-                            const ocrText = ninjaResponse.data.text || ninjaResponse.data.map(item => item.text).join(' ') || '';
-                            const ocrPrice = ocrText.match(/\d+[,.]\d{2}/)?.[0] || null;
-                            const normalizedText = normalizeText(ocrText);
-                            const matchedProduct = findBestMatch(normalizedText, bancoDeDados);
-                            const isCervProduct = normalizedText.includes('CERV') || normalizedText.includes('CERVEJA');
-                            const validatedPrice = validatePrice(ocrPrice, isCervProduct);
-
-                            results.apininjas = {
-                                product: matchedProduct ? matchedProduct.PRODUTO : 'Produto não identificado',
-                                volume: matchedProduct ? matchedProduct.ML : null,
-                                price: validatedPrice ? `R$ ${validatedPrice}` : 'Preço não identificado',
-                                id: matchedProduct ? matchedProduct.id : null
-                            };
-                        } catch (err) {
-                            results.apininjas = { error: `Erro no API-Ninjas: ${err.response?.status ? `Status ${err.response.status}` : err.message}` };
-                        }
-
-                        // Tesseract
-                        try {
-                            const { data: { text } } = await Tesseract.recognize(
-                                `data:image/jpeg;base64,${base64Image}`,
-                                'por',
-                                {
-                                    logger: () => {}
-                                }
-                            );
-                            const ocrText = text;
-                            const ocrPrice = ocrText.match(/\d+[,.]\d{2}/)?.[0] || null;
-                            const normalizedText = normalizeText(ocrText);
-                            const matchedProduct = findBestMatch(normalizedText, bancoDeDados);
-                            const isCervProduct = normalizedText.includes('CERV') || normalizedText.includes('CERVEJA');
-                            const validatedPrice = validatePrice(ocrPrice, isCervProduct);
-
-                            results.tesseract = {
-                                product: matchedProduct ? matchedProduct.PRODUTO : 'Produto não identificado',
-                                volume: matchedProduct ? matchedProduct.ML : null,
-                                price: validatedPrice ? `R$ ${validatedPrice}` : 'Preço não identificado',
-                                id: matchedProduct ? matchedProduct.id : null
-                            };
-                        } catch (err) {
-                            results.tesseract = { error: 'Erro no Tesseract: ' + err.message };
-                        }
-
-                        setOcrResults(results);
-                        setNewPrice(results.ocrspace.price?.replace('R$ ', '') || '');
+                            } catch (err) {
+                                console.error('Erro crítico ao processar resultados OCR:', err.message, err.stack);
+                                setError(`Erro crítico ao processar resultados OCR: ${err.message}. Verifique o console.`);
+                            } finally {
+                                setLoading(false);
+                            }
+                        });
+                    };
+                    reader.onerror = () => {
+                        console.error('Erro ao ler imagem');
+                        setError('Erro crítico ao ler imagem. Verifique o console.');
+                        setLoading(false);
                     };
                 } catch (err) {
-                    setError('Erro ao processar imagem: ' + err.message);
-                } finally {
+                    console.error('Erro crítico ao processar imagem:', err.message, err.stack);
+                    setError(`Erro crítico ao processar imagem: ${err.message}. Verifique o console.`);
                     setLoading(false);
                 }
             };
 
             const handlePriceChange = () => {
-                if (newPrice) {
-                    const isCervProduct = ocrResults[selectedOcr].product.includes('CERV') || ocrResults[selectedOcr].product.includes('CERVEJA');
-                    const validatedPrice = validatePrice(newPrice, isCervProduct);
-                    if (validatedPrice) {
-                        setOcrResults({
-                            ...ocrResults,
-                            [selectedOcr]: { ...ocrResults[selectedOcr], price: `R$ ${validatedPrice}` }
-                        });
-                    } else {
-                        setError('Preço inválido');
+                console.log('Handling price change:', newPrice);
+                try {
+                    if (newPrice && ocrResults[selectedOcr]) {
+                        const isCervProduct = ocrResults[selectedOcr].product.includes('CERV') || ocrResults[selectedOcr].product.includes('CERVEJA');
+                        const { price: validatedPrice, confidence, emoji, label } = validatePrice(
+                            newPrice, 
+                            isCervProduct, 
+                            ocrResults[selectedOcr].rawText, 
+                            ocrResults[selectedOcr === 'ocrspace' ? 'tesseract' : 'ocrspace']?.price?.replace('R$ ', ''), 
+                            selectedOcr === 'tesseract'
+                        );
+                        if (validatedPrice) {
+                            setOcrResults({
+                                ...ocrResults,
+                                [selectedOcr]: { 
+                                    ...ocrResults[selectedOcr], 
+                                    price: `R$ ${validatedPrice}`,
+                                    confidence,
+                                    emoji,
+                                    label
+                                }
+                            });
+                            setConfidenceData({ confidence, emoji, label });
+                            setPriceDetected(true);
+                            confetti({
+                                particleCount: 150,
+                                spread: 80,
+                                origin: { y: 0.6 },
+                                colors: ['#22c55e', '#ffffff', '#3b82f6']
+                            });
+                            setTimeout(() => setPriceDetected(false), 2000);
+                            setPriceMismatch(false);
+                        } else {
+                            console.warn('Preço inválido:', newPrice);
+                        }
                     }
+                    setEditPrice(false);
+                } catch (err) {
+                    console.error('Erro ao alterar preço:', err.message, err.stack);
+                    setError(`Erro crítico ao alterar preço: ${err.message}. Verifique o console.`);
                 }
-                setEditPrice(false);
             };
 
             const handleSubmit = async () => {
-                if (!ocrResults[selectedOcr] || !ocrResults[selectedOcr].id || ocrResults[selectedOcr].price === 'Preço não identificado') {
-                    setError('Produto ou preço inválido');
-                    return;
-                }
-
-                setLoading(true);
-                setError(null);
+                console.log('Submitting price:', ocrResults[selectedOcr]?.price);
                 try {
+                    if (!ocrResults[selectedOcr] || !ocrResults[selectedOcr].id || !ocrResults[selectedOcr].price) {
+                        console.warn('Tentativa de envio com produto ou preço inválido:', ocrResults[selectedOcr]);
+                        return;
+                    }
+
+                    setLoading(true);
+                    setError(null);
                     const priceToSend = ocrResults[selectedOcr].price.replace('R$ ', '').replace(',', '.');
-                    await Promise.race([
+                    await retryOperation(() =>
                         axios.patch(
                             `https://api.baserow.io/api/database/rows/table/322640/${ocrResults[selectedOcr].id}/?user_field_names=true`,
                             { "PREÇO": priceToSend },
                             {
-                                headers: {
-                                    Authorization: "Token QNhuEjQ6tUb2CmQyN2B5ipfhC61gLfXe",
-                                    "Content-Type": "application/json"
-                                },
-                                timeout: 10000
+                                headers: { Authorization: "Token QNhuEjQ6tUb2CmQyN2B5ipfhC61gLfXe", "Content-Type": "application/json" },
+                                timeout: 8000
                             }
-                        ),
-                        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout na submissão')), 10000))
-                    ]);
+                        )
+                    );
 
+                    console.log('Price submitted successfully');
+                    setFullScreenSuccess(true);
                     confetti({
-                        particleCount: 100,
-                        spread: 70,
+                        particleCount: 150,
+                        spread: 80,
                         origin: { y: 0.6 },
-                        colors: ['#3b82f6', '#22c55e', '#ef4444']
+                        colors: ['#22c55e', '#ffffff', '#3b82f6']
                     });
-
+                    setTimeout(() => setFullScreenSuccess(false), 2000);
                     setSuccess(true);
-                    setTimeout(() => setSuccess(false), 3000);
+                    setTimeout(() => setSuccess(false), 2000);
+                    setPriceMismatch(false);
                 } catch (err) {
-                    setError('Erro ao enviar preço: ' + err.message);
-                    setSuccess(true); // Show success message even on failure to avoid hanging
-                    setTimeout(() => setSuccess(false), 3000);
+                    console.error('Erro crítico ao enviar preço:', err.message, err.stack);
+                    setError(`Erro crítico ao enviar preço: ${err.message}. Verifique o console.`);
+                    setSuccess(true);
+                    setTimeout(() => setSuccess(false), 2000);
                 } finally {
                     setLoading(false);
                 }
@@ -505,29 +1077,32 @@
 
             return (
                 <ErrorBoundary>
-                    <div className="w-full max-w-md flex flex-col gap-2 relative z-10">
+                    <div className="w-full max-w-xs flex flex-col gap-1">
                         <header className="text-center">
-                            <h1 className="text-3xl font-bold text-blue-300 drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]">
-                                <svg className="icon mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <h1 className="text-xl font-bold text-blue-300 drop-shadow-[0_0_6px_rgba(59,130,246,0.5)]">
+                                <svg className="icon mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7m-9 5v6h4v-6m-7-7h10" />
                                 </svg>
-                                OCR CORDEIRO
+                                OCR Cordeiro
                             </h1>
                         </header>
 
-                        <main className="bg-gray-800/80 rounded-lg p-4 flex flex-col gap-3 backdrop-blur-sm">
+                        <main className="bg-gray-800/80 rounded-lg p-3 flex flex-col gap-2 backdrop-blur-sm">
                             {loading && (
-                                <div className="flex justify-center">
+                                <div className="flex flex-col items-center gap-1">
                                     <div className="relative">
                                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-blue-400"></div>
-                                        <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-sm text-blue-400">Escaneando</span>
+                                        <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[10px] text-blue-400">Zoom {zoomLevel}x</span>
+                                    </div>
+                                    <div className="w-full progress-bar">
+                                        <div className="progress-fill" style={{ width: `${progress}%` }}></div>
                                     </div>
                                 </div>
                             )}
 
                             {error && (
-                                <div className="bg-red-900/50 text-red-300 p-2 rounded text-base text-center">
-                                    <svg className="icon mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <div className="bg-red-900/50 text-red-300 p-2 rounded text-center">
+                                    <svg className="icon mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                     {error}
@@ -535,46 +1110,98 @@
                             )}
 
                             {success && (
-                                <div className="success-modal text-white p-4 rounded text-base text-center">
-                                    <svg className="icon mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <div className="success-modal text-white p-2 rounded text-center">
+                                    <svg className="icon mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
-                                    Preço enviado com sucesso!
+                                    Preço enviado!
                                 </div>
                             )}
 
-                            {imageUrl && (
+                            {priceDetected && (
+                                <div className="full-screen-success">
+                                    <svg className="checkmark" viewBox="0 0 52 52">
+                                        <circle className="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                                        <path className="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                                    </svg>
+                                    <p className="text-lg text-white mt-2">Preço Detectado!</p>
+                                </div>
+                            )}
+
+                            {fullScreenSuccess && (
+                                <div className="full-screen-success">
+                                    <svg className="checkmark" viewBox="0 0 52 52">
+                                        <circle className="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                                        <path className="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                                    </svg>
+                                    <p className="text-lg text-white mt-2">Preço Enviado: {ocrResults[selectedOcr]?.price}</p>
+                                </div>
+                            )}
+
+                            {priceMismatch && (
+                                <div className="warning-modal text-white p-2 rounded text-center">
+                                    <svg className="icon mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Não sentimos seguros ao enviar o preço pois detectou 2 preços diferentes.
+                                    <div className="flex justify-center mt-2">
+                                        <button
+                                            onClick={handleSubmit}
+                                            className="neon-button text-white px-3 py-1 rounded text-sm flex items-center"
+                                        >
+                                            <svg className="icon mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            Confirmar Envio
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {imageUrl ? (
                                 <div className="image-container rounded overflow-hidden">
                                     <img 
                                         src={imageUrl} 
                                         alt="Produto" 
                                         className="w-full h-auto object-cover object-top" 
-                                        onError={() => setError('Erro ao carregar imagem')}
+                                        onError={() => setError('Erro crítico ao carregar imagem. Verifique o console.')}
                                     />
                                     {(loading || Object.keys(ocrResults).length > 0) && (
                                         <div className="scanning-overlay"></div>
                                     )}
                                 </div>
+                            ) : (
+                                <div className="bg-gray-900/50 p-2 rounded text-center">
+                                    <svg className="icon mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Sem imagem
+                                </div>
                             )}
 
-                            {Object.keys(ocrResults).length > 0 && (
-                                <div className="bg-gray-900/50 p-4 rounded flex flex-col gap-3 text-base">
-                                    <div className="flex items-center gap-2">
+                            {Object.keys(ocrResults).length > 0 && ocrResults[selectedOcr] ? (
+                                <div className="bg-gray-900/50 p-3 rounded flex flex-col gap-2">
+                                    <div className="flex items-center gap-1">
                                         <svg className="icon text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                         </svg>
-                                        <strong className="text-blue-400">Fonte OCR:</strong>
+                                        <strong className="text-blue-400">OCR:</strong>
                                         <select
                                             value={selectedOcr}
                                             onChange={(e) => {
                                                 setSelectedOcr(e.target.value);
-                                                setNewPrice(ocrResults[e.target.value].price?.replace('R$ ', '') || '');
+                                                setNewPrice(ocrResults[e.target.value]?.price?.replace('R$ ', '') || '0,00');
+                                                setConfidenceData({
+                                                    confidence: ocrResults[e.target.value]?.confidence || 0,
+                                                    emoji: ocrResults[e.target.value]?.emoji || '😞',
+                                                    label: ocrResults[e.target.value]?.label || 'Ruim'
+                                                });
                                             }}
-                                            className="bg-gray-700 text-white px-2 py-1 rounded text-base"
+                                            className="bg-gray-700 text-white px-1 py-0.5 rounded text-sm"
                                         >
-                                            <option value="ocrspace">OCR.Space</option>
-                                            <option value="apininjas">API-Ninjas</option>
-                                            <option value="tesseract">Tesseract</option>
+                                            {Object.keys(ocrResults).map(source => (
+                                                <option key={source} value={source}>{source === 'ocrspace' ? 'OCR.Space' : 'Tesseract'}</option>
+                                            ))}
                                         </select>
                                     </div>
 
@@ -582,20 +1209,20 @@
                                         <div className="text-red-300">{ocrResults[selectedOcr].error}</div>
                                     ) : (
                                         <>
-                                            <p>
-                                                <svg className="icon mr-2 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <p className="flex items-center">
+                                                <svg className="icon mr-1 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                                                 </svg>
                                                 <strong className="text-blue-400">Produto:</strong> {ocrResults[selectedOcr].product}
                                             </p>
-                                            <p>
-                                                <svg className="icon mr-2 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <p className="flex items-center">
+                                                <svg className="icon mr-1 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                                                 </svg>
                                                 <strong className="text-blue-400">Volume:</strong> {ocrResults[selectedOcr].volume ? `${ocrResults[selectedOcr].volume}ml` : 'N/A'}
                                             </p>
-                                            <div className="flex items-center gap-2">
-                                                <svg className="icon mr-2 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <div className="flex items-center gap-1">
+                                                <svg className="icon mr-1 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                 </svg>
                                                 <strong className="text-blue-400">Preço:</strong>
@@ -605,59 +1232,65 @@
                                                             type="text"
                                                             value={newPrice}
                                                             onChange={(e) => setNewPrice(e.target.value)}
-                                                            className="bg-gray-700 text-white px-2 py-1 rounded text-base w-24"
+                                                            className="bg-gray-700 text-white px-1 py-0.5 rounded text-sm w-16"
                                                             placeholder="Preço"
                                                         />
                                                         <button
                                                             onClick={handlePriceChange}
-                                                            className="bg-green-500 text-white px-2 py-1 rounded text-sm"
+                                                            className="bg-green-500 text-white px-1 py-0.5 rounded text-xs"
                                                         >
                                                             OK
                                                         </button>
                                                     </div>
                                                 ) : (
-                                                    <div className="flex items-center gap-2">
+                                                    <div className="flex items-center gap-1">
                                                         <span>{ocrResults[selectedOcr].price}</span>
                                                         <button
                                                             onClick={() => setEditPrice(true)}
-                                                            className="text-blue-400 text-sm"
+                                                            className="text-blue-400 text-xs"
                                                         >
                                                             Editar
                                                         </button>
                                                     </div>
                                                 )}
                                             </div>
+                                            <ConfidenceBar 
+                                                confidence={confidenceData.confidence} 
+                                                emoji={confidenceData.emoji} 
+                                                label={confidenceData.label} 
+                                            />
                                         </>
                                     )}
                                 </div>
+                            ) : (
+                                <div className="bg-gray-900/50 p-2 rounded text-center">
+                                    <svg className="icon mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Aguardando OCR
+                                </div>
                             )}
 
-                            {ocrResults[selectedOcr] && !ocrResults[selectedOcr].error && (
+                            {ocrResults[selectedOcr] && !ocrResults[selectedOcr].error && !priceMismatch && (
                                 <div className="flex justify-center">
                                     <button 
                                         onClick={handleSubmit}
-                                        className="w-full neon-button text-white px-4 py-2 rounded text-base disabled:opacity-50 flex items-center justify-center"
-                                        disabled={loading}
-                                    >
-                                        <svg className="icon mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        className="w-full neon-button text-white px-3 py-1 rounded text-sm disabled:opacity-50 flex items-center justify-center"
+                                        disabled={loading || !ocrResults[selectedOcr]?.id || !ocrResults[selectedOcr].price}                                     >
+                                        <svg className="icon mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
-                                        Enviar
+                                        Enviar Preço
                                     </button>
                                 </div>
                             )}
                         </main>
-
-                        <footer className="text-gray-400 text-center text-sm mt-2">
-                            <p>© 2025 OCR Product Scanner</p>
-                        </footer>
                     </div>
                 </ErrorBoundary>
             );
         }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        ReactDOM.render(<App />, document.getElementById('root'));
     </script>
 </body>
 </html>
