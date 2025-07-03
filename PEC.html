@@ -11,68 +11,61 @@
     <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.25.6/babel.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.1.3/dist/tesseract.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #0d1b2a, #1b263b, #3a0ca3);
+            background: linear-gradient(135deg, #1e40af, #60a5fa);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             color: white;
-            font-family: sans-serif;
-            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
         }
         .bubble {
             position: absolute;
             border-radius: 50%;
-            background: rgba(59, 130, 246, 0.1);
-            box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
-            animation: float 15s infinite;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            animation: float 10s infinite;
             pointer-events: none;
         }
-        .bubble:nth-child(1) { width: 40px; height: 40px; top: 10%; left: 15%; animation-duration: 12s; }
-        .bubble:nth-child(2) { width: 25px; height: 25px; top: 50%; left: 25%; animation-duration: 18s; }
-        .bubble:nth-child(3) { width: 50px; height: 50px; top: 20%; left: 60%; animation-duration: 14s; }
-        .bubble:nth-child(4) { width: 30px; height: 30px; top: 70%; left: 40%; animation-duration: 16s; }
+        .bubble:nth-child(1) { width: 60px; height: 60px; top: 15%; left: 25%; animation-duration: 8s; }
+        .bubble:nth-child(2) { width: 40px; height: 40px; top: 45%; left: 65%; animation-duration: 12s; }
+        .bubble:nth-child(3) { width: 50px; height: 50px; top: 55%; left: 35%; animation-duration: 10s; }
         @keyframes float {
-            0% { transform: translateY(0) scale(1); opacity: 0.3; }
-            50% { transform: translateY(-60px) scale(1.1); opacity: 0.5; }
-            100% { transform: translateY(0) scale(1); opacity: 0.3; }
+            0% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(-60px); opacity: 0.7; }
+            100% { transform: translateY(0); opacity: 0.5; }
         }
         .image-container {
-            height: 150px;
+            height: 160px;
             overflow: hidden;
             position: relative;
-            border-radius: 6px;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            background: #fff;
         }
         .image-container img {
             width: 100%;
             height: auto;
-            object-fit: cover;
-            object-position: top;
-        }
-        .scanning-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
+            object-fit: contain;
+            object-position: center;
         }
         .scanning-overlay::before {
             content: '';
             position: absolute;
-            width: 120%;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.8), transparent);
-            box-shadow: 0 0 6px rgba(59, 130, 246, 0.5);
-            animation: scanWave 2s infinite ease-in-out;
-            transform: translateX(-10%);
+            top: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #60a5fa, transparent);
+            animation: scanWave 1.2s infinite ease-in-out;
         }
         @keyframes scanWave {
-            0% { transform: translateY(-10%) translateX(-10%) skewX(20deg); opacity: 0.3; }
-            50% { transform: translateY(110%) translateX(-10%) skewX(-20deg); opacity: 0.8; }
-            100% { transform: translateY(-10%) translateX(-10%) skewX(20deg); opacity: 0.3; }
+            0% { transform: translateY(0); opacity: 0.5; }
+            50% { transform: translateY(160px); opacity: 0.9; }
+            100% { transform: translateY(0); opacity: 0.5; }
         }
         .icon {
             width: 20px;
@@ -80,22 +73,29 @@
             vertical-align: middle;
         }
         .neon-button {
-            background: #60a5fa;
-            box-shadow: 0 0 4px #60a5fa, 0 0 8px rgba(59, 130, 246, 0.3);
+            background: #2563eb;
+            box-shadow: 0 0 8px #2563eb, 0 0 16px rgba(37, 99, 235, 0.5);
             transition: all 0.3s ease;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-weight: 700;
+            animation: pulse 2s infinite ease-in-out;
         }
         .neon-button:hover:not(:disabled) {
-            box-shadow: 0 0 6px #60a5fa, 0 0 12px rgba(59, 130, 246, 0.5);
-            transform: scale(1.02);
+            box-shadow: 0 0 16px #2563eb, 0 0 24px rgba(37, 99, 235, 0.7);
+            transform: scale(1.05);
         }
-        .success-modal {
-            animation: popIn 0.5s ease-out;
-            background: rgba(34, 197, 94, 0.9);
-            border-radius: 6px;
-            padding: 8px;
-            text-align: center;
+        .neon-button:disabled {
+            background: #6b7280;
+            box-shadow: none;
+            cursor: not-allowed;
         }
-        .full-screen-success {
+        @keyframes pulse {
+            0% { box-shadow: 0 0 8px #2563eb, 0 0 16px rgba(37, 99, 235, 0.5); }
+            50% { box-shadow: 0 0 12px #2563eb, 0 0 20px rgba(37, 99, 235, 0.7); }
+            100% { box-shadow: 0 0 8px #2563eb, 0 0 16px rgba(37, 99, 235, 0.5); }
+        }
+        .success-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -106,25 +106,22 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            animation: popIn 0.5s ease-out;
+            animation: popIn 0.5s ease-out, fadeOut 0.5s ease-out 1.5s forwards;
             z-index: 1000;
         }
         .checkmark {
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            display: block;
             stroke-width: 2;
             stroke: #fff;
             stroke-miterlimit: 10;
-            box-shadow: inset 0px 0px 0px #22c55e;
             animation: fill 0.4s ease-in-out 0.4s forwards, scale 0.3s ease-in-out 0.9s both;
         }
         .checkmark__circle {
             stroke-dasharray: 166;
             stroke-dashoffset: 166;
             stroke-width: 2;
-            stroke-miterlimit: 10;
             stroke: #22c55e;
             fill: none;
             animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
@@ -140,52 +137,76 @@
         }
         @keyframes scale {
             0%, 100% { transform: none; }
-            50% { transform: scale3d(1.1, 1.1, 1); }
+            50% { transform: scale3d(1.2, 1.2, 1); }
         }
         @keyframes fill {
-            100% { box-shadow: inset 0px 0px 0px 30px #22c55e; }
+            100% { box-shadow: inset 0px 0px 0px 40px #22c55e; }
         }
         @keyframes popIn {
             0% { transform: scale(0.8); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
         .progress-bar {
             height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
             overflow: hidden;
         }
         .progress-fill {
             height: 100%;
-            background: #60a5fa;
+            background: #2563eb;
             transition: width 0.3s ease;
         }
         .confidence-bar {
             height: 8px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 4px;
             overflow: hidden;
-            position: relative;
         }
         .confidence-fill {
             height: 100%;
             background: linear-gradient(to right, #ef4444, #eab308, #22c55e);
-            transition: width 0.5s ease-in-out;
+            transition: width 0.4s ease;
         }
         .confidence-label {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 4px;
             font-size: 0.75rem;
-            color: #d1d5db;
+            color: #e5e7eb;
+            text-align: center;
+            margin-top: 6px;
         }
         .warning-modal {
             animation: popIn 0.5s ease-out;
             background: rgba(239, 68, 68, 0.9);
-            border-radius: 6px;
-            padding: 8px;
+            border-radius: 8px;
+            padding: 10px;
             text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        .text-bbox-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+        main {
+            background: rgba(31, 41, 55, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        select, input {
+            background: #374151;
+            border: 1px solid #4b5563;
+            border-radius: 6px;
+            transition: border-color 0.3s ease;
+        }
+        select:focus, input:focus {
+            outline: none;
+            border-color: #60a5fa;
+            box-shadow: 0 0 8px rgba(96, 165, 250, 0.3);
         }
     </style>
 </head>
@@ -193,314 +214,296 @@
     <div class="bubble"></div>
     <div class="bubble"></div>
     <div class="bubble"></div>
-    <div class="bubble"></div>
     <div id="root"></div>
     <script>
-        console.log('Starting script initialization');
-        window.addEventListener('load', () => {
-            console.log('Window loaded');
-            const requiredScripts = ['React', 'ReactDOM', 'axios', 'tailwind', 'Babel', 'Tesseract', 'confetti'];
-            const missingScripts = requiredScripts.filter(script => !window[script]);
-            if (missingScripts.length > 0) {
-                console.error('Erro: Scripts CDN não carregados:', missingScripts);
-                document.getElementById('root').innerHTML = `
-                    <div style="color: red; text-align: center; padding: 10px;">
-                        Erro crítico: Falha ao carregar ${missingScripts.join(', ')}. Verifique sua conexão ou tente outro navegador.
-                    </div>
-                `;
-            } else {
-                console.log('All scripts loaded successfully');
-            }
-        });
-
         window.addEventListener('error', (event) => {
             console.error('Erro global:', event.message, event.filename, event.lineno, event.colno, event.error?.stack || 'No stack trace');
             document.getElementById('root').innerHTML = `
-                <div style="color: red; text-align: center; padding: 10px;">
-                    Erro crítico: ${event.message} (Linha: ${event.lineno}, Coluna: ${event.colno}). Verifique o console para mais detalhes.
+                <div class="bg-red-900/50 text-red-300 p-4 rounded text-center">
+                    Erro crítico: ${event.message}. Verifique o console.
                 </div>
             `;
         });
 
-        function preprocessImage(base64Image, zoomLevel, callback) {
-            console.log(`Preprocessing image at zoom ${zoomLevel}x`);
-            try {
-                const img = new Image();
-                img.src = `data:image/jpeg;base64,${base64Image}`;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = img.width * zoomLevel;
-                    canvas.height = img.height * zoomLevel;
-                    ctx.scale(zoomLevel, zoomLevel);
-                    ctx.drawImage(img, 0, 0);
-                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                    const data = imageData.data;
-                    const contrast = 1.5;
-                    for (let i = 0; i < data.length; i += 4) {
-                        data[i] = Math.min(255, Math.max(0, (data[i] - 128) * contrast + 128));
-                        data[i + 1] = Math.min(255, Math.max(0, (data[i + 1] - 128) * contrast + 128));
-                        data[i + 2] = Math.min(255, Math.max(0, (data[i + 2] - 128) * contrast + 128));
+        function preprocessImage(base64Image, callback) {
+            const img = new Image();
+            img.src = `data:image/jpeg;base64,${base64Image}`;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+
+                // Grayscale and adaptive thresholding
+                for (let i = 0; i < data.length; i += 4) {
+                    const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                    data[i] = data[i + 1] = data[i + 2] = avg > 128 ? 255 : 0;
+                }
+
+                // Increase contrast
+                const contrast = 1.5;
+                for (let i = 0; i < data.length; i += 4) {
+                    data[i] = Math.min(255, Math.max(0, (data[i] - 128) * contrast + 128));
+                    data[i + 1] = Math.min(255, Math.max(0, (data[i + 1] - 128) * contrast + 128));
+                    data[i + 2] = Math.min(255, Math.max(0, (data[i + 2] - 128) * contrast + 128));
+                }
+
+                ctx.putImageData(imageData, 0, 0);
+                callback(canvas.toDataURL('image/jpeg').split(',')[1]);
+            };
+            img.onerror = () => callback(null);
+        }
+
+        function drawTextBoundingBoxes(imageElement, words) {
+            // Remove existing canvas if present
+            const existingCanvas = imageElement.parentElement.querySelector('.text-bbox-canvas');
+            if (existingCanvas) existingCanvas.remove();
+
+            const canvas = document.createElement('canvas');
+            canvas.className = 'text-bbox-canvas';
+            const ctx = canvas.getContext('2d');
+            const container = imageElement.parentElement;
+
+            // Match canvas to image's displayed size
+            const rect = imageElement.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+
+            // Scale bounding boxes to match displayed image
+            const scaleX = rect.width / imageElement.naturalWidth;
+            const scaleY = rect.height / imageElement.naturalHeight;
+
+            container.style.position = 'relative';
+            container.appendChild(canvas);
+
+            ctx.strokeStyle = 'red';
+            ctx.lineWidth = 2;
+            words.forEach(word => {
+                if (word.bbox && word.confidence >= 50) {
+                    const { x0, y0, x1, y1 } = word.bbox;
+                    ctx.beginPath();
+                    ctx.rect(x0 * scaleX, y0 * scaleY, (x1 - x0) * scaleX, (y1 - y0) * scaleY);
+                    ctx.stroke();
+                    // Highlight volume-related words in blue
+                    if (word.text.match(/(\d+)(ML|L|LT|LTR|LTRO|LITRO)/i) || knownVolumes.includes(parseInt(word.text))) {
+                        ctx.strokeStyle = 'blue';
+                        ctx.lineWidth = 3;
+                        ctx.beginPath();
+                        ctx.rect(x0 * scaleX, y0 * scaleY, (x1 - x0) * scaleX, (y1 - y0) * scaleY);
+                        ctx.stroke();
+                        ctx.strokeStyle = 'red';
+                        ctx.lineWidth = 2;
                     }
-                    ctx.putImageData(imageData, 0, 0);
-                    callback(canvas.toDataURL('image/jpeg').split(',')[1]);
-                };
-                img.onerror = () => {
-                    console.error('Erro ao carregar imagem para preprocessamento');
-                    callback(null);
-                };
-            } catch (err) {
-                console.error('Erro no preprocessamento:', err.message);
-                callback(null);
-            }
+                }
+            });
         }
     </script>
     <script type="text/babel">
         const bancoDeDados = [
-            { id: 3, PRODUTO: 'CERV LAGER HEINEKEN LN 6X330ml', ML: 330 },
-            { id: 4, PRODUTO: 'CERV STELLA ARTOIS LN 6X330ml', ML: 330 },
-            { id: 5, PRODUTO: 'CERV LAGER CORONA LN 6X330ml', ML: 330 },
-            { id: 6, PRODUTO: 'CERV LAGER BUDWEISER LN 6X330ml', ML: 330 },
-            { id: 7, PRODUTO: 'CERV HEINEKEN ZERO ALC LN 6X330ml', ML: 330 },
-            { id: 8, PRODUTO: 'CERV P MALTE SPATEM LN 6X355ml', ML: 355 },
-            { id: 9, PRODUTO: 'CERV BRAHMA ZERO ÁLCOOL 12X350ml', ML: 350 },
-            { id: 10, PRODUTO: 'CERV HEINEKEN ZERO ÁLCOOL 12X350ml', ML: 350 },
-            { id: 11, PRODUTO: 'CERV EISENBAHN 12X473ml', ML: 473 },
-            { id: 12, PRODUTO: 'CERVEJA LAGER AMSTEL 12X473ml', ML: 473 },
-            { id: 13, PRODUTO: 'CERV HEINEKEN LT 12X473ml', ML: 473 },
-            { id: 14, PRODUTO: 'CERVEJA KAISER 12X473ml', ML: 473 },
-            { id: 15, PRODUTO: 'CERV PILSEN ANTARTICA 12X473ml', ML: 473 },
-            { id: 16, PRODUTO: 'CERV ANTARCTICA ORIGINAL 12X473ml', ML: 473 },
-            { id: 17, PRODUTO: 'CERVEJA BRAHMA 12X473ml', ML: 473 },
-            { id: 18, PRODUTO: 'CERVEJA STELLA ARTOIS 12X473ml', ML: 473 },
-            { id: 19, PRODUTO: 'CERVEJA P MALTE BOHEMIA 473ml', ML: 473 },
-            { id: 20, PRODUTO: 'CERV P MALTE SPATEM LT 12X473ml', ML: 473 },
-            { id: 21, PRODUTO: 'CERV ANTARCTICA SUB ZERO 473ml', ML: 473 },
-            { id: 22, PRODUTO: 'LEITE ITAMBÊ INTEGRAL 12X1L', ML: 1 },
-            { id: 23, PRODUTO: 'LEITE ITAMBÊ DESNATADO 12X1L', ML: 1 },
-            { id: 24, PRODUTO: 'LEITE ITAMBÊ SEMIDESNATADO 12X1L', ML: 1 },
-            { id: 25, PRODUTO: 'LEITE PORTO ALEGRE INTEGRAL 12X1L', ML: 1 },
-            { id: 26, PRODUTO: 'LEITE QUATA INTEGRAL 12X1L', ML: 1 },
-            { id: 27, PRODUTO: 'LEITE PIRACANJUBA INTEGRAL 12X1L', ML: 1 },
-            { id: 28, PRODUTO: 'ÁGUA IGARAPE SEM GÁS 12X500ml', ML: 500 },
-            { id: 29, PRODUTO: 'ÁGUA IGARAPÉ COM GÁS 12X500ml', ML: 500 },
-            { id: 30, PRODUTO: 'REFRI COCA COLA MINI PET 12X200ml', ML: 200 },
-            { id: 31, PRODUTO: 'REFRI SUKITA LARANJA PET 12X200ml', ML: 200 },
-            { id: 32, PRODUTO: 'REFRI SODA LIMONADA PET 12X200ml', ML: 200 },
-            { id: 33, PRODUTO: 'REFRI GUARANÁ ANTARTICA PET 12X200ml', ML: 200 },
-            { id: 34, PRODUTO: 'REFRI GUARANÁ ZERO PET 12X200ml', ML: 200 },
-            { id: 35, PRODUTO: 'REFRI PEPSI PET 12X200ml', ML: 200 },
-            { id: 36, PRODUTO: 'ÓLEO DE SOJA VELEIRO 6X900ml', ML: 900 },
-            { id: 37, PRODUTO: 'ÓLEO DE SOJA LIZA 6X900ml', ML: 900 },
-            { id: 38, PRODUTO: 'CERV MALZBIER BRAHMA 6X355ml', ML: 355 },
-            { id: 39, PRODUTO: 'CERV PILSEN IMPERIO 12X473ml', ML: 473 },
-            { id: 40, PRODUTO: 'CERV PILSEN BUDWEISER 12X473ml', ML: 473 },
-            { id: 67, PRODUTO: 'LEITE INTEGRAL ITA 12X1L', ML: 1 },
-            { id: 68, PRODUTO: 'LEITE INTEGRAL ITALAC 12X1L', ML: 1 },
-            { id: 69, PRODUTO: 'AGUA MIN GRAO MOGOL 12X500ml', ML: 500 },
-            { id: 70, PRODUTO: 'CERV P MALTE SPATEM LN 6X355ml', ML: 355 },
-            { id: 71, PRODUTO: 'CERV LAGER HEINEKEN LN 6X355ml', ML: 330 },
-            { id: 72, PRODUTO: 'CERV PILSEN BRUDER BX GASTRO 12X473ml', ML: 473 },
-            { id: 73, PRODUTO: 'CERV PILSEN LAUT 12X473ml', ML: 473 },
-            { id: 74, PRODUTO: 'CERV P MALTE PETRA 12X473ml', ML: 473 },
-            { id: 75, PRODUTO: 'CERV PILSEN ITAIPAVA LT 12X473ml', ML: 473 },
-            { id: 76, PRODUTO: 'CERV PILSEN SKOL LT 12X473ml', ML: 473 },
-            { id: 100, PRODUTO: 'CERV LAGER CORONA LN 6X330ml', ML: 330 },
-            { id: 133, PRODUTO: 'CERV LAGER BUDWEISER LN 6X330ml', ML: 330 },
-            { id: 167, PRODUTO: 'CERV PILSEN LAUT 12X473ml', ML: 473 },
-            { id: 199, PRODUTO: 'REFRI CAÇULINHA SODA 12X200ml', ML: 200 },
-            { id: 232, PRODUTO: 'CERV LAGER HEINEKEN LN 6X330ml', ML: 330 },
-            { id: 233, PRODUTO: 'CERV LAGER HEINEKEN LN 6X330ml', ML: 330 },
-            { id: 265, PRODUTO: 'CERVEJA KAISER 12X473ml', ML: 473 },
-            { id: 266, PRODUTO: 'CERV MALZIBIER CARACU 12X350ml', ML: 350 },
-            { id: 298, PRODUTO: 'LEITE INTEGRAL CEMIL 12X1L', ML: 1 },
-            { id: 331, PRODUTO: 'CERV ZERO ALC BUDWEISER LN 6x330ml', ML: 330 },
-            { id: 364, PRODUTO: 'CERV AMERICA IPA EISENBAHN LN 6X355ml', ML: 355 },
-            { id: 65, PRODUTO: 'CERV PALE ALE EISENBAHN LN 6X355ml', ML: 355 },
-            { id: 366, PRODUTO: 'CERV PILSEN BRAHMA LN 6X355ml', ML: 355 },
-            { id: 367, PRODUTO: 'CERV UTRA AMSTEL LN 6X275ml', ML: 275 },
-            { id: 368, PRODUTO: 'FANTA LARANJA ZERO 12x2l', ML: 2 },
-            { id: 397, PRODUTO: 'COQ COROTE LIMÃO 12X500ml', ML: 500 }
+            { id: 3, PRODUTO: 'CERV LAGER HEINEKEN LN 6X330ml', ML: 330, brand: 'HEINEKEN' },
+            { id: 4, PRODUTO: 'CERV STELLA ARTOIS LN 6X330ml', ML: 330, brand: 'STELLA ARTOIS' },
+            { id: 5, PRODUTO: 'CERV LAGER CORONA LN 6X330ml', ML: 330, brand: 'CORONA' },
+            { id: 6, PRODUTO: 'CERV LAGER BUDWEISER LN 6X330ml', ML: 330, brand: 'BUDWEISER' },
+            { id: 7, PRODUTO: 'CERV HEINEKEN ZERO ALC LN 6X330ml', ML: 330, brand: 'HEINEKEN' },
+            { id: 8, PRODUTO: 'CERV P MALTE SPATEM LN 6X355ml', ML: 355, brand: 'SPATEM' },
+            { id: 9, PRODUTO: 'CERV BRAHMA ZERO ÁLCOOL 12X350ml', ML: 350, brand: 'BRAHMA' },
+            { id: 10, PRODUTO: 'CERV HEINEKEN ZERO ÁLCOOL 12X350ml', ML: 350, brand: 'HEINEKEN' },
+            { id: 11, PRODUTO: 'CERV EISENBAHN 12X473ml', ML: 473, brand: 'EISENBAHN' },
+            { id: 12, PRODUTO: 'CERVEJA LAGER AMSTEL 12X473ml', ML: 473, brand: 'AMSTEL' },
+            { id: 13, PRODUTO: 'CERV HEINEKEN LT 12X473ml', ML: 473, brand: 'HEINEKEN' },
+            { id: 14, PRODUTO: 'CERVEJA KAISER 12X473ml', ML: 473, brand: 'KAISER' },
+            { id: 15, PRODUTO: 'CERV PILSEN ANTARTICA 12X473ml', ML: 473, brand: 'ANTARTICA' },
+            { id: 16, PRODUTO: 'CERV ANTARCTICA ORIGINAL 12X473ml', ML: 473, brand: 'ANTARTICA' },
+            { id: 17, PRODUTO: 'CERVEJA BRAHMA 12X473ml', ML: 473, brand: 'BRAHMA' },
+            { id: 18, PRODUTO: 'CERVEJA STELLA ARTOIS 12X473ml', ML: 473, brand: 'STELLA ARTOIS' },
+            { id: 19, PRODUTO: 'CERVEJA P MALTE BOHEMIA 473ml', ML: 473, brand: 'BOHEMIA' },
+            { id: 20, PRODUTO: 'CERV P MALTE SPATEM LT 12X473ml', ML: 473, brand: 'SPATEM' },
+            { id: 21, PRODUTO: 'CERV ANTARCTICA SUB ZERO 473ml', ML: 473, brand: 'ANTARTICA' },
+            { id: 22, PRODUTO: 'LEITE ITAMBÊ INTEGRAL 12X1L', ML: 1, brand: 'ITAMBÊ' },
+            { id: 23, PRODUTO: 'LEITE ITAMBÊ DESNATADO 12X1L', ML: 1, brand: 'ITAMBÊ' },
+            { id: 24, PRODUTO: 'LEITE ITAMBÊ SEMIDESNATADO 12X1L', ML: 1, brand: 'ITAMBÊ' },
+            { id: 25, PRODUTO: 'LEITE PORTO ALEGRE INTEGRAL 12X1L', ML: 1, brand: 'PORTO ALEGRE' },
+            { id: 26, PRODUTO: 'LEITE QUATA INTEGRAL 12X1L', ML: 1, brand: 'QUATA' },
+            { id: 27, PRODUTO: 'LEITE PIRACANJUBA INTEGRAL 12X1L', ML: 1, brand: 'PIRACANJUBA' },
+            { id: 28, PRODUTO: 'ÁGUA IGARAPE SEM GÁS 12X500ml', ML: 500, brand: 'IGARAPE' },
+            { id: 29, PRODUTO: 'ÁGUA IGARAPÉ COM GÁS 12X500ml', ML: 500, brand: 'IGARAPE' },
+            { id: 30, PRODUTO: 'REFRI COCA COLA MINI PET 12X200ml', ML: 200, brand: 'COCA COLA' },
+            { id: 31, PRODUTO: 'REFRI SUKITA LARANJA PET 12X200ml', ML: 200, brand: 'SUKITA' },
+            { id: 32, PRODUTO: 'REFRI SODA LIMONADA PET 12X200ml', ML: 200, brand: 'SODA' },
+            { id: 33, PRODUTO: 'REFRI GUARANÁ ANTARTICA PET 12X200ml', ML: 200, brand: 'GUARANÁ ANTARTICA' },
+            { id: 34, PRODUTO: 'REFRI GUARANÁ ZERO PET 12X200ml', ML: 200, brand: 'GUARANÁ ANTARTICA' },
+            { id: 35, PRODUTO: 'REFRI PEPSI PET 12X200ml', ML: 200, brand: 'PEPSI' },
+            { id: 36, PRODUTO: 'ÓLEO DE SOJA VELEIRO 6X900ml', ML: 900, brand: 'VELEIRO' },
+            { id: 37, PRODUTO: 'ÓLEO DE SOJA LIZA 6X900ml', ML: 900, brand: 'LIZA' },
+            { id: 38, PRODUTO: 'CERV MALZBIER BRAHMA 6X355ml', ML: 355, brand: 'BRAHMA' },
+            { id: 39, PRODUTO: 'CERV PILSEN IMPERIO 12X473ml', ML: 473, brand: 'IMPERIO' },
+            { id: 40, PRODUTO: 'CERV PILSEN BUDWEISER 12X473ml', ML: 473, brand: 'BUDWEISER' },
+            { id: 67, PRODUTO: 'LEITE INTEGRAL ITA 12X1L', ML: 1, brand: 'ITA' },
+            { id: 68, PRODUTO: 'LEITE INTEGRAL ITALAC 12X1L', ML: 1, brand: 'ITALAC' },
+            { id: 69, PRODUTO: 'AGUA MIN GRAO MOGOL 12X500ml', ML: 500, brand: 'GRAO MOGOL' },
+            { id: 70, PRODUTO: 'CERV P MALTE SPATEM LN 6X355ml', ML: 355, brand: 'SPATEM' },
+            { id: 71, PRODUTO: 'CERV LAGER HEINEKEN LN 6X355ml', ML: 330, brand: 'HEINEKEN' },
+            { id: 72, PRODUTO: 'CERV PILSEN BRUDER BX GASTRO 12X473ml', ML: 473, brand: 'BRUDER' },
+            { id: 73, PRODUTO: 'CERV PILSEN LAUT 12X473ml', ML: 473, brand: 'LAUT' },
+            { id: 74, PRODUTO: 'CERV P MALTE PETRA 12X473ml', ML: 473, brand: 'PETRA' },
+            { id: 75, PRODUTO: 'CERV PILSEN ITAIPAVA LT 12X473ml', ML: 473, brand: 'ITAIPAVA' },
+            { id: 76, PRODUTO: 'CERV PILSEN SKOL LT 12X473ml', ML: 473, brand: 'SKOL' },
+            { id: 100, PRODUTO: 'CERV LAGER CORONA LN 6X330ml', ML: 330, brand: 'CORONA' },
+            { id: 133, PRODUTO: 'CERV LAGER BUDWEISER LN 6X330ml', ML: 330, brand: 'BUDWEISER' },
+            { id: 167, PRODUTO: 'CERV PILSEN LAUT 12X473ml', ML: 473, brand: 'LAUT' },
+            { id: 199, PRODUTO: 'REFRI CAÇULINHA SODA 12X200ml', ML: 200, brand: 'CAÇULINHA' },
+            { id: 232, PRODUTO: 'CERV LAGER HEINEKEN LN 6X330ml', ML: 330, brand: 'HEINEKEN' },
+            { id: 233, PRODUTO: 'CERV LAGER HEINEKEN LN 6X330ml', ML: 330, brand: 'HEINEKEN' },
+            { id: 265, PRODUTO: 'CERVEJA KAISER 12X473ml', ML: 473, brand: 'KAISER' },
+            { id: 266, PRODUTO: 'CERV MALZIBIER CARACU 12X350ml', ML: 350, brand: 'CARACU' },
+            { id: 298, PRODUTO: 'LEITE INTEGRAL CEMIL 12X1L', ML: 1, brand: 'CEMIL' },
+            { id: 331, PRODUTO: 'CERV ZERO ALC BUDWEISER LN 6x330ml', ML: 330, brand: 'BUDWEISER' },
+            { id: 364, PRODUTO: 'CERV AMERICA IPA EISENBAHN LN 6X355ml', ML: 355, brand: 'EISENBAHN' },
+            { id: 65, PRODUTO: 'CERV PALE ALE EISENBAHN LN 6X355ml', ML: 355, brand: 'EISENBAHN' },
+            { id: 366, PRODUTO: 'CERV PILSEN BRAHMA LN 6X355ml', ML: 355, brand: 'BRAHMA' },
+            { id: 367, PRODUTO: 'CERV UTRA AMSTEL LN 6X275ml', ML: 275, brand: 'AMSTEL' },
+            { id: 368, PRODUTO: 'FANTA LARANJA ZERO 12x2l', ML: 2, brand: 'FANTA' },
+            { id: 397, PRODUTO: 'COQ COROTE LIMÃO 12X500ml', ML: 500, brand: 'COROTE' }
         ];
 
         const keywords = [
-            'COQ', 'COROTE', 'LIMAO', 'MARACUJA', 'CERV', 'CERVEJA', 'LAGER', 'PILSEN',
-            'HEINEKEN', 'STELLA', 'ARTOIS', 'CORONA', 'BUDWEISER', 'ZERO', 'ALC', 'MALTE',
-            'SPATEM', 'BRAHMA', 'EISENBAHN', 'AMSTEL', 'KAISER', 'ANTARTICA', 'ORIGINAL',
-            'SUB', 'BOHEMIA', 'LEITE', 'ITAMBE', 'INTEGRAL', 'DESNATADO', 'SEMIDESNATADO',
-            'PORTO', 'ALEGRE', 'QUATA', 'PIRACANJUBA', 'AGUA', 'IGARAPE', 'GAS', 'REFRI',
-            'COCA', 'COLA', 'SUKITA', 'LARANJA', 'SODA', 'LIMONADA', 'GUARANA', 'PEPSI',
-            'OLEO', 'SOJA', 'VELEIRO', 'LIZA', 'MALZBIER', 'IMPERIO', 'ITA', 'ITALAC',
-            'GRAO', 'MOGOL', 'BRUDER', 'LAUT', 'PETRA', 'ITAIPAVA', 'SKOL', 'CACULINHA',
-            'CEMIL', 'AMERICA', 'IPA', 'PALE', 'ALE', 'UTRA', 'FANTA'
+            'CERV', 'CERVEJA', 'LAGER', 'PILSEN', 'ZERO', 'ALC', 'MALTE', 'ORIGINAL', 'SUB',
+            'LEITE', 'INTEGRAL', 'DESNATADO', 'SEMIDESNATADO', 'AGUA', 'GAS', 'REFRI', 'SODA',
+            'LIMONADA', 'GUARANA', 'OLEO', 'SOJA', 'MALZBIER', 'IPA', 'PALE', 'ALE', 'UTRA'
         ];
 
         const brandPrefixes = [
-            { prefix: 'HEI', brand: 'HEINEKEN', score: 50 },
-            { prefix: 'ANT', brand: 'ANTARTICA', score: 50 },
-            { prefix: 'BRA', brand: 'BRAHMA', score: 50 },
-            { prefix: 'SKO', brand: 'SKOL', score: 50 },
-            { prefix: 'STE', brand: 'STELLA', score: 50 },
-            { prefix: 'COR', brand: 'CORONA', score: 50 },
-            { prefix: 'BUD', brand: 'BUDWEISER', score: 50 },
-            { prefix: 'EIS', brand: 'EISENBAHN', score: 50 },
-            { prefix: 'AMS', brand: 'AMSTEL', score: 50 },
-            { prefix: 'KAI', brand: 'KAISER', score: 50 },
-            { prefix: 'PET', brand: 'PETRA', score: 50 },
-            { prefix: 'ITA', brand: 'ITAIPAVA', score: 50 }
-        ];
-
-        const volumeHeuristics = [
-            { startsWith: '4', volume: 473 },
-            { startsWith: '33', volume: 330 },
-            { startsWith: '35', volume: 350 },
-            { startsWith: '5', volume: 500 },
-            { startsWith: '2', volume: 200 },
-            { startsWith: '9', volume: 900 },
-            { startsWith: '1', volume: 1 }
+            { prefix: 'HEI', brand: 'HEINEKEN', score: 60 },
+            { prefix: 'STE', brand: 'STELLA ARTOIS', score: 60 },
+            { prefix: 'COR', brand: 'CORONA', score: 60 },
+            { prefix: 'BUD', brand: 'BUDWEISER', score: 60 },
+            { prefix: 'SPA', brand: 'SPATEM', score: 60 },
+            { prefix: 'BRA', brand: 'BRAHMA', score: 60 },
+            { prefix: 'EIS', brand: 'EISENBAHN', score: 60 },
+            { prefix: 'AMS', brand: 'AMSTEL', score: 60 },
+            { prefix: 'KAI', brand: 'KAISER', score: 60 },
+            { prefix: 'ANT', brand: 'ANTARTICA', score: 60 },
+            { prefix: 'BOH', brand: 'BOHEMIA', score: 60 },
+            { prefix: 'ITA', brand: 'ITAIPAVA', score: 60 },
+            { prefix: 'SKO', brand: 'SKOL', score: 60 },
+            { prefix: 'PET', brand: 'PETRA', score: 60 },
+            { prefix: 'LAU', brand: 'LAUT', score: 60 },
+            { prefix: 'BRU', brand: 'BRUDER', score: 60 },
+            { prefix: 'ITAM', brand: 'ITAMBÊ', score: 60 },
+            { prefix: 'PORTO', brand: 'PORTO ALEGRE', score: 60 },
+            { prefix: 'QUA', brand: 'QUATA', score: 60 },
+            { prefix: 'PIR', brand: 'PIRACANJUBA', score: 60 },
+            { prefix: 'IGA', brand: 'IGARAPE', score: 60 },
+            { prefix: 'COC', brand: 'COCA COLA', score: 60 },
+            { prefix: 'SUK', brand: 'SUKITA', score: 60 },
+            { prefix: 'GUA', brand: 'GUARANÁ ANTARTICA', score: 60 },
+            { prefix: 'PEP', brand: 'PEPSI', score: 60 },
+            { prefix: 'VELE', brand: 'VELEIRO', score: 60 },
+            { prefix: 'LIZ', brand: 'LIZA', score: 60 },
+            { prefix: 'CAR', brand: 'CARACU', score: 60 },
+            { prefix: 'CEM', brand: 'CEMIL', score: 60 },
+            { prefix: 'FAN', brand: 'FANTA', score: 60 },
+            { prefix: 'COQ', brand: 'COROTE', score: 60 }
         ];
 
         const knownVolumes = [473, 330, 350, 500, 200, 900, 1, 355, 275, 2];
 
-        function calculatePriceConfidence(price, rawText, isTesseract, otherOcrPrice) {
-            console.log(`Calculating confidence for price: ${price}, rawText: ${rawText}, isTesseract: ${isTesseract}, otherOcrPrice: ${otherOcrPrice}`);
-            let score = 0;
-
-            // Formato do preço
-            if (/R\$\s*\d+[,.]\d{2}/.test(rawText)) {
-                score += 50; // R$ 4,39 ou R$ 4.39
-            } else if (/R\$\s*\d+/.test(rawText)) {
-                score += 40; // R$ 4
-            } else if (/\d+[,.]\d{2}/.test(price)) {
-                score += 30; // 4,39 ou 4.39 sem R$
-            } else if (/\d+[,.]\d/.test(price)) {
-                score += 20; // 4,7 ou 4.7
-            } else if (/^\d+$/.test(price) && !knownVolumes.includes(parseInt(price))) {
-                score += 10; // 438 (não é volume)
+        function formatVolume(ml) {
+            if (ml <= 2) {
+                return `${ml}L`;
             }
-
-            // Contexto do texto
-            if (/(PREÇO|VALOR|R\$|RS)/i.test(rawText)) {
-                score += 10;
-            }
-
-            // Confiabilidade do OCR
-            score += isTesseract ? 5 : 10;
-
-            // Coincidência entre OCRs
-            if (otherOcrPrice) {
-                const priceNum = parseFloat(price.replace(',', '.'));
-                const otherPriceNum = parseFloat(otherOcrPrice.replace(',', '.'));
-                if (Math.abs(priceNum - otherPriceNum) <= 0.10) {
-                    score += 30;
-                } else if (Math.abs(priceNum - otherPriceNum) <= 1.00) {
-                    score += 15;
-                }
-            }
-
-            // Normalizar para 0-100
-            const confidence = Math.min(100, Math.max(0, score));
-            let emoji, label;
-            if (confidence >= 80) {
-                emoji = '😎';
-                label = 'Muito Bom';
-            } else if (confidence >= 50) {
-                emoji = '😊';
-                label = 'Bom';
-            } else if (confidence >= 20) {
-                emoji = '😐';
-                label = 'Médio';
-            } else {
-                emoji = '😞';
-                label = 'Ruim';
-            }
-
-            console.log(`Confidence score: ${confidence}%, Emoji: ${emoji}, Label: ${label}`);
-            return { confidence, emoji, label };
+            return `${ml}ml`;
         }
 
-        function validatePrice(price, isCervProduct, rawText, otherOcrPrice, isTesseract) {
-            console.log(`Validating price: ${price}, isCervProduct: ${isCervProduct}, rawText: ${rawText}, otherOcrPrice: ${otherOcrPrice}, isTesseract: ${isTesseract}`);
-            if (!price) return { price: '0,00', confidence: 0 };
+        function calculatePriceConfidence(price, rawText) {
+            let score = 0;
+            if (/R\$\s*\d+[,.]\d{2}/.test(rawText)) score += 50;
+            else if (/\d+[,.]\d{2}/.test(price)) score += 30;
+            else if (/\d+[,.]\d/.test(price)) score += 20;
+            else if (/^\d+$/.test(price) && !knownVolumes.includes(parseInt(price))) score += 10;
+            if (/(PREÇO|VALOR|R\$)/i.test(rawText)) score += 15;
+            const confidence = Math.min(100, score);
+            return {
+                confidence,
+                emoji: confidence >= 80 ? '😎' : confidence >= 50 ? '😊' : confidence >= 20 ? '😐' : '😞',
+                label: confidence >= 80 ? 'Muito Bom' : confidence >= 50 ? 'Bom' : confidence >= 20 ? 'Médio' : 'Ruim'
+            };
+        }
+
+        function validatePrice(price, isCervProduct, rawText) {
+            if (!price || /R\$\s*0,00/i.test(rawText)) {
+                return { price: '0,00', confidence: 0, emoji: '😞', label: 'Ruim' };
+            }
+
             let numPrice;
             const volumeLike = ['473', '330', '350', '500', '200', '900', '1', '355', '275', '2'];
-
-            if (typeof price === 'string') {
-                price = price.replace(',', '.').replace(/[^\d.]/g, '');
-                if (isTesseract) {
-                    if (/^\d+$/.test(price) && volumeLike.includes(price) && price !== otherOcrPrice) {
-                        const altPriceMatch = rawText.match(/(R\$)?\s*(\d+[,.]\d{2}|\d+[,.]\d|\d{1,2})/)?.[0];
-                        if (altPriceMatch && (altPriceMatch.includes(',') || altPriceMatch.includes('.'))) {
-                            price = altPriceMatch.replace(/R\$/, '').trim();
-                        } else if (altPriceMatch && !volumeLike.includes(altPriceMatch)) {
-                            price = `${altPriceMatch[0]},${altPriceMatch.slice(1) || '00'}`;
-                        } else {
-                            price = '0,00';
-                        }
-                    } else if (/^\d+[,.]\d$/.test(price) && price !== otherOcrPrice) {
-                        const altPriceMatch = rawText.match(/(R\$)?\s*(\d+[,.]\d{2}|\d+[,.]\d|\d{1,2})/)?.[0];
-                        if (altPriceMatch && (altPriceMatch.includes(',') || altPriceMatch.includes('.'))) {
-                            price = altPriceMatch.replace(/R\$/, '').trim();
-                        } else if (altPriceMatch && !volumeLike.includes(altPriceMatch)) {
-                            price = `${altPriceMatch[0]},${altPriceMatch.slice(1) || '00'}`;
-                        } else {
-                            price = '0,00';
-                        }
-                    } else if (/^\d+$/.test(price) && !volumeLike.includes(price)) {
-                        price = `${price[0]},${price.slice(1) || '00'}`;
-                    }
-                } else {
-                    if (/^\d+$/.test(price)) {
-                        price = `${price[0]},${price.slice(1) || '00'}`;
-                    }
-                }
-                numPrice = parseFloat(price);
+            price = price.replace(',', '.').replace(/[^\d.]/g, '');
+            if (/^\d+$/.test(price) && volumeLike.includes(price)) {
+                price = '0,00';
+            } else if (/^\d+[,.]\d{2}$/.test(price)) {
+                price = price.replace('.', ',');
+            } else if (/^\d+[,.]\d$/.test(price)) {
+                price = `${price[0]},${price.slice(2) || '0'}0`;
+            } else if (/^\d+$/.test(price)) {
+                price = `${price},00`;
             } else {
-                numPrice = parseFloat(price);
+                price = '0,00';
             }
-
+            numPrice = parseFloat(price.replace(',', '.'));
             if (isNaN(numPrice)) {
-                return { price: '0,00', confidence: 0 };
+                return { price: '0,00', confidence: 0, emoji: '😞', label: 'Ruim' };
             }
             if (isCervProduct && numPrice < 0.20) {
-                return { price: '0,00', confidence: 0 };
+                return { price: '0,00', confidence: 0, emoji: '😞', label: 'Ruim' };
             }
             if (numPrice > 12.00) {
                 numPrice = 12.00;
             }
-
             const finalPrice = numPrice.toFixed(2).replace('.', ',');
-            const { confidence, emoji, label } = calculatePriceConfidence(finalPrice, rawText, isTesseract, otherOcrPrice);
+            const { confidence, emoji, label } = calculatePriceConfidence(finalPrice, rawText);
             return { price: finalPrice, confidence, emoji, label };
         }
 
         function correctOcrText(text) {
-            console.log('Correcting OCR text:', text);
+            if (typeof text !== 'string') {
+                console.warn('correctOcrText: Input não é uma string, retornando vazio', text);
+                return '';
+            }
             const corrections = [
-                { wrong: /\b(GEN|GEM|GIN|CEU|CEF|CEJ|CEP|EP)\b/gi, correct: 'CERV' },
-                { wrong: /\b(MALTL|NUT|NRITL|NALTE|NHAYT|NHAT|MOUT|MILT|MRTI|MOULT)\b/gi, correct: 'MALTE' },
-                { wrong: /\b0\b/gi, correct: 'O' },
-                { wrong: /\b1\b/gi, correct: 'I' },
-                { wrong: /\b(\d+)(NL|N1|NT|NI|M1|N7)\b/gi, correct: '$1 ML' },
-                { 
-                    wrong: /\b(473|330|350|500|200|900|1|355|275|2)(\d+)?\b/gi, 
-                    correct: (match, p1) => knownVolumes.includes(parseInt(p1)) ? `${p1} ML` : match 
-                },
+                { wrong: /\b[Ss](?=\d*[,.]\d)/gi, correct: '5' }, // S/s before decimal in prices
+                { wrong: /\b[Oo](?=\d*[,.]\d)/gi, correct: '0' }, // O/o before decimal in prices
                 { wrong: /\b(RS|RZ|S)\b/gi, correct: 'R$' },
-                { 
-                    wrong: /\b(R\$)\s*(\d{3})\b/gi, 
-                    correct: (match, p1, p2) => `${p1} ${p2[0]},${p2.slice(1)}` 
-                },
-                { wrong: /\b(\d+)[,.](\d{1,2})\b/gi, correct: '$1,$2' }
+                { wrong: /\b(\d+)[,.](\d{1,2})\b/gi, correct: '$1,$2' },
+                { wrong: /\bHE1NEKEN\b/gi, correct: 'HEINEKEN' },
+                { wrong: /\bSTEL1A\b/gi, correct: 'STELLA' },
+                { wrong: /\bC0R0NA\b/gi, correct: 'CORONA' },
+                { wrong: /\bBUDWE1SER\b/gi, correct: 'BUDWEISER' },
+                { wrong: /\bSPATEN\b/gi, correct: 'SPATEM' },
+                { wrong: /\bBRAMA\b/gi, correct: 'BRAHMA' },
+                { wrong: /\bE1SENBAHN\b/gi, correct: 'EISENBAHN' },
+                { wrong: /\bAMST3L\b/gi, correct: 'AMSTEL' },
+                { wrong: /\bKA1SER\b/gi, correct: 'KAISER' },
+                { wrong: /\bANTART1CA\b/gi, correct: 'ANTARTICA' },
+                { wrong: /\bB0HEMIA\b/gi, correct: 'BOHEMIA' },
+                { wrong: /\bSK0L\b/gi, correct: 'SKOL' },
+                { wrong: /\b1TA1PAVA\b/gi, correct: 'ITAIPAVA' },
+                { wrong: /\b(LT|LTR|LTRO)\b/gi, correct: 'LITRO' } // Correct LT/LTR to LITRO
             ];
             let corrected = text;
             corrections.forEach(({ wrong, correct }) => {
-                corrected = corrected.replace(wrong, typeof correct === 'function' ? correct : correct);
+                corrected = corrected.replace(wrong, correct);
             });
-            return { correctedText: corrected };
+            return corrected;
         }
 
         function normalizeText(text) {
+            if (typeof text !== 'string') {
+                console.warn('normalizeText: Input não é uma string, retornando vazio', text);
+                return '';
+            }
             return text
                 .toUpperCase()
                 .normalize('NFD')
@@ -510,264 +513,207 @@
                 .trim();
         }
 
-        function levenshteinDistance(a, b) {
-            try {
-                const matrix = Array(b.length + 1).fill().map(() => Array(a.length + 1).fill(0));
-                for (let i = 0; i <= a.length; i++) matrix[0][i] = i;
-                for (let j = 0; j <= b.length; j++) matrix[j][0] = j;
-                for (let j = 1; j <= b.length; j++) {
-                    for (let i = 1; i <= a.length; i++) {
-                        const indicator = a[i - 1] === b[j - 1] ? 0 : 1;
-                        matrix[j][i] = Math.min(
-                            matrix[j][i - 1] + 1,
-                            matrix[j - 1][i] + 1,
-                            matrix[j - 1][i - 1] + indicator
-                        );
-                    }
-                }
-                return matrix[b.length][a.length];
-            } catch (err) {
-                console.error('Erro no cálculo de Levenshtein:', err.message);
-                return Infinity;
-            }
-        }
-
         function findBestMatch(normalizedText, database) {
-            console.log('Finding best match for:', normalizedText);
-            try {
-                let bestMatch = database[0];
-                let highestScore = -Infinity;
-                const volumeMatch = normalizedText.match(/(\d+)(ML|L)/i)?.[1];
-                let volume = volumeMatch ? parseInt(volumeMatch) : null;
-                const criticalKeywords = ['HEINEKEN', 'STELLA', 'CORONA', 'BUDWEISER', 'PETRA', 'BRAHMA', 'EISENBAHN', 'AMSTEL', 'KAISER', 'ANTARTICA', 'SKOL', 'ITAIPAVA', 'IMPERIO'];
+            let bestMatch = database[0];
+            let highestScore = -Infinity;
+            const volumeMatch = normalizedText.match(/(\d+)(ML|L|LT|LTR|LTRO|LITRO)/i);
+            const volume = volumeMatch ? parseInt(volumeMatch[1]) : null;
+            const isLiter = volumeMatch && /L|LT|LTR|LTRO|LITRO/i.test(volumeMatch[2]);
 
-                if (volume) {
-                    const volumeStr = volume.toString();
-                    for (const heuristic of volumeHeuristics) {
-                        if (volumeStr.startsWith(heuristic.startsWith)) {
-                            volume = heuristic.volume;
-                            break;
-                        }
-                    }
-                }
+            database.forEach(product => {
+                const normalizedProduct = normalizeText(product.PRODUTO);
+                const productWords = normalizedProduct.split(' ');
+                const textWords = normalizedText.split(' ');
+                let score = 0;
 
-                database.forEach(product => {
-                    const normalizedProduct = normalizeText(product.PRODUTO);
-                    const productWords = normalizedProduct.split(' ');
-                    const textWords = normalizedText.split(' ');
-                    
-                    let score = 0;
-
-                    productWords.forEach(word => {
-                        if (criticalKeywords.includes(word) && textWords.includes(word)) {
-                            score += 70;
-                        } else if (keywords.includes(word) && textWords.includes(word)) {
-                            score += 15;
-                        } else if (textWords.includes(word)) {
-                            score += 5;
-                        }
-                    });
-
+                // Brand matching
+                const productBrand = normalizeText(product.brand);
+                if (normalizedText.includes(productBrand)) {
+                    score += 100; // High weight for exact brand match
+                } else {
                     brandPrefixes.forEach(({ prefix, brand, score: prefixScore }) => {
-                        if (normalizedText.includes(prefix) && normalizedProduct.includes(brand)) {
+                        if (normalizedText.includes(prefix) && productBrand.includes(brand)) {
                             score += prefixScore;
                         }
                     });
+                }
 
-                    if (volume && product.ML === volume) {
-                        score += 40;
-                    } else if (volume && Math.abs(product.ML - volume) <= 50) {
-                        score += 10;
-                    }
-
-                    criticalKeywords.forEach(keyword => {
-                        if (normalizedProduct.includes(keyword) && !normalizedText.includes(keyword)) {
-                            score -= 10;
-                        }
-                    });
-
-                    const distance = levenshteinDistance(normalizedText, normalizedProduct);
-                    const maxLength = Math.max(normalizedText.length, normalizedProduct.length);
-                    const similarityScore = (1 - distance / maxLength) * 30;
-                    score += similarityScore;
-
-                    if (score > highestScore) {
-                        highestScore = score;
-                        bestMatch = product;
+                // Keyword matching
+                productWords.forEach(word => {
+                    if (textWords.includes(word)) {
+                        score += keywords.includes(word) ? 20 : 5;
                     }
                 });
 
-                console.log('Best match:', bestMatch, 'Score:', highestScore);
-                return bestMatch;
-            } catch (err) {
-                console.error('Erro no findBestMatch:', err.message);
-                return database[0];
-            }
+                // Volume matching
+                if (volume) {
+                    if (isLiter && product.ML <= 2 && volume === product.ML) {
+                        score += 70; // Higher weight for liter match
+                    } else if (!isLiter && product.ML === volume) {
+                        score += 50; // Standard weight for ml match
+                    }
+                    if (knownVolumes.includes(volume)) score += 20;
+                }
+
+                // Levenshtein distance
+                const distance = Math.min(
+                    ...productWords.map(pWord =>
+                        Math.min(...textWords.map(tWord => {
+                            const matrix = Array(tWord.length + 1).fill().map(() => Array(pWord.length + 1).fill(0));
+                            for (let i = 0; i <= pWord.length; i++) matrix[0][i] = i;
+                            for (let j = 0; j <= tWord.length; j++) matrix[j][0] = j;
+                            for (let j = 1; j <= tWord.length; j++) {
+                                for (let i = 1; i <= pWord.length; i++) {
+                                    matrix[j][i] = Math.min(
+                                        matrix[j][i - 1] + 1,
+                                        matrix[j - 1][i] + 1,
+                                        matrix[j - 1][i - 1] + (pWord[i - 1] === tWord[j - 1] ? 0 : 1)
+                                    );
+                                }
+                            }
+                            return matrix[tWord.length][pWord.length];
+                        }))
+                    )
+                );
+                score += (1 - distance / Math.max(normalizedText.length, normalizedProduct.length)) * 30;
+
+                if (score > highestScore) {
+                    highestScore = score;
+                    bestMatch = product;
+                }
+            });
+
+            return bestMatch;
         }
 
-        async function retryOperation(fn, maxRetries = 3, delay = 1000) {
+        async function retryOperation(fn, maxRetries = 3, delay = 500) {
             for (let attempt = 1; attempt <= maxRetries; attempt++) {
                 try {
                     return await fn();
                 } catch (err) {
-                    console.log(`Tentativa ${attempt} falhou: ${err.message}, tentando novamente em ${delay}ms`);
+                    console.error(`Tentativa ${attempt} falhou: ${err.message}`);
                     if (attempt === maxRetries) throw err;
-                    await new Promise(resolve => setTimeout(resolve, delay));
-                    delay *= 2;
+                    await new Promise(resolve => setTimeout(resolve, delay * attempt));
                 }
             }
         }
 
         function ConfidenceBar({ confidence, emoji, label }) {
             return (
-                <div className="confidence-bar">
-                    <div className="confidence-fill" style={{ width: `${confidence}%` }}></div>
-                    <div className="confidence-label">
-                        <span>{emoji}</span>
-                        <span>{label} ({confidence}%)</span>
+                <div>
+                    <div className="confidence-bar">
+                        <div className="confidence-fill" style={{ width: `${confidence}%` }}></div>
                     </div>
+                    <div className="confidence-label">{emoji} {label} ({confidence}%)</div>
                 </div>
             );
         }
 
-        class ErrorBoundary extends React.Component {
-            state = { error: null };
-            static getDerivedStateFromError(error) {
-                console.error('ErrorBoundary:', error.message, error.stack);
-                return { error: error.message };
-            }
-            render() {
-                if (this.state.error) {
-                    return (
-                        <div className="bg-red-900/50 text-red-300 p-2 rounded text-center">
-                            <svg className="icon mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            Erro crítico: {this.state.error}. Verifique o console para mais detalhes.
-                        </div>
-                    );
-                }
-                return this.props.children;
-            }
-        }
-
         function App() {
-            const [imageUrl, setImageUrl] = React.useState('');
-            const [ocrResults, setOcrResults] = React.useState({});
-            const [selectedOcr, setSelectedOcr] = React.useState('ocrspace');
-            const [loading, setLoading] = React.useState(false);
-            const [error, setError] = React.useState(null);
-            const [editPrice, setEditPrice] = React.useState(false);
-            const [newPrice, setNewPrice] = React.useState('');
-            const [success, setSuccess] = React.useState(false);
-            const [fullScreenSuccess, setFullScreenSuccess] = React.useState(false);
-            const [priceDetected, setPriceDetected] = React.useState(false);
-            const [progress, setProgress] = React.useState(0);
-            const [zoomLevel, setZoomLevel] = React.useState(1);
-            const [priceMismatch, setPriceMismatch] = React.useState(false);
-            const [confidenceData, setConfidenceData] = React.useState({ confidence: 0, emoji: '😞', label: 'Ruim' });
+            const [state, setState] = React.useState({
+                imageUrl: '',
+                ocrResults: {},
+                selectedOcr: 'ocrspace',
+                loading: false,
+                error: null,
+                editPrice: false,
+                newPrice: '',
+                success: false,
+                priceDetected: false,
+                progress: 0
+            });
+            const imageRef = React.useRef(null);
+
+            const updateState = (updates) => setState(prev => ({ ...prev, ...updates }));
 
             React.useEffect(() => {
-                console.log('Fetching image from Baserow');
                 const fetchImage = async () => {
-                    setLoading(true);
+                    updateState({ loading: true });
                     try {
                         const response = await retryOperation(() =>
                             axios.get(
                                 "https://api.baserow.io/api/database/rows/table/587819/2/?user_field_names=true",
-                                {
-                                    headers: { Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd" },
-                                    timeout: 8000
-                                }
+                                { headers: { Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd" } }
                             )
                         );
-                        console.log('Image URL fetched:', response.data.urlimagem);
-                        setImageUrl(response.data.urlimagem);
+                        updateState({ imageUrl: response.data.urlimagem });
                     } catch (err) {
-                        console.error('Erro ao buscar imagem do Baserow:', err.message, err.stack);
-                        setError(`Erro crítico ao buscar imagem do Baserow: ${err.message}. Verifique o console.`);
-                        setImageUrl('');
+                        updateState({ error: `Erro ao buscar imagem: ${err.message}` });
                     } finally {
-                        setLoading(false);
+                        updateState({ loading: false });
                     }
                 };
                 fetchImage();
             }, []);
 
             React.useEffect(() => {
-                if (imageUrl) {
-                    console.log('Processing image:', imageUrl);
-                    processImage(imageUrl);
+                if (state.imageUrl) processImage(state.imageUrl);
+            }, [state.imageUrl]);
+
+            React.useEffect(() => {
+                if (imageRef.current && state.ocrResults[state.selectedOcr]?.result?.words?.length > 0) {
+                    drawTextBoundingBoxes(imageRef.current, state.ocrResults[state.selectedOcr].result.words);
                 }
-            }, [imageUrl]);
+            }, [state.selectedOcr, state.ocrResults]);
 
             const processImage = async (url) => {
-                setLoading(true);
-                setError(null);
-                setProgress(0);
-                setZoomLevel(1);
+                updateState({ loading: true, error: null, progress: 0 });
                 try {
-                    console.log('Fetching image data');
                     const response = await retryOperation(() =>
-                        axios.get(url, { responseType: 'blob', timeout: 8000 })
+                        axios.get(url, { responseType: 'blob' })
                     );
                     const reader = new FileReader();
                     reader.readAsDataURL(response.data);
                     reader.onloadend = () => {
-                        console.log('Image converted to base64');
                         const base64Image = reader.result.split(',')[1];
-                        preprocessImage(base64Image, 1, async (processedImage) => {
+                        preprocessImage(base64Image, async (processedImage) => {
                             if (!processedImage) {
-                                setError('Erro crítico ao preprocessar imagem. Verifique o console.');
-                                setLoading(false);
+                                updateState({ error: 'Erro ao preprocessar imagem', loading: false });
                                 return;
                             }
                             const results = {};
-
                             const ocrPromises = [
+                                // OCR.Space
                                 (async () => {
-                                    console.log('Starting OCR.Space processing');
                                     try {
                                         const formData = new FormData();
                                         formData.append('base64Image', `data:image/jpeg;base64,${processedImage}`);
                                         formData.append('language', 'por');
-                                        formData.append('isOverlayRequired', 'false');
+                                        formData.append('isOverlayRequired', 'true');
                                         formData.append('OCREngine', '2');
-
                                         const ocrSpaceResponse = await retryOperation(() =>
-                                            axios.post(
-                                                'https://api.ocr.space/parse/image',
-                                                formData,
-                                                {
-                                                    headers: { 'apikey': 'K86154304788957', 'Content-Type': 'multipart/form-data' },
-                                                    timeout: 8000
-                                                }
-                                            )
+                                            axios.post('https://api.ocr.space/parse/image', formData, {
+                                                headers: { 'apikey': 'K86154304788957', 'Content-Type': 'multipart/form-data' }
+                                            })
                                         );
-
-                                        const ocrText = ocrSpaceResponse.data.ParsedResults[0]?.ParsedText || '';
-                                        console.log('OCR.Space result:', ocrText);
-                                        const { correctedText } = correctOcrText(ocrText);
+                                        updateState({ progress: 50 });
+                                        const ocrText = ocrSpaceResponse.data?.ParsedResults?.[0]?.ParsedText || '';
+                                        if (!ocrText && ocrSpaceResponse.data) {
+                                            console.warn('OCR.Space retornou resposta inválida:', ocrSpaceResponse.data);
+                                        }
+                                        const correctedText = correctOcrText(ocrText);
                                         const normalizedText = normalizeText(correctedText);
                                         let ocrPrice = correctedText.match(/(R\$)?\s*\d+[,.]\d{2}/)?.[0] || 
-                                                      correctedText.match(/(R\$)?\s*\d+[,.]\d/)?.[0] || 
-                                                      correctedText.match(/(R\$)?\s*\d{1,2}/)?.[0] || '';
+                                                      correctedText.match(/(R\$)?\s*\d+[,.]\d/)?.[0] || '';
                                         ocrPrice = ocrPrice.replace(/R\$/, '').trim();
-                                        if (!ocrPrice) {
-                                            const numberMatch = correctedText.match(/\d{1,2}/)?.[0];
-                                            ocrPrice = numberMatch ? `${numberMatch[0]},${numberMatch.slice(1) || '00'}` : '0,00';
-                                        }
+                                        if (!ocrPrice) ocrPrice = '0,00';
                                         const matchedProduct = findBestMatch(normalizedText, bancoDeDados);
                                         const isCervProduct = normalizedText.includes('CERV') || normalizedText.includes('CERVEJA');
-                                        const { price: validatedPrice, confidence, emoji, label } = validatePrice(
-                                            ocrPrice, 
-                                            isCervProduct, 
-                                            correctedText, 
-                                            results.tesseract?.price?.replace('R$ ', ''), 
-                                            false
-                                        );
-
-                                        results.ocrspace = {
+                                        const { price: validatedPrice, confidence, emoji, label } = validatePrice(ocrPrice, isCervProduct, correctedText);
+                                        // Extract bounding boxes from OCR.Space response
+                                        const words = ocrSpaceResponse.data?.ParsedResults?.[0]?.TextOverlay?.Lines?.flatMap(line =>
+                                            line.Words.map(word => ({
+                                                text: word.WordText,
+                                                confidence: word.Confidence || 50,
+                                                bbox: {
+                                                    x0: word.Left,
+                                                    y0: word.Top,
+                                                    x1: word.Left + word.Width,
+                                                    y1: word.Top + word.Height
+                                                }
+                                            }))
+                                        ) || [];
+                                        return {
                                             source: 'ocrspace',
                                             result: {
                                                 product: matchedProduct.PRODUTO,
@@ -777,516 +723,280 @@
                                                 rawText: correctedText,
                                                 confidence,
                                                 emoji,
-                                                label
+                                                label,
+                                                words
                                             }
                                         };
-                                        return results.ocrspace;
                                     } catch (err) {
-                                        console.error('Erro no OCR.Space:', err.message, err.stack);
-                                        return { source: 'ocrspace', result: { error: `Erro no OCR.Space: ${err.message}`, rawText: '' } };
+                                        console.error('Erro no OCR.Space:', err.message, 'Resposta:', err.response?.data);
+                                        return {
+                                            source: 'ocrspace',
+                                            result: {
+                                                error: `Erro no OCR.Space: ${err.message}. Verifique a resposta da API no console.`,
+                                                rawText: '',
+                                                product: bancoDeDados[0].PRODUTO,
+                                                volume: bancoDeDados[0].ML,
+                                                price: 'R$ 0,00',
+                                                id: bancoDeDados[0].id,
+                                                confidence: 0,
+                                                emoji: '😞',
+                                                label: 'Ruim',
+                                                words: []
+                                            }
+                                        };
                                     }
                                 })(),
+                                // Tesseract
                                 (async () => {
-                                    console.log('Starting Tesseract processing');
                                     try {
-                                        const tesseractResults = [];
-                                        const priceCounts = {};
-                                        const productCounts = {};
-                                        const rawPrices = [];
-                                        for (let zoom = 1; zoom <= 6; zoom++) {
-                                            setProgress((zoom / 6) * 100);
-                                            setZoomLevel(zoom);
-                                            console.log(`Tesseract zoom ${zoom}x`);
-                                            const result = await new Promise((resolve) => {
-                                                preprocessImage(base64Image, zoom, async (zoomedImage) => {
-                                                    if (!zoomedImage) {
-                                                        resolve({ error: `Erro no preprocessamento (zoom ${zoom}x)`, rawText: '' });
-                                                        return;
-                                                    }
-                                                    try {
-                                                        const { data: { text } } = await Tesseract.recognize(
-                                                            `data:image/jpeg;base64,${zoomedImage}`,
-                                                            'por',
-                                                            { logger: () => {} }
-                                                        );
-                                                        const ocrText = text;
-                                                        console.log(`Tesseract zoom ${zoom}x result:`, ocrText);
-                                                        const { correctedText } = correctOcrText(ocrText);
-                                                        const normalizedText = normalizeText(correctedText);
-                                                        let ocrPrice = correctedText.match(/(R\$)?\s*\d+[,.]\d{2}/)?.[0] || 
-                                                                      correctedText.match(/(R\$)?\s*\d+[,.]\d/)?.[0] || 
-                                                                      correctedText.match(/(R\$)?\s*\d{1,2}/)?.[0] || '';
-                                                        ocrPrice = ocrPrice.replace(/R\$/, '').trim();
-                                                        if (!ocrPrice) {
-                                                            const numberMatch = correctedText.match(/\d{1,2}/)?.[0];
-                                                            ocrPrice = numberMatch ? `${numberMatch[0]},${numberMatch.slice(1) || '00'}` : '0,00';
-                                                        }
-                                                        rawPrices.push(ocrPrice);
-                                                        const matchedProduct = findBestMatch(normalizedText, bancoDeDados);
-                                                        const isCervProduct = normalizedText.includes('CERV') || normalizedText.includes('CERVEJA');
-                                                        const { price: validatedPrice, confidence, emoji, label } = validatePrice(
-                                                            ocrPrice, 
-                                                            isCervProduct, 
-                                                            correctedText, 
-                                                            results.ocrspace?.price?.replace('R$ ', ''), 
-                                                            true
-                                                        );
-                                                        if (validatedPrice) {
-                                                            const priceStr = `R$ ${validatedPrice}`;
-                                                            priceCounts[priceStr] = (priceCounts[priceStr] || 0) + 1;
-                                                        }
-                                                        const productStr = matchedProduct.PRODUTO;
-                                                        productCounts[productStr] = (productCounts[productStr] || 0) + 1;
-                                                        resolve({
-                                                            rawText: ocrText,
-                                                            product: matchedProduct.PRODUTO,
-                                                            volume: matchedProduct.ML,
-                                                            price: validatedPrice ? `R$ ${validatedPrice}` : 'R$ 0,00',
-                                                            id: matchedProduct.id,
-                                                            confidence,
-                                                            emoji,
-                                                            label
-                                                        });
-                                                    } catch (err) {
-                                                        console.error(`Erro no Tesseract (zoom ${zoom}x):`, err.message, err.stack);
-                                                        resolve({ error: `Erro no Tesseract (zoom ${zoom}x): ${err.message}`, rawText: '' });
-                                                    }
-                                                });
-                                            });
-                                            tesseractResults.push(result);
-                                        }
-
-                                        let selectedPrice = '';
-                                        let maxPriceCount = 0;
-                                        let selectedProduct = null;
-                                        let maxProductCount = 0;
-                                        let selectedResult = tesseractResults[0];
-
-                                        for (const price in priceCounts) {
-                                            if (priceCounts[price] >= 3) {
-                                                if (priceCounts[price] > maxPriceCount) {
-                                                    maxPriceCount = priceCounts[price];
-                                                    selectedPrice = price;
-                                                }
+                                        const { data } = await Tesseract.recognize(
+                                            `data:image/jpeg;base64,${processedImage}`,
+                                            'por',
+                                            { tessedit_pageseg_mode: Tesseract.PSM.SINGLE_BLOCK }
+                                        );
+                                        updateState({ progress: 100 });
+                                        const ocrText = data.text || '';
+                                        const correctedText = correctOcrText(ocrText);
+                                        const normalizedText = normalizeText(correctedText);
+                                        let ocrPrice = correctedText.match(/(R\$)?\s*\d+[,.]\d{2}/)?.[0] || 
+                                                      correctedText.match(/(R\$)?\s*\d+[,.]\d/)?.[0] || '';
+                                        ocrPrice = ocrPrice.replace(/R\$/, '').trim();
+                                        if (!ocrPrice) ocrPrice = '0,00';
+                                        const matchedProduct = findBestMatch(normalizedText, bancoDeDados);
+                                        const isCervProduct = normalizedText.includes('CERV') || normalizedText.includes('CERVEJA');
+                                        const { price: validatedPrice, confidence, emoji, label } = validatePrice(ocrPrice, isCervProduct, correctedText);
+                                        const priceStr = `R$ ${validatedPrice}`;
+                                        return {
+                                            source: 'tesseract',
+                                            result: {
+                                                rawText: correctedText,
+                                                product: matchedProduct.PRODUTO,
+                                                volume: matchedProduct.ML,
+                                                price: priceStr,
+                                                id: matchedProduct.id,
+                                                confidence,
+                                                emoji,
+                                                label,
+                                                words: data.words || []
                                             }
-                                        }
-
-                                        if (!selectedPrice) {
-                                            const priceFreq = Object.entries(priceCounts).sort((a, b) => b[1] - a[1]);
-                                            selectedPrice = priceFreq[0]?.[0] || rawPrices.find(p => p) || 'R$ 0,00';
-                                        }
-
-                                        for (const product in productCounts) {
-                                            if (productCounts[product] >= 3) {
-                                                if (productCounts[product] > maxProductCount) {
-                                                    maxProductCount = productCounts[product];
-                                                    selectedProduct = product;
-                                                }
-                                            }
-                                        }
-
-                                        if (!selectedProduct) {
-                                            const productFreq = Object.entries(productCounts).sort((a, b) => b[1] - a[1]);
-                                            selectedProduct = productFreq[0]?.[0] || results.ocrspace?.product || bancoDeDados[0].PRODUTO;
-                                            selectedResult = tesseractResults.find(result => result.product === selectedProduct) || tesseractResults[0];
-                                        }
-
-                                        if (selectedPrice && selectedProduct) {
-                                            selectedResult = tesseractResults.find(
-                                                result => result.price === selectedPrice && result.product === selectedProduct
-                                            ) || tesseractResults[0];
-                                        } else if (selectedPrice) {
-                                            selectedResult = tesseractResults.find(result => result.price === selectedPrice) || tesseractResults[0];
-                                        } else if (selectedProduct) {
-                                            selectedResult = tesseractResults.find(result => result.product === selectedProduct) || tesseractResults[0];
-                                        } else if (results.ocrspace?.product) {
-                                            selectedResult = results.ocrspace;
-                                        }
-
-                                        console.log('Tesseract price counts:', priceCounts);
-                                        console.log('Tesseract product counts:', productCounts);
-                                        console.log('Selected Tesseract price:', selectedPrice);
-                                        console.log('Selected Tesseract product:', selectedProduct);
-
-                                        return { source: 'tesseract', result: selectedResult };
+                                        };
                                     } catch (err) {
-                                        console.error('Erro crítico no Tesseract:', err.message, err.stack);
-                                        setError(`Erro crítico no Tesseract: ${err.message}. Verifique o console.`);
-                                        return { source: 'tesseract', result: { error: `Erro no Tesseract: ${err.message}`, rawText: '' } };
+                                        console.error('Erro no Tesseract:', err.message);
+                                        return {
+                                            source: 'tesseract',
+                                            result: {
+                                                error: `Erro no Tesseract: ${err.message}`,
+                                                rawText: '',
+                                                product: bancoDeDados[0].PRODUTO,
+                                                volume: bancoDeDados[0].ML,
+                                                price: 'R$ 0,00',
+                                                id: bancoDeDados[0].id,
+                                                confidence: 0,
+                                                emoji: '😞',
+                                                label: 'Ruim',
+                                                words: []
+                                            }
+                                        };
                                     }
                                 })()
                             ];
 
-                            console.log('Waiting for OCR results');
-                            try {
-                                const allResults = await Promise.all(ocrPromises.map(p => p.catch(e => ({ source: null, result: { error: e.message } }))));
-                                allResults.forEach(({ source, result }) => {
-                                    if (source) results[source] = result;
-                                });
+                            const allResults = await Promise.all(ocrPromises);
+                            allResults.forEach(res => {
+                                if (res && res.source && res.result) results[res.source] = { result: res.result };
+                            });
 
-                                if (Object.keys(results).length > 0) {
-                                    const validSource = Object.keys(results).find(source => !results[source].error) || 'tesseract';
-                                    console.log('OCR results:', results);
-                                    setOcrResults(results);
-                                    setSelectedOcr(validSource);
-                                    setNewPrice(results[validSource]?.price?.replace('R$ ', '') || '0,00');
-                                    setConfidenceData({
-                                        confidence: results[validSource]?.confidence || 0,
-                                        emoji: results[validSource]?.emoji || '😞',
-                                        label: results[validSource]?.label || 'Ruim'
-                                    });
+                            const validSource = !results.ocrspace?.result.error ? 'ocrspace' : 'tesseract';
+                            updateState({
+                                ocrResults: results,
+                                selectedOcr: validSource,
+                                newPrice: results[validSource]?.result?.price?.replace('R$ ', '') || '0,00',
+                                confidenceData: {
+                                    confidence: results[validSource]?.result?.confidence || 0,
+                                    emoji: results[validSource]?.result?.emoji || '😞',
+                                    label: results[validSource]?.result?.label || 'Ruim'
+                                },
+                                loading: false
+                            });
 
-                                    if (results[validSource]?.price) {
-                                        console.log('Price detected, showing animation');
-                                        setPriceDetected(true);
-                                        confetti({
-                                            particleCount: 150,
-                                            spread: 80,
-                                            origin: { y: 0.6 },
-                                            colors: ['#22c55e', '#ffffff', '#3b82f6']
-                                        });
-                                        setTimeout(() => setPriceDetected(false), 2000);
-                                    }
-
-                                    const ocrSpacePrice = results.ocrspace?.price?.replace('R$ ', '') || null;
-                                    const tesseractPrice = results.tesseract?.price?.replace('R$ ', '') || null;
-                                    if (ocrSpacePrice && tesseractPrice && !results.ocrspace.error && !results.tesseract.error) {
-                                        const ocrSpaceNum = parseFloat(ocrSpacePrice.replace(',', '.'));
-                                        const tesseractNum = parseFloat(tesseractPrice.replace(',', '.'));
-                                        if (Math.abs(ocrSpaceNum - tesseractNum) <= 0.10) {
-                                            console.log('Prices match, auto-submitting');
-                                            handleSubmit();
-                                        } else {
-                                            console.log('Price mismatch detected');
-                                            setPriceMismatch(true);
-                                        }
-                                    }
-                                } else {
-                                    console.error('No valid OCR results');
-                                    setError('Erro crítico: Nenhum resultado OCR válido. Verifique o console.');
-                                    setOcrResults({ tesseract: { error: 'Nenhum resultado OCR válido', rawText: '' } });
-                                    setSelectedOcr('tesseract');
-                                }
-                            } catch (err) {
-                                console.error('Erro crítico ao processar resultados OCR:', err.message, err.stack);
-                                setError(`Erro crítico ao processar resultados OCR: ${err.message}. Verifique o console.`);
-                            } finally {
-                                setLoading(false);
+                            if (results[validSource]?.result?.price && results[validSource].result.price !== 'R$ 0,00') {
+                                updateState({ priceDetected: true });
+                                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                                setTimeout(() => updateState({ priceDetected: false }), 1500);
                             }
                         });
                     };
-                    reader.onerror = () => {
-                        console.error('Erro ao ler imagem');
-                        setError('Erro crítico ao ler imagem. Verifique o console.');
-                        setLoading(false);
-                    };
+                    reader.onerror = () => updateState({ error: 'Erro ao ler imagem', loading: false });
                 } catch (err) {
-                    console.error('Erro crítico ao processar imagem:', err.message, err.stack);
-                    setError(`Erro crítico ao processar imagem: ${err.message}. Verifique o console.`);
-                    setLoading(false);
+                    updateState({ error: `Erro ao processar imagem: ${err.message}`, loading: false });
                 }
             };
 
             const handlePriceChange = () => {
-                console.log('Handling price change:', newPrice);
-                try {
-                    if (newPrice && ocrResults[selectedOcr]) {
-                        const isCervProduct = ocrResults[selectedOcr].product.includes('CERV') || ocrResults[selectedOcr].product.includes('CERVEJA');
-                        const { price: validatedPrice, confidence, emoji, label } = validatePrice(
-                            newPrice, 
-                            isCervProduct, 
-                            ocrResults[selectedOcr].rawText, 
-                            ocrResults[selectedOcr === 'ocrspace' ? 'tesseract' : 'ocrspace']?.price?.replace('R$ ', ''), 
-                            selectedOcr === 'tesseract'
-                        );
-                        if (validatedPrice) {
-                            setOcrResults({
-                                ...ocrResults,
-                                [selectedOcr]: { 
-                                    ...ocrResults[selectedOcr], 
-                                    price: `R$ ${validatedPrice}`,
-                                    confidence,
-                                    emoji,
-                                    label
-                                }
-                            });
-                            setConfidenceData({ confidence, emoji, label });
-                            setPriceDetected(true);
-                            confetti({
-                                particleCount: 150,
-                                spread: 80,
-                                origin: { y: 0.6 },
-                                colors: ['#22c55e', '#ffffff', '#3b82f6']
-                            });
-                            setTimeout(() => setPriceDetected(false), 2000);
-                            setPriceMismatch(false);
-                        } else {
-                            console.warn('Preço inválido:', newPrice);
-                        }
-                    }
-                    setEditPrice(false);
-                } catch (err) {
-                    console.error('Erro ao alterar preço:', err.message, err.stack);
-                    setError(`Erro crítico ao alterar preço: ${err.message}. Verifique o console.`);
+                if (!state.newPrice || !state.ocrResults[state.selectedOcr]) return;
+                const isCervProduct = state.ocrResults[state.selectedOcr].result.product.includes('CERV') || state.ocrResults[state.selectedOcr].result.product.includes('CERVEJA');
+                const { price: validatedPrice, confidence, emoji, label } = validatePrice(state.newPrice, isCervProduct, state.ocrResults[state.selectedOcr].result.rawText);
+                if (validatedPrice) {
+                    updateState({
+                        ocrResults: {
+                            ...state.ocrResults,
+                            [state.selectedOcr]: {
+                                ...state.ocrResults[state.selectedOcr],
+                                result: { ...state.ocrResults[state.selectedOcr].result, price: `R$ ${validatedPrice}`, confidence, emoji, label }
+                            }
+                        },
+                        confidenceData: { confidence, emoji, label },
+                        priceDetected: true,
+                        editPrice: false
+                    });
+                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                    setTimeout(() => updateState({ priceDetected: false }), 1500);
                 }
             };
 
-            const handleSubmit = async () => {
-                console.log('Submitting price:', ocrResults[selectedOcr]?.price);
+            const handleSubmit = async (result) => {
+                if (!result?.id || !result?.price || result.price === 'R$ 0,00') return;
+                updateState({ loading: true, error: null });
                 try {
-                    if (!ocrResults[selectedOcr] || !ocrResults[selectedOcr].id || !ocrResults[selectedOcr].price) {
-                        console.warn('Tentativa de envio com produto ou preço inválido:', ocrResults[selectedOcr]);
-                        return;
-                    }
-
-                    setLoading(true);
-                    setError(null);
-                    const priceToSend = ocrResults[selectedOcr].price.replace('R$ ', '').replace(',', '.');
                     await retryOperation(() =>
                         axios.patch(
-                            `https://api.baserow.io/api/database/rows/table/322640/${ocrResults[selectedOcr].id}/?user_field_names=true`,
-                            { "PREÇO": priceToSend },
-                            {
-                                headers: { Authorization: "Token QNhuEjQ6tUb2CmQyN2B5ipfhC61gLfXe", "Content-Type": "application/json" },
-                                timeout: 8000
-                            }
+                            `https://api.baserow.io/api/database/rows/table/322640/${result.id}/?user_field_names=true`,
+                            { "PREÇO": result.price.replace('R$ ', '').replace(',', '.') },
+                            { headers: { Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd", "Content-Type": "application/json" } }
                         )
                     );
-
-                    console.log('Price submitted successfully');
-                    setFullScreenSuccess(true);
-                    confetti({
-                        particleCount: 150,
-                        spread: 80,
-                        origin: { y: 0.6 },
-                        colors: ['#22c55e', '#ffffff', '#3b82f6']
-                    });
-                    setTimeout(() => setFullScreenSuccess(false), 2000);
-                    setSuccess(true);
-                    setTimeout(() => setSuccess(false), 2000);
-                    setPriceMismatch(false);
+                    updateState({ success: true });
+                    confetti({ particleCount: 200, spread: 90, origin: { y: 0.5 }, colors: ['#22c55e', '#ffffff'] });
+                    setTimeout(() => updateState({ success: false }), 2000);
                 } catch (err) {
-                    console.error('Erro crítico ao enviar preço:', err.message, err.stack);
-                    setError(`Erro crítico ao enviar preço: ${err.message}. Verifique o console.`);
-                    setSuccess(true);
-                    setTimeout(() => setSuccess(false), 2000);
+                    const errorMessage = err.response?.status === 401
+                        ? 'Erro de autenticação: Token inválido ou expirado. Gere um novo token no Baserow e atualize o código.'
+                        : `Erro ao enviar preço: ${err.response?.data?.detail || err.message}`;
+                    updateState({ error: errorMessage, success: false });
+                    console.error('Detalhes do erro:', err.response?.data || err.message);
                 } finally {
-                    setLoading(false);
+                    updateState({ loading: false });
                 }
             };
 
             return (
-                <ErrorBoundary>
-                    <div className="w-full max-w-xs flex flex-col gap-1">
-                        <header className="text-center">
-                            <h1 className="text-xl font-bold text-blue-300 drop-shadow-[0_0_6px_rgba(59,130,246,0.5)]">
-                                <svg className="icon mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7m-9 5v6h4v-6m-7-7h10" />
+                <div className="w-full max-w-[400px] mx-auto p-5 flex flex-col gap-3">
+                    <header className="text-center">
+                        <h1 className="text-xl font-bold text-white flex items-center justify-center">
+                            <svg className="icon mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            OCR Cordeiro
+                        </h1>
+                    </header>
+
+                    <main className="p-5 flex flex-col gap-4">
+                        {state.loading && (
+                            <div className="flex flex-col items-center gap-3">
+                                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-blue-400"></div>
+                                <div className="progress-bar w-full">
+                                    <div className="progress-fill" style={{ width: `${state.progress}%` }}></div>
+                                </div>
+                            </div>
+                        )}
+
+                        {state.error && (
+                            <div className="warning-modal text-white flex items-center justify-center gap-2">
+                                <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                OCR Cordeiro
-                            </h1>
-                        </header>
+                                {state.error}
+                            </div>
+                        )}
 
-                        <main className="bg-gray-800/80 rounded-lg p-3 flex flex-col gap-2 backdrop-blur-sm">
-                            {loading && (
-                                <div className="flex flex-col items-center gap-1">
-                                    <div className="relative">
-                                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-blue-400"></div>
-                                        <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[10px] text-blue-400">Zoom {zoomLevel}x</span>
-                                    </div>
-                                    <div className="w-full progress-bar">
-                                        <div className="progress-fill" style={{ width: `${progress}%` }}></div>
-                                    </div>
-                                </div>
-                            )}
+                        {state.success && (
+                            <div className="success-overlay">
+                                <svg className="checkmark" viewBox="0 0 52 52">
+                                    <circle className="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+                                    <path className="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                                </svg>
+                                <h2 className="text-2xl font-bold mt-4">Enviado com Sucesso!</h2>
+                            </div>
+                        )}
 
-                            {error && (
-                                <div className="bg-red-900/50 text-red-300 p-2 rounded text-center">
-                                    <svg className="icon mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    {error}
-                                </div>
-                            )}
+                        {state.imageUrl ? (
+                            <div className="image-container">
+                                <img src={state.imageUrl} alt="Produto" ref={imageRef} />
+                                {state.loading && <div className="scanning-overlay"></div>}
+                            </div>
+                        ) : (
+                            <div className="bg-gray-900/50 p-3 rounded text-center">Sem imagem</div>
+                        )}
 
-                            {success && (
-                                <div className="success-modal text-white p-2 rounded text-center">
-                                    <svg className="icon mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    Preço enviado!
+                        {Object.keys(state.ocrResults).length > 0 && state.ocrResults[state.selectedOcr]?.result && (
+                            <div className="bg-gray-900/50 p-4 rounded flex flex-col gap-3">
+                                <div className="flex items-center gap-3">
+                                    <strong className="text-blue-300 font-medium">OCR:</strong>
+                                    <select
+                                        value={state.selectedOcr}
+                                        onChange={(e) => updateState({
+                                            selectedOcr: e.target.value,
+                                            newPrice: state.ocrResults[e.target.value]?.result?.price?.replace('R$ ', '') || '0,00',
+                                            confidenceData: {
+                                                confidence: state.ocrResults[e.target.value]?.result?.confidence || 0,
+                                                emoji: state.ocrResults[e.target.value]?.result?.emoji || '😞',
+                                                label: state.ocrResults[e.target.value]?.result?.label || 'Ruim'
+                                            }
+                                        })}
+                                        className="bg-gray-700 text-white px-3 py-1.5 rounded text-sm flex-1"
+                                    >
+                                        {Object.keys(state.ocrResults).map(source => (
+                                            <option key={source} value={source}>{source === 'ocrspace' ? 'OCR.Space' : 'Tesseract'}</option>
+                                        ))}
+                                    </select>
                                 </div>
-                            )}
 
-                            {priceDetected && (
-                                <div className="full-screen-success">
-                                    <svg className="checkmark" viewBox="0 0 52 52">
-                                        <circle className="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
-                                        <path className="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-                                    </svg>
-                                    <p className="text-lg text-white mt-2">Preço Detectado!</p>
-                                </div>
-                            )}
+                                {state.ocrResults[state.selectedOcr].result.error ? (
+                                    <div className="text-red-300">{state.ocrResults[state.selectedOcr].result.error}</div>
+                                ) : (
+                                    <>
+                                        <p><strong className="text-blue-300 font-medium">Produto:</strong> {state.ocrResults[state.selectedOcr].result.product}</p>
+                                        <p><strong className="text-blue-300 font-medium">Volume:</strong> {state.ocrResults[state.selectedOcr].result.volume ? formatVolume(state.ocrResults[state.selectedOcr].result.volume) : 'N/A'}</p>
+                                        <div className="flex items-center gap-3">
+                                            <strong className="text-blue-300 font-medium">Preço:</strong>
+                                            {state.editPrice ? (
+                                                <div className="flex gap-2">
+                                                    <input
+                                                        type="text"
+                                                        value={state.newPrice}
+                                                        onChange={(e) => updateState({ newPrice: e.target.value })}
+                                                        className="text-white px-3 py-1.5 rounded text-sm w-20"
+                                                        placeholder="0,00"
+                                                    />
+                                                    <button onClick={handlePriceChange} className="neon-button text-white px-3 py-1.5 rounded text-sm">OK</button>
+                                                </div>
+                                            ) : (
+                                                <div className="flex gap-2 items-center">
+                                                    <span>{state.ocrResults[state.selectedOcr].result.price}</span>
+                                                    <button onClick={() => updateState({ editPrice: true })} className="text-blue-400 text-sm hover:underline">Editar</button>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <ConfidenceBar {...state.confidenceData} />
+                                    </>
+                                )}
+                            </div>
+                        )}
 
-                            {fullScreenSuccess && (
-                                <div className="full-screen-success">
-                                    <svg className="checkmark" viewBox="0 0 52 52">
-                                        <circle className="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
-                                        <path className="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-                                    </svg>
-                                    <p className="text-lg text-white mt-2">Preço Enviado: {ocrResults[selectedOcr]?.price}</p>
-                                </div>
-                            )}
-
-                            {priceMismatch && (
-                                <div className="warning-modal text-white p-2 rounded text-center">
-                                    <svg className="icon mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    Não sentimos seguros ao enviar o preço pois detectou 2 preços diferentes.
-                                    <div className="flex justify-center mt-2">
-                                        <button
-                                            onClick={handleSubmit}
-                                            className="neon-button text-white px-3 py-1 rounded text-sm flex items-center"
-                                        >
-                                            <svg className="icon mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                            Confirmar Envio
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
-
-                            {imageUrl ? (
-                                <div className="image-container rounded overflow-hidden">
-                                    <img 
-                                        src={imageUrl} 
-                                        alt="Produto" 
-                                        className="w-full h-auto object-cover object-top" 
-                                        onError={() => setError('Erro crítico ao carregar imagem. Verifique o console.')}
-                                    />
-                                    {(loading || Object.keys(ocrResults).length > 0) && (
-                                        <div className="scanning-overlay"></div>
-                                    )}
-                                </div>
-                            ) : (
-                                <div className="bg-gray-900/50 p-2 rounded text-center">
-                                    <svg className="icon mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    Sem imagem
-                                </div>
-                            )}
-
-                            {Object.keys(ocrResults).length > 0 && ocrResults[selectedOcr] ? (
-                                <div className="bg-gray-900/50 p-3 rounded flex flex-col gap-2">
-                                    <div className="flex items-center gap-1">
-                                        <svg className="icon text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                        </svg>
-                                        <strong className="text-blue-400">OCR:</strong>
-                                        <select
-                                            value={selectedOcr}
-                                            onChange={(e) => {
-                                                setSelectedOcr(e.target.value);
-                                                setNewPrice(ocrResults[e.target.value]?.price?.replace('R$ ', '') || '0,00');
-                                                setConfidenceData({
-                                                    confidence: ocrResults[e.target.value]?.confidence || 0,
-                                                    emoji: ocrResults[e.target.value]?.emoji || '😞',
-                                                    label: ocrResults[e.target.value]?.label || 'Ruim'
-                                                });
-                                            }}
-                                            className="bg-gray-700 text-white px-1 py-0.5 rounded text-sm"
-                                        >
-                                            {Object.keys(ocrResults).map(source => (
-                                                <option key={source} value={source}>{source === 'ocrspace' ? 'OCR.Space' : 'Tesseract'}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-
-                                    {ocrResults[selectedOcr].error ? (
-                                        <div className="text-red-300">{ocrResults[selectedOcr].error}</div>
-                                    ) : (
-                                        <>
-                                            <p className="flex items-center">
-                                                <svg className="icon mr-1 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                                                </svg>
-                                                <strong className="text-blue-400">Produto:</strong> {ocrResults[selectedOcr].product}
-                                            </p>
-                                            <p className="flex items-center">
-                                                <svg className="icon mr-1 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                                                </svg>
-                                                <strong className="text-blue-400">Volume:</strong> {ocrResults[selectedOcr].volume ? `${ocrResults[selectedOcr].volume}ml` : 'N/A'}
-                                            </p>
-                                            <div className="flex items-center gap-1">
-                                                <svg className="icon mr-1 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                </svg>
-                                                <strong className="text-blue-400">Preço:</strong>
-                                                {editPrice ? (
-                                                    <div className="flex items-center gap-1">
-                                                        <input
-                                                            type="text"
-                                                            value={newPrice}
-                                                            onChange={(e) => setNewPrice(e.target.value)}
-                                                            className="bg-gray-700 text-white px-1 py-0.5 rounded text-sm w-16"
-                                                            placeholder="Preço"
-                                                        />
-                                                        <button
-                                                            onClick={handlePriceChange}
-                                                            className="bg-green-500 text-white px-1 py-0.5 rounded text-xs"
-                                                        >
-                                                            OK
-                                                        </button>
-                                                    </div>
-                                                ) : (
-                                                    <div className="flex items-center gap-1">
-                                                        <span>{ocrResults[selectedOcr].price}</span>
-                                                        <button
-                                                            onClick={() => setEditPrice(true)}
-                                                            className="text-blue-400 text-xs"
-                                                        >
-                                                            Editar
-                                                        </button>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <ConfidenceBar 
-                                                confidence={confidenceData.confidence} 
-                                                emoji={confidenceData.emoji} 
-                                                label={confidenceData.label} 
-                                            />
-                                        </>
-                                    )}
-                                </div>
-                            ) : (
-                                <div className="bg-gray-900/50 p-2 rounded text-center">
-                                    <svg className="icon mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    Aguardando OCR
-                                </div>
-                            )}
-
-                            {ocrResults[selectedOcr] && !ocrResults[selectedOcr].error && !priceMismatch && (
-                                <div className="flex justify-center">
-                                    <button 
-                                        onClick={handleSubmit}
-                                        className="w-full neon-button text-white px-3 py-1 rounded text-sm disabled:opacity-50 flex items-center justify-center"
-                                        disabled={loading || !ocrResults[selectedOcr]?.id || !ocrResults[selectedOcr].price}                                     >
-                                        <svg className="icon mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        Enviar Preço
-                                    </button>
-                                </div>
-                            )}
-                        </main>
-                    </div>
-                </ErrorBoundary>
+                        {state.ocrResults[state.selectedOcr]?.result && !state.ocrResults[state.selectedOcr].result.error && (
+                            <button
+                                onClick={() => handleSubmit(state.ocrResults[state.selectedOcr].result)}
+                                className="neon-button text-white flex items-center justify-center"
+                                disabled={state.loading || !state.ocrResults[state.selectedOcr]?.result?.price || state.ocrResults[state.selectedOcr].result.price === 'R$ 0,00'}
+                            >
+                                <svg className="icon mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Enviar Preço
+                            </button>
+                        )}
+                    </main>
+                </div>
             );
         }
 
