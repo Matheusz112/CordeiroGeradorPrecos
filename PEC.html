@@ -10,17 +10,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.25.6/babel.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #1a1a40, #2e1065);
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: #e5e7eb;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
+            color: #e2e8f0;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 0.85rem;
+            line-height: 1.4;
             overflow-x: hidden;
             position: relative;
         }
@@ -36,32 +37,31 @@
         .bubble {
             position: absolute;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(147, 197, 253, 0.3), transparent);
-            box-shadow: 0 0 20px rgba(147, 197, 253, 0.5);
-            animation: float 6s infinite ease-in-out;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.3), transparent);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+            animation: float 7s infinite ease-in-out;
             pointer-events: none;
         }
-        .bubble:nth-child(1) { width: 80px; height: 80px; top: 15%; left: 15%; animation-duration: 6s; }
-        .bubble:nth-child(2) { width: 60px; height: 60px; top: 55%; left: 75%; animation-duration: 8s; }
-        .bubble:nth-child(3) { width: 70px; height: 70px; top: 65%; left: 25%; animation-duration: 7s; }
+        .bubble:nth-child(1) { width: 50px; height: 50px; top: 15%; left: 15%; animation-duration: 6s; }
+        .bubble:nth-child(2) { width: 40px; height: 40px; top: 55%; left: 75%; animation-duration: 8s; }
+        .bubble:nth-child(3) { width: 45px; height: 45px; top: 65%; left: 25%; animation-duration: 7s; }
         @keyframes float {
-            0% { transform: translateY(0) translateX(0); opacity: 0.7; }
-            50% { transform: translateY(-60px) translateX(15px); opacity: 1; }
-            100% { transform: translateY(0) translateX(0); opacity: 0.7; }
+            0% { transform: translateY(0) translateX(0); opacity: 0.5; }
+            50% { transform: translateY(-40px) translateX(8px); opacity: 0.8; }
+            100% { transform: translateY(0) translateX(0); opacity: 0.5; }
         }
         .image-container {
-            height: 200px;
+            height: 140px;
             overflow: hidden;
             position: relative;
-            border-radius: 14px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6), 0 0 30px rgba(147, 197, 253, 0.3);
-            background: #fff;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5), 0 0 15px rgba(59, 130, 246, 0.3);
+            background: transparent;
+            transition: box-shadow 0.3s ease;
             animation: fadeIn 0.8s ease-out;
         }
         .image-container:hover {
-            transform: scale(1.03);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.7), 0 0 40px rgba(147, 197, 253, 0.5);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6), 0 0 20px rgba(59, 130, 246, 0.4);
         }
         .image-container img {
             width: 100%;
@@ -74,35 +74,35 @@
             position: absolute;
             top: 0;
             width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, #a5b4fc, transparent);
-            animation: scanWave 0.8s infinite ease-in-out;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #60a5fa, transparent);
+            animation: scanWave 0.9s infinite ease-in-out;
         }
         @keyframes scanWave {
-            0% { transform: translateY(0); opacity: 0.7; }
-            50% { transform: translateY(200px); opacity: 1; }
-            100% { transform: translateY(0); opacity: 0.7; }
+            0% { transform: translateY(0); opacity: 0.6; }
+            50% { transform: translateY(140px); opacity: 0.9; }
+            100% { transform: translateY(0); opacity: 0.6; }
         }
         .icon {
-            width: 26px;
-            height: 26px;
+            width: 20px;
+            height: 20px;
             vertical-align: middle;
         }
         .neon-button {
-            background: linear-gradient(45deg, #3b82f6, #a855f7);
-            box-shadow: 0 0 12px rgba(59, 130, 246, 0.8), 0 0 24px rgba(168, 85, 247, 0.6);
+            background: linear-gradient(45deg, #2563eb, #7c3aed);
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.7), 0 0 16px rgba(124, 58, 237, 0.5);
             transition: all 0.3s ease;
-            border-radius: 12px;
-            padding: 14px 30px;
-            font-weight: 600;
-            font-size: 1rem;
-            animation: pulse 2.5s infinite ease-in-out;
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 10px 24px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            animation: pulse 1.8s infinite ease-in-out;
+            backdrop-filter: blur(3px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
         .neon-button:hover:not(:disabled) {
-            box-shadow: 0 0 20px rgba(59, 130, 246, 1), 0 0 30px rgba(168, 85, 247, 0.8);
-            transform: scale(1.05);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.9), 0 0 20px rgba(124, 58, 237, 0.7);
+            transform: scale(1.03);
         }
         .neon-button:disabled {
             background: #4b5563;
@@ -110,9 +110,9 @@
             cursor: not-allowed;
         }
         @keyframes pulse {
-            0% { box-shadow: 0 0 12px rgba(59, 130, 246, 0.8), 0 0 24px rgba(168, 85, 247, 0.6); }
-            50% { box-shadow: 0 0 18px rgba(59, 130, 246, 1), 0 0 36px rgba(168, 85, 247, 0.8); }
-            100% { box-shadow: 0 0 12px rgba(59, 130, 246, 0.8), 0 0 24px rgba(168, 85, 247, 0.6); }
+            0% { box-shadow: 0 0 8px rgba(59, 130, 246, 0.7), 0 0 16px rgba(124, 58, 237, 0.5); }
+            50% { box-shadow: 0 0 12px rgba(59, 130, 246, 0.9), 0 0 20px rgba(124, 58, 237, 0.7); }
+            100% { box-shadow: 0 0 8px rgba(59, 130, 246, 0.7), 0 0 16px rgba(124, 58, 237, 0.5); }
         }
         .success-overlay {
             position: fixed;
@@ -120,69 +120,69 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: linear-gradient(135deg, #10b981, #047857);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            animation: popIn 1s ease-out, fadeOut 1s ease-out 6s forwards;
+            animation: popIn 0.7s ease-out, fadeOut 0.7s ease-out 4.5s forwards;
             z-index: 1000;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(5px);
         }
         .success-overlay h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.5rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
             font-weight: 700;
-            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
-            animation: waveText 1.2s ease-out;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            animation: waveText 0.9s ease-out;
         }
         .success-overlay p {
-            font-size: 1.3rem;
-            font-weight: 500;
-            margin-top: 1.5rem;
-            max-width: 600px;
+            font-size: 0.95rem;
+            font-weight: 400;
+            margin-top: 0.8rem;
+            max-width: 90%;
             text-align: center;
-            animation: waveText 1.2s ease-out 0.3s;
+            animation: waveText 0.9s ease-out 0.2s;
         }
         .checkmark {
-            width: 120px;
-            height: 120px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            stroke-width: 3;
+            stroke-width: 2.2;
             stroke: #fff;
             stroke-miterlimit: 10;
-            animation: fill 0.6s ease-in-out 0.6s forwards, scale 0.5s ease-in-out 1.2s both;
+            animation: fill 0.4s ease-in-out 0.4s forwards, scale 0.3s ease-in-out 0.9s both;
         }
         .checkmark__circle {
             stroke-dasharray: 166;
             stroke-dashoffset: 166;
-            stroke-width: 3;
+            stroke-width: 2.2;
             stroke: #22c55e;
             fill: none;
-            animation: stroke 0.8s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
         }
         .checkmark__check {
             transform-origin: 50% 50%;
             stroke-dasharray: 48;
             stroke-dashoffset: 48;
-            animation: stroke 0.5s cubic-bezier(0.65, 0, 0.45, 1) 1s forwards;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.7s forwards;
         }
         @keyframes stroke {
             100% { stroke-dashoffset: 0; }
         }
         @keyframes scale {
             0%, 100% { transform: none; }
-            50% { transform: scale3d(1.4, 1.4, 1); }
+            50% { transform: scale3d(1.2, 1.2, 1); }
         }
         @keyframes fill {
-            100% { box-shadow: inset 0px 0px 0px 60px #22c55e; }
+            100% { box-shadow: inset 0px 0px 0px 40px #22c55e; }
         }
         @keyframes popIn {
-            0% { transform: scale(0.6); opacity: 0; }
+            0% { transform: scale(0.7); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
         @keyframes waveText {
-            0% { transform: translateY(30px); opacity: 0; }
+            0% { transform: translateY(15px); opacity: 0; }
             100% { transform: translateY(0); opacity: 1; }
         }
         @keyframes fadeOut {
@@ -190,49 +190,49 @@
             100% { opacity: 0; }
         }
         @keyframes glow {
-            0% { text-shadow: 0 0 5px rgba(168, 85, 247, 0.5); }
-            50% { text-shadow: 0 0 15px rgba(168, 85, 247, 0.8); }
-            100% { text-shadow: 0 0 5px rgba(168, 85, 247, 0.5); }
+            0% { text-shadow: 0 0 3px rgba(59, 130, 246, 0.5); }
+            50% { text-shadow: 0 0 10px rgba(59, 130, 246, 0.8); }
+            100% { text-shadow: 0 0 3px rgba(59, 130, 246, 0.5); }
         }
         .progress-bar {
-            height: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 5px;
             overflow: hidden;
         }
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #3b82f6, #a855f7);
-            transition: width 0.5s ease;
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            transition: width 0.3s ease;
         }
         .confidence-bar {
-            height: 12px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 5px;
             overflow: hidden;
-            animation: slideIn 0.8s ease-out;
+            animation: slideIn 0.6s ease-out;
         }
         .confidence-fill {
             height: 100%;
-            background: linear-gradient(to right, #f43f5e, #facc15, #22c55e);
-            transition: width 0.5s ease;
+            background: linear-gradient(to right, #ef4444, #facc15, #22c55e);
+            transition: width 0.3s ease;
         }
         .confidence-label {
-            font-size: 0.9rem;
-            color: #e5e7eb;
+            font-size: 0.8rem;
+            color: #e2e8f0;
             text-align: center;
-            margin-top: 10px;
-            font-weight: 500;
-            animation: glow 2s infinite ease-in-out;
+            margin-top: 6px;
+            font-weight: 400;
+            animation: glow 1.6s infinite ease-in-out;
         }
         .warning-modal {
-            animation: popIn 0.6s ease-out;
-            background: rgba(239, 68, 68, 0.95);
-            border-radius: 12px;
-            padding: 14px;
+            animation: popIn 0.4s ease-out;
+            background: rgba(220, 38, 38, 0.9);
+            border-radius: 8px;
+            padding: 10px;
             text-align: center;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(3px);
         }
         .text-bbox-canvas {
             position: absolute;
@@ -241,44 +241,105 @@
             pointer-events: none;
         }
         main {
-            background: rgba(17, 24, 39, 0.8);
-            border-radius: 14px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
-            padding: 2rem;
-            backdrop-filter: blur(10px);
+            background: rgba(17, 24, 39, 0.85);
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+            padding: 1rem;
+            backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: fadeIn 0.8s ease-out;
+            animation: fadeIn 0.6s ease-out;
         }
         select, input {
-            background: rgba(31, 41, 55, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            color: white;
-            padding: 10px;
+            background: rgba(31, 41, 55, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            color: #e2e8f0;
+            padding: 6px;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
         select:focus, input:focus {
             outline: none;
-            border-color: #a855f7;
-            box-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+            border-color: #7c3aed;
+            box-shadow: 0 0 8px rgba(124, 58, 237, 0.5);
         }
         .header {
-            background: linear-gradient(90deg, #3b82f6, #a855f7);
-            padding: 1.2rem;
-            border-radius: 14px 14px 0 0;
-            margin: -2rem -2rem 1.5rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            background: transparent;
+            padding: 0.8rem;
+            margin: -1rem -1rem 0.8rem;
         }
         .product-label, .price-label {
-            animation: slideIn 0.8s ease-out;
+            animation: slideIn 0.6s ease-out;
+        }
+        .beer-image-container {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            margin: 0 auto;
+            border-radius: 14px;
+            overflow: hidden;
+            background: transparent;
+            animation: bounce 2s infinite ease-in-out;
+        }
+        .beer-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+        }
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+        .product-description {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            text-align: center;
+            margin-top: 6px;
+            animation: slideIn 0.6s ease-out;
+        }
+        .separator {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #60a5fa, transparent);
+            margin: 6px 0;
         }
         @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(20px); }
+            0% { opacity: 0; transform: translateY(12px); }
             100% { opacity: 1; transform: translateY(0); }
         }
         @keyframes slideIn {
-            0% { opacity: 0; transform: translateX(-20px); }
+            0% { opacity: 0; transform: translateX(-12px); }
             100% { opacity: 1; transform: translateX(0); }
+        }
+        @media (max-width: 640px) {
+            body {
+                font-size: 0.8rem;
+            }
+            .image-container {
+                height: 120px;
+            }
+            .neon-button {
+                padding: 8px 20px;
+                font-size: 0.85rem;
+            }
+            .success-overlay h2 {
+                font-size: 1.6rem;
+            }
+            .success-overlay p {
+                font-size: 0.9rem;
+            }
+            .checkmark {
+                width: 70px;
+                height: 70px;
+            }
+            .beer-image-container {
+                width: 100px;
+                height: 100px;
+            }
+            .product-description {
+                font-size: 0.65rem;
+            }
         }
     </style>
 </head>
@@ -296,18 +357,18 @@
         canvas.height = window.innerHeight;
 
         const particles = [];
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 60; i++) {
             particles.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
-                radius: Math.random() * 2 + 1,
-                speed: Math.random() * 0.5 + 0.2
+                radius: Math.random() * 1.2 + 0.7,
+                speed: Math.random() * 0.3 + 0.1
             });
         }
 
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
             particles.forEach(p => {
                 p.y += p.speed;
                 if (p.y > canvas.height) p.y = 0;
@@ -342,7 +403,7 @@
                 canvas.width = img.width;
                 canvas.height = img.height;
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                callback(canvas.toDataURL('image/jpeg', 0.95).split(',')[1]);
+                callback(canvas.toDataURL('image/jpeg', 0.9).split(',')[1]);
             };
             img.onerror = () => callback(null);
         }
@@ -367,7 +428,7 @@
             container.appendChild(canvas);
 
             ctx.strokeStyle = 'red';
-            ctx.lineWidth = 2.5;
+            ctx.lineWidth = 2;
             words.forEach(word => {
                 if (word.bbox && word.confidence >= 50) {
                     const { x0, y0, x1, y1 } = word.bbox;
@@ -375,11 +436,11 @@
                     const isPrice = word.text.match(/(R\$)?\s*\d+[,.]\d{2}/) || word.text.match(/\d+[,.]\d{2}/);
 
                     if (isVolume || isPrice) {
-                        ctx.strokeStyle = '#22c55e'; // Green for volume and price
-                        ctx.lineWidth = 3.5;
-                    } else {
-                        ctx.strokeStyle = 'red'; // Red for other text
+                        ctx.strokeStyle = '#22c55e';
                         ctx.lineWidth = 2.5;
+                    } else {
+                        ctx.strokeStyle = 'red';
+                        ctx.lineWidth = 2;
                     }
 
                     ctx.beginPath();
@@ -417,7 +478,7 @@
             { id: 26, PRODUTO: 'LEITE QUATA INTEGRAL 12X1L', ML: 1, brand: 'QUATA' },
             { id: 27, PRODUTO: 'LEITE PIRACANJUBA INTEGRAL 12X1L', ML: 1, brand: 'PIRACANJUBA' },
             { id: 28, PRODUTO: 'ÁGUA IGARAPE SEM GÁS 12X500ml', ML: 500, brand: 'IGARAPE' },
-            { id: 29, PRODUTO: 'ÁGUA IGARAPÉ COM GÁS 12X500ml', ML: 500, branch: 'IGARAPE' },
+            { id: 29, PRODUTO: 'ÁGUA IGARAPÉ COM GÁS 12X500ml', ML: 500, brand: 'IGARAPE' },
             { id: 30, PRODUTO: 'REFRI COCA COLA MINI PET 12X200ml', ML: 200, brand: 'COCA COLA' },
             { id: 31, PRODUTO: 'REFRI SUKITA LARANJA PET 12X200ml', ML: 200, brand: 'SUKITA' },
             { id: 32, PRODUTO: 'REFRI SODA LIMONADA PET 12X200ml', ML: 200, brand: 'SODA' },
@@ -442,7 +503,7 @@
             { id: 100, PRODUTO: 'CERV LAGER CORONA LN 6X330ml', ML: 330, brand: 'CORONA' },
             { id: 133, PRODUTO: 'CERV LAGER BUDWEISER LN 6X330ml', ML: 330, brand: 'BUDWEISER' },
             { id: 167, PRODUTO: 'CERV PILSEN LAUT 12X473ml', ML: 473, brand: 'LAUT' },
-            { id: 199, PRODUTO: 'REFRI CAÇULINHA SODA 12X200ml', ML: 200, brand: 'CAÇULINHA' },
+            { id: 199, PRODUTO: 'REFRI CAÇULINHA SODA 12X200ml', ML: 200, bank: 'CAÇULINHA' },
             { id: 232, PRODUTO: 'CERV LAGER HEINEKEN LN 6X330ml', ML: 330, brand: 'HEINEKEN' },
             { id: 233, PRODUTO: 'CERV LAGER HEINEKEN LN 6X330ml', ML: 330, brand: 'HEINEKEN' },
             { id: 265, PRODUTO: 'CERVEJA KAISER 12X473ml', ML: 473, brand: 'KAISER' },
@@ -528,7 +589,6 @@
             const volume = volumeMatch ? parseInt(volumeMatch[1]) : null;
             const isLiter = volumeMatch && /L|LT|LTR|LTRO|LITRO/i.test(volumeMatch[2]);
 
-            // Exact brand match
             if (normalizedText.includes(normalizeText(matchedProduct.brand))) {
                 score += 200;
             } else {
@@ -539,24 +599,21 @@
                 });
             }
 
-            // Specific descriptors for Heineken variants
             const descriptors = ['ZERO', 'ALC', 'ÁLCOOL', 'LN', 'LONG NECK'];
             descriptors.forEach(desc => {
                 if (normalizedText.includes(desc) && normalizedProduct.includes(desc)) {
-                    score += 100; // Exact descriptor match
+                    score += 100;
                 } else if (normalizedText.includes(desc) !== normalizedProduct.includes(desc)) {
-                    score -= 50; // Penalize mismatch in critical descriptors
+                    score -= 50;
                 }
             });
 
-            // Keyword matches
             productWords.forEach(word => {
                 if (textWords.includes(word)) {
                     score += keywords.includes(word) ? 40 : 15;
                 }
             });
 
-            // Exact volume match
             if (volume) {
                 if (isLiter && matchedProduct.ML <= 2 && volume === matchedProduct.ML) {
                     score += 150;
@@ -566,17 +623,15 @@
                 if (knownVolumes.includes(volume)) score += 30;
             }
 
-            // Description similarity
             const similarity = productWords.filter(word => textWords.includes(word)).length / productWords.length;
             if (similarity >= 0.9) {
-                score += 100; // Near-exact match
+                score += 100;
             } else if (similarity >= 0.7) {
-                score += 50; // High similarity
+                score += 50;
             } else if (similarity >= 0.5) {
-                score += 30; // Moderate similarity
+                score += 30;
             }
 
-            // Ensure 100% confidence only for exact matches
             const isExactMatch = normalizedText.includes(normalizeText(matchedProduct.brand)) &&
                                  volume === matchedProduct.ML &&
                                  similarity >= 0.9 &&
@@ -689,13 +744,11 @@
                 const scores = [];
                 let hasPenalty = false;
 
-                // Score all products in the current database
                 currentDatabase.forEach(product => {
                     const normalizedProduct = normalizeText(product.PRODUTO);
                     const productWords = normalizedProduct.split(' ');
                     let score = 0;
 
-                    // Brand match
                     if (normalizedText.includes(normalizeText(product.brand))) {
                         score += 200;
                     } else {
@@ -706,26 +759,23 @@
                         });
                     }
 
-                    // Specific descriptors for Heineken variants
                     const descriptors = ['ZERO', 'ALC', 'ÁLCOOL', 'LN', 'LONG NECK'];
                     descriptors.forEach(desc => {
                         if (normalizedText.includes(desc) && normalizedProduct.includes(desc)) {
                             score += 100;
                         } else if (normalizedText.includes(desc) !== normalizedProduct.includes(desc)) {
-                            score -= 50; // Penalize mismatch
+                            score -= 50;
                             penalizedIds.add(product.id);
                             hasPenalty = true;
                         }
                     });
 
-                    // Keyword matches
                     productWords.forEach(word => {
                         if (textWords.includes(word)) {
                             score += keywords.includes(word) ? 40 : 15;
                         }
                     });
 
-                    // Volume match
                     if (volume) {
                         if (isLiter && product.ML <= 2 && volume === product.ML) {
                             score += 150;
@@ -735,7 +785,6 @@
                         if (knownVolumes.includes(volume)) score += 30;
                     }
 
-                    // Description similarity
                     const similarity = productWords.filter(word => textWords.includes(word)).length / productWords.length;
                     if (similarity >= 0.9) {
                         score += 100;
@@ -748,7 +797,6 @@
                     scores.push({ product: product.PRODUTO, id: product.id, score, similarity: similarity.toFixed(2) });
                 });
 
-                // Sort scores and check for close matches
                 scores.sort((a, b) => b.score - a.score);
                 console.log(`Iteração ${iteration + 1} Scores:`, scores);
                 console.log(`Penalizados:`, Array.from(penalizedIds));
@@ -757,14 +805,12 @@
                     bestMatch = currentDatabase.find(p => normalizeText(p.PRODUTO) === normalizeText(scores[0].product));
                     highestScore = scores[0].score;
 
-                    // Check if top match is valid and not ambiguous
                     if (highestScore >= 100 && (!hasPenalty || scores[0].score - (scores[1]?.score || 0) >= 5)) {
                         console.log(`Melhor correspondência encontrada na iteração ${iteration + 1}:`, bestMatch);
                         return bestMatch;
                     }
                 }
 
-                // Filter out penalized products and retry
                 currentDatabase = currentDatabase.filter(p => !penalizedIds.has(p.id));
                 iteration++;
             }
@@ -787,7 +833,7 @@
 
         function ConfidenceBar({ confidence, emoji, label }) {
             return (
-                <div className="animate-[slideIn_0.8s_ease-out]">
+                <div className="animate-[slideIn_0.6s_ease-out]">
                     <div className="confidence-bar">
                         <div className="confidence-fill" style={{ width: `${confidence}%` }}></div>
                     </div>
@@ -807,7 +853,8 @@
                 success: false,
                 successMessage: '',
                 priceDetected: false,
-                progress: 0
+                progress: 0,
+                beerImageUrl: ''
             });
             const imageRef = React.useRef(null);
 
@@ -842,6 +889,26 @@
                     drawTextBoundingBoxes(imageRef.current, state.ocrResults.ocrspace.result.words);
                 }
             }, [state.ocrResults]);
+
+            React.useEffect(() => {
+                if (state.ocrResults.ocrspace?.result?.id) {
+                    const fetchBeerImage = async () => {
+                        try {
+                            const response = await retryOperation(() =>
+                                axios.get(
+                                    `https://api.baserow.io/api/database/rows/table/322640/${state.ocrResults.ocrspace.result.id}/?user_field_names=true`,
+                                    { headers: { Authorization: "Token UkqZsuMMnwE59fMqs8OwXX60SASP7FOd" } }
+                                )
+                            );
+                            updateState({ beerImageUrl: response.data['IMAGEM URL'] || '' });
+                        } catch (err) {
+                            console.error('Erro ao buscar imagem do produto:', err.message);
+                            updateState({ beerImageUrl: '' });
+                        }
+                    };
+                    fetchBeerImage();
+                }
+            }, [state.ocrResults.ocrspace?.result?.id]);
 
             const processImage = async (url) => {
                 updateState({ loading: true, error: null, progress: 0 });
@@ -924,13 +991,13 @@
                                 if (results.ocrspace.result.price !== 'R$ 0,00') {
                                     updateState({ priceDetected: true });
                                     confetti({ 
-                                        particleCount: 250, 
-                                        spread: 100, 
+                                        particleCount: 150, 
+                                        spread: 70, 
                                         origin: { y: 0.6 },
-                                        colors: ['#3b82f6', '#a855f7', '#ffffff'],
-                                        ticks: 350
+                                        colors: ['#2563eb', '#7c3aed', '#ffffff'],
+                                        ticks: 250
                                     });
-                                    setTimeout(() => updateState({ priceDetected: false }), 2500);
+                                    setTimeout(() => updateState({ priceDetected: false }), 1800);
                                 }
                             } catch (err) {
                                 console.error('Erro no OCR.Space:', err.message, 'Resposta:', err.response?.data);
@@ -980,13 +1047,13 @@
                         editPrice: false
                     });
                     confetti({ 
-                        particleCount: 250, 
-                        spread: 100, 
+                        particleCount: 150, 
+                        spread: 70, 
                         origin: { y: 0.6 },
-                        colors: ['#3b82f6', '#a855f7', '#ffffff'],
-                        ticks: 350
+                        colors: ['#2563eb', '#7c3aed', '#ffffff'],
+                        ticks: 250
                     });
-                    setTimeout(() => updateState({ priceDetected: false }), 2500);
+                    setTimeout(() => updateState({ priceDetected: false }), 1800);
                 }
             };
 
@@ -1006,13 +1073,13 @@
                         successMessage: `PRODUTO ${result.product} FOI ENVIADO COM SUCESSO PARA BANCO DE DADOS NO VALOR DE ${result.price}`
                     });
                     confetti({ 
-                        particleCount: 400, 
-                        spread: 120, 
+                        particleCount: 250, 
+                        spread: 90, 
                         origin: { y: 0.5 }, 
                         colors: ['#22c55e', '#10b981', '#ffffff'],
-                        ticks: 600
+                        ticks: 450
                     });
-                    setTimeout(() => updateState({ success: false, successMessage: '' }), 6500);
+                    setTimeout(() => updateState({ success: false, successMessage: '' }), 5000);
                 } catch (err) {
                     const errorMessage = err.response?.status === 401
                         ? 'Erro de autenticação: Token inválido ou expirado. Gere um novo token no Baserow e atualize o código.'
@@ -1025,20 +1092,25 @@
             };
 
             return (
-                <div className="w-full max-w-[440px] mx-auto p-6 flex flex-col gap-5">
-                    <header className="header text-center animate-[fadeIn_0.8s_ease-out]">
-                        <h1 className="text-3xl font-bold text-white flex items-center justify-center" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                            <svg className="icon mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
-                            OCR Cordeiro
-                        </h1>
+                <div className="w-full max-w-[320px] mx-auto p-3 flex flex-col gap-3">
+                    <header className="header text-center animate-[fadeIn_0.6s_ease-out]">
+                        {state.beerImageUrl && state.ocrResults.ocrspace?.result && !state.ocrResults.ocrspace.result.error ? (
+                            <div className="flex flex-col items-center">
+                                <div className="beer-image-container relative">
+                                    <img src={state.beerImageUrl} alt="Produto Identificado" />
+                                </div>
+                                <hr className="separator" />
+                                <p className="product-description">{state.ocrResults.ocrspace.result.product}</p>
+                            </div>
+                        ) : (
+                            <div className="h-8"></div>
+                        )}
                     </header>
 
-                    <main className="p-6 flex flex-col gap-6">
+                    <main className="p-3 flex flex-col gap-3">
                         {state.loading && (
-                            <div className="flex flex-col items-center gap-4 animate-[fadeIn_0.8s_ease-out]">
-                                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-purple-400"></div>
+                            <div className="flex flex-col items-center gap-2 animate-[fadeIn_0.6s_ease-out]">
+                                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-blue-400"></div>
                                 <div className="progress-bar w-full">
                                     <div className="progress-fill" style={{ width: `${state.progress}%` }}></div>
                                 </div>
@@ -1046,7 +1118,7 @@
                         )}
 
                         {state.error && (
-                            <div className="warning-modal text-white flex items-center justify-center gap-3 animate-[fadeIn_0.8s_ease-out]">
+                            <div className="warning-modal text-white flex items-center justify-center gap-2 animate-[fadeIn_0.6s_ease-out]">
                                 <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
@@ -1071,51 +1143,51 @@
                                 {state.loading && <div className="scanning-overlay"></div>}
                             </div>
                         ) : (
-                            <div className="bg-gray-900/50 p-4 rounded text-center animate-[fadeIn_0.8s_ease-out]">Sem imagem</div>
+                            <div className="bg-gray-900/50 p-2 rounded text-center animate-[fadeIn_0.6s_ease-out]">Sem imagem</div>
                         )}
 
                         {state.ocrResults.ocrspace?.result && (
-                            <div className="bg-gray-900/50 p-6 rounded flex flex-col gap-5 animate-[fadeIn_0.8s_ease-out]">
+                            <div className="bg-gray-900/50 p-3 rounded flex flex-col gap-3 animate-[fadeIn_0.6s_ease-out]">
                                 {state.ocrResults.ocrspace.result.error ? (
                                     <div className="text-red-300">{state.ocrResults.ocrspace.result.error}</div>
                                 ) : (
                                     <>
                                         <p className="product-label flex items-center gap-2">
-                                            <svg className="icon text-purple-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <svg className="icon text-blue-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                                             </svg>
-                                            <strong className="text-purple-300 font-medium">Produto:</strong> 
-                                            <span className="animate-[glow_2s_infinite_ease-in-out]">{state.ocrResults.ocrspace.result.product}</span>
+                                            <strong className="text-blue-300 font-medium">Produto:</strong> 
+                                            <span className="animate-[glow_1.6s_infinite_ease-in-out]">{state.ocrResults.ocrspace.result.product}</span>
                                         </p>
                                         <p className="flex items-center gap-2">
-                                            <svg className="icon text-purple-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <svg className="icon text-blue-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                             </svg>
-                                            <strong className="text-purple-300 font-medium">Volume:</strong> 
-                                            <span className="animate-[glow_2s_infinite_ease-in-out]">{state.ocrResults.ocrspace.result.volume ? formatVolume(state.ocrResults.ocrspace.result.volume) : 'N/A'}</span>
+                                            <strong className="text-blue-300 font-medium">Volume:</strong> 
+                                            <span className="animate-[glow_1.6s_infinite_ease-in-out]">{state.ocrResults.ocrspace.result.volume ? formatVolume(state.ocrResults.ocrspace.result.volume) : 'N/A'}</span>
                                         </p>
-                                        <div className="price-label flex items-center gap-4">
+                                        <div className="price-label flex items-center gap-2">
                                             <div className="flex items-center gap-2">
-                                                <svg className="icon text-purple-333" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                <svg className="icon text-blue-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                 </svg>
-                                                <strong className="text-purple-300 font-medium">Preço:</strong>
+                                                <strong className="text-blue-300 font-medium">Preço:</strong>
                                             </div>
                                             {state.editPrice ? (
-                                                <div className="flex gap-3">
+                                                <div className="flex gap-2">
                                                     <input
                                                         type="text"
                                                         value={state.newPrice}
                                                         onChange={(e) => updateState({ newPrice: e.target.value })}
-                                                        className="text-white px-4 py-2 rounded text-sm w-28"
+                                                        className="text-white px-2 py-1 rounded text-sm w-20"
                                                         placeholder="0,00"
                                                     />
-                                                    <button onClick={handlePriceChange} className="neon-button text-white px-4 py-2 rounded text-sm">OK</button>
+                                                    <button onClick={handlePriceChange} className="neon-button text-white px-2 py-1 rounded text-sm">OK</button>
                                                 </div>
                                             ) : (
-                                                <div className="flex gap-4 items-center">
-                                                    <span className="text-xl font-medium animate-[glow_2s_infinite_ease-in-out]">{state.ocrResults.ocrspace.result.price}</span>
-                                                    <button onClick={() => updateState({ editPrice: true })} className="text-purple-400 text-sm hover:underline">Editar</button>
+                                                <div className="flex gap-2 items-center">
+                                                    <span className="text-base font-medium animate-[glow_1.6s_infinite_ease-in-out]">{state.ocrResults.ocrspace.result.price}</span>
+                                                    <button onClick={() => updateState({ editPrice: true })} className="text-blue-400 text-sm hover:underline">Editar</button>
                                                 </div>
                                             )}
                                         </div>
@@ -1131,7 +1203,7 @@
                                 className="neon-button text-white flex items-center justify-center"
                                 disabled={state.loading || !state.ocrResults.ocrspace?.result?.price || state.ocrResults.ocrspace.result.price === 'R$ 0,00'}
                             >
-                                <svg className="icon mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <svg className="icon mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                                 Enviar Preço
