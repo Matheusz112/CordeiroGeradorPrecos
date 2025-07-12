@@ -7,37 +7,24 @@
     <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios@1.7.7/dist/axios.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.25.6/babel.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-color: #F7FAFC;
-            --text-color: #1A202C;
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --button-bg: #1E90FF;
-            --button-text: #FFFFFF;
-            --accent: #B3E5FC;
-            --glow: rgba(30, 144, 255, 0.7);
-            --highlight: #FFD700;
-            --holo-gradient: linear-gradient(135deg, rgba(30, 144, 255, 0.3), rgba(255, 215, 0, 0.3));
-        }
-
         body {
-            background: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0;
+            color: #e2e8f0;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 0.85rem;
+            line-height: 1.4;
             overflow-x: hidden;
-            letter-spacing: 0.02em;
+            position: relative;
         }
-
         canvas#particle-bg {
             position: fixed;
             top: 0;
@@ -47,405 +34,344 @@
             z-index: -1;
             pointer-events: none;
         }
-
-        .container {
-            max-width: 380px;
-            width: 100%;
-            padding: 1.5rem;
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 10px 30px var(--glow);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.5s ease;
-            animation: float 6s ease-in-out infinite;
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.3), transparent);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+            animation: float 7s infinite ease-in-out;
+            pointer-events: none;
         }
-
+        .bubble:nth-child(1) { width: 50px; height: 50px; top: 15%; left: 15%; animation-duration: 6s; }
+        .bubble:nth-child(2) { width: 40px; height: 40px; top: 55%; left: 75%; animation-duration: 8s; }
+        .bubble:nth-child(3) { width: 45px; height: 45px; top: 65%; left: 25%; animation-duration: 7s; }
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            0% { transform: translateY(0) translateX(0); opacity: 0.5; }
+            50% { transform: translateY(-40px) translateX(8px); opacity: 0.8; }
+            100% { transform: translateY(0) translateX(0); opacity: 0.5; }
         }
-
         .image-container {
-            position: relative;
-            height: 180px;
+            height: 140px;
             overflow: hidden;
-            border-radius: 16px;
-            box-shadow: 0 8px 24px var(--glow), 0 4px 12px rgba(0, 0, 0, 0.2);
-            background: radial-gradient(circle, var(--accent) 10%, transparent 70%);
-            border: 3px solid transparent;
-            background-clip: padding-box;
-            animation: neonPulse 2.5s infinite ease-in-out;
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5), 0 0 15px rgba(59, 130, 246, 0.3);
+            background: transparent;
+            transition: box-shadow 0.3s ease;
+            animation: fadeIn 0.8s ease-out;
         }
-
         .image-container:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 12px 40px var(--glow), 0 6px 20px rgba(0, 0, 0, 0.3);
-            animation: neonBurst 0.5s ease-in-out;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6), 0 0 20px rgba(59, 130, 246, 0.4);
         }
-
-        @keyframes neonPulse {
-            0%, 100% { border-color: var(--holo-gradient); box-shadow: 0 0 15px var(--glow); }
-            50% { border-color: var(--highlight); box-shadow: 0 0 25px var(--glow); }
-        }
-
-        @keyframes neonBurst {
-            0% { box-shadow: 0 0 15px var(--glow); }
-            50% { box-shadow: 0 0 40px var(--glow), 0 0 60px var(--highlight); }
-            100% { box-shadow: 0 0 15px var(--glow); }
-        }
-
         .image-container img {
             width: 100%;
-            height: 100%;
+            height: auto;
             object-fit: contain;
             object-position: center;
-            filter: brightness(1.05) contrast(1.1) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-            transition: filter 0.5s ease;
-            animation: shimmer 4s infinite linear;
-            position: relative;
-            z-index: 1;
         }
-
-        @keyframes shimmer {
-            0% { filter: brightness(1.05) contrast(1.1); }
-            50% { filter: brightness(1.15) contrast(1.2); }
-            100% { filter: brightness(1.05) contrast(1.1); }
-        }
-
-        .image-container::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: shimmerOverlay 3s infinite linear;
-            z-index: 2;
-        }
-
-        @keyframes shimmerOverlay {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-
         .scanning-overlay::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent, var(--highlight) 50%, transparent);
-            animation: scanWave 1.5s infinite linear;
-            z-index: 3;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #60a5fa, transparent);
+            animation: scanWave 0.9s infinite ease-in-out;
         }
-
         @keyframes scanWave {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
+            0% { transform: translateY(0); opacity: 0.6; }
+            50% { transform: translateY(140px); opacity: 0.9; }
+            100% { transform: translateY(0); opacity: 0.6; }
         }
-
+        .icon {
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+        }
         .neon-button {
-            background: var(--button-bg);
-            color: var(--button-text);
-            padding: 12px 28px;
-            border-radius: 10px;
-            font-weight: 500;
-            font-size: 0.95rem;
+            background: linear-gradient(45deg, #2563eb, #7c3aed);
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.7), 0 0 16px rgba(124, 58, 237, 0.5);
             transition: all 0.3s ease;
-            box-shadow: 0 0 15px var(--glow);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            animation: pulse 2s infinite;
+            border-radius: 8px;
+            padding: 10px 24px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            animation: pulse 1.8s infinite ease-in-out;
+            backdrop-filter: blur(3px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
-
         .neon-button:hover:not(:disabled) {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px var(--glow);
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.9), 0 0 20px rgba(124, 58, 237, 0.7);
+            transform: scale(1.03);
         }
-
         .neon-button:disabled {
-            background: #4B5563;
+            background: #4b5563;
             box-shadow: none;
             cursor: not-allowed;
         }
-
         @keyframes pulse {
-            0% { box-shadow: 0 0 15px var(--glow); }
-            50% { box-shadow: 0 0 30px var(--glow); }
-            100% { box-shadow: 0 0 15px var(--glow); }
+            0% { box-shadow: 0 0 8px rgba(59, 130, 246, 0.7), 0 0 16px rgba(124, 58, 237, 0.5); }
+            50% { box-shadow: 0 0 12px rgba(59, 130, 246, 0.9), 0 0 20px rgba(124, 58, 237, 0.7); }
+            100% { box-shadow: 0 0 8px rgba(59, 130, 246, 0.7), 0 0 16px rgba(124, 58, 237, 0.5); }
         }
-
         .success-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #10B981, #047857);
+            background: linear-gradient(135deg, #10b981, #047857);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            animation: popIn 0.8s ease-out, fadeOut 0.8s ease-out 4.5s forwards;
+            animation: popIn 0.7s ease-out, fadeOut 0.7s ease-out 4.5s forwards;
             z-index: 1000;
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
         }
-
         .success-overlay h2 {
-            font-size: 2rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
             font-weight: 700;
-            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
             animation: waveText 0.9s ease-out;
         }
-
         .success-overlay p {
-            font-size: 1rem;
-            margin-top: 1rem;
-            max-width: 85%;
+            font-size: 0.95rem;
+            font-weight: 400;
+            margin-top: 0.8rem;
+            max-width: 90%;
             text-align: center;
-            animation: waveText 0.9s ease-out 0.3s;
+            animation: waveText 0.9s ease-out 0.2s;
         }
-
         .checkmark {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            stroke-width: 2.5;
+            stroke-width: 2.2;
             stroke: #fff;
-            animation: fill 0.5s ease-in-out 0.5s forwards, scale 0.4s ease-in-out 1s both;
+            stroke-miterlimit: 10;
+            animation: fill 0.4s ease-in-out 0.4s forwards, scale 0.3s ease-in-out 0.9s both;
         }
-
         .checkmark__circle {
             stroke-dasharray: 166;
             stroke-dashoffset: 166;
-            stroke-width: 2.5;
-            stroke: #22C55E;
+            stroke-width: 2.2;
+            stroke: #22c55e;
             fill: none;
-            animation: stroke 0.7s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
         }
-
         .checkmark__check {
             transform-origin: 50% 50%;
             stroke-dasharray: 48;
             stroke-dashoffset: 48;
-            animation: stroke 0.4s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.7s forwards;
         }
-
         @keyframes stroke {
             100% { stroke-dashoffset: 0; }
         }
-
         @keyframes scale {
             0%, 100% { transform: none; }
-            50% { transform: scale3d(1.3, 1.3, 1); }
+            50% { transform: scale3d(1.2, 1.2, 1); }
         }
-
         @keyframes fill {
-            100% { box-shadow: inset 0px 0px 0px 50px #22C55E; }
+            100% { box-shadow: inset 0px 0px 0px 40px #22c55e; }
         }
-
         @keyframes popIn {
-            0% { transform: scale(0.6); opacity: 0; }
+            0% { transform: scale(0.7); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
-
         @keyframes waveText {
-            0% { transform: translateY(20px); opacity: 0; }
+            0% { transform: translateY(15px); opacity: 0; }
             100% { transform: translateY(0); opacity: 1; }
         }
-
         @keyframes fadeOut {
             0% { opacity: 1; }
             100% { opacity: 0; }
         }
-
+        @keyframes glow {
+            0% { text-shadow: 0 0 3px rgba(59, 130, 246, 0.5); }
+            50% { text-shadow: 0 0 10px rgba(59, 130, 246, 0.8); }
+            100% { text-shadow: 0 0 3px rgba(59, 130, 246, 0.5); }
+        }
         .progress-bar {
-            height: 8px;
-            background: rgba(0, 0, 0, 0.15);
-            border-radius: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 5px;
             overflow: hidden;
         }
-
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--highlight), var(--button-bg));
-            transition: width 0.4s ease;
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            transition: width 0.3s ease;
         }
-
         .confidence-bar {
-            height: 10px;
-            background: rgba(0, 0, 0, 0.15);
-            border-radius: 6px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 5px;
             overflow: hidden;
+            animation: slideIn 0.6s ease-out;
         }
-
         .confidence-fill {
             height: 100%;
-            background: linear-gradient(to right, #EF4444, #FACC15, #22C55E);
-            transition: width 0.4s ease;
+            background: linear-gradient(to right, #ef4444, #facc15, #22c55e);
+            transition: width 0.3s ease;
         }
-
         .confidence-label {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
+            color: #e2e8f0;
             text-align: center;
-            margin-top: 8px;
+            margin-top: 6px;
             font-weight: 400;
+            animation: glow 1.6s infinite ease-in-out;
         }
-
         .warning-modal {
-            background: rgba(239, 68, 68, 0.95);
-            border-radius: 10px;
-            padding: 12px;
+            animation: popIn 0.4s ease-out;
+            background: rgba(220, 38, 38, 0.9);
+            border-radius: 8px;
+            padding: 10px;
             text-align: center;
-            box-shadow: 0 6px 15px var(--glow);
-            backdrop-filter: blur(5px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(3px);
         }
-
         .text-bbox-canvas {
             position: absolute;
             top: 0;
             left: 0;
             pointer-events: none;
         }
-
-        .header {
+        main {
+            background: rgba(17, 24, 39, 0.85);
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
             padding: 1rem;
-            text-align: center;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.6s ease-out;
         }
-
+        select, input {
+            background: rgba(31, 41, 55, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            color: #e2e8f0;
+            padding: 6px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        select:focus, input:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 8px rgba(124, 58, 237, 0.5);
+        }
+        .header {
+            background: transparent;
+            padding: 0.8rem;
+            margin: -1rem -1rem 0.8rem;
+        }
         .product-label, .price-label {
-            animation: slideIn 0.7s ease-out;
+            animation: slideIn 0.6s ease-out;
         }
-
         .beer-image-container {
-            width: 140px;
-            height: 140px;
+            width: 120px;
+            height: 120px;
             position: relative;
             margin: 0 auto;
-            border-radius: 16px;
+            border-radius: 14px;
             overflow: hidden;
-            background: radial-gradient(circle, var(--accent) 10%, transparent 70%);
-            border: 3px solid transparent;
-            background-clip: padding-box;
-            box-shadow: 0 6px 20px var(--glow);
-            animation: neonPulse 2.5s infinite ease-in-out, rotateAura 8s infinite linear;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: transparent;
+            animation: bounce 2s infinite ease-in-out;
         }
-
-        .beer-image-container:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 30px var(--glow);
-            animation: neonBurst 0.5s ease-in-out;
-        }
-
         .beer-image-container img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             object-position: center;
-            filter: brightness(1.05) contrast(1.1) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-            transition: filter 0.3s ease, transform 0.5s ease;
-            animation: popInImage 0.8s ease-out;
         }
-
-        @keyframes popInImage {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
         }
-
-        @keyframes rotateAura {
-            0% { border-color: var(--holo-gradient); }
-            50% { border-color: var(--highlight); }
-            100% { border-color: var(--holo-gradient); }
-        }
-
         .product-description {
-            font-size: 0.8rem;
-            color: var(--text-color);
-            opacity: 0.85;
+            font-size: 0.7rem;
+            color: #94a3b8;
             text-align: center;
-            margin-top: 10px;
+            margin-top: 6px;
+            animation: slideIn 0.6s ease-out;
         }
-
         .separator {
             border: 0;
-            height: 1.5px;
-            background: linear-gradient(to right, transparent, var(--highlight), transparent);
-            margin: 10px 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #60a5fa, transparent);
+            margin: 6px 0;
         }
-
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(12px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
         @keyframes slideIn {
-            0% { opacity: 0; transform: translateX(-15px); }
+            0% { opacity: 0; transform: translateX(-12px); }
             100% { opacity: 1; transform: translateX(0); }
         }
-
         @media (max-width: 640px) {
-            .container {
-                padding: 1.2rem;
+            body {
+                font-size: 0.8rem;
             }
             .image-container {
-                height: 160px;
-            }
-            .neon-button {
-                padding: 10px 24px;
-                font-size: 0.9rem;
-            }
-            .success-overlay h2 {
-                font-size: 1.8rem;
-            }
-            .success-overlay p {
-                font-size: 0.95rem;
-            }
-            .checkmark {
-                width: 80px;
-                height: 80px;
-            }
-            .beer-image-container {
-                width: 120px;
                 height: 120px;
             }
+            .neon-button {
+                padding: 8px 20px;
+                font-size: 0.85rem;
+            }
+            .success-overlay h2 {
+                font-size: 1.6rem;
+            }
+            .success-overlay p {
+                font-size: 0.9rem;
+            }
+            .checkmark {
+                width: 70px;
+                height: 70px;
+            }
+            .beer-image-container {
+                width: 100px;
+                height: 100px;
+            }
             .product-description {
-                font-size: 0.75rem;
+                font-size: 0.65rem;
             }
         }
     </style>
 </head>
 <body>
     <canvas id="particle-bg"></canvas>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
     <div id="root"></div>
     <script>
-        // Particle background with orbiting effect
+        // Particle background
         const canvas = document.getElementById('particle-bg');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
         const particles = [];
-        for (let i = 0; i < 80; i++) {
+        for (let i = 0; i < 60; i++) {
             particles.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
-                radius: Math.random() * 1.5 + 0.8,
-                speed: Math.random() * 0.4 + 0.2,
-                angle: Math.random() * Math.PI * 2
+                radius: Math.random() * 1.2 + 0.7,
+                speed: Math.random() * 0.3 + 0.1
             });
         }
 
-        ctx.fillStyle = 'rgba(30, 144, 255, 0.6)';
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
             particles.forEach(p => {
-                p.angle += p.speed * 0.01;
-                p.x += Math.cos(p.angle) * p.speed;
-                p.y += Math.sin(p.angle) * p.speed;
-                if (p.x < 0) p.x += canvas.width;
-                if (p.x > canvas.width) p.x -= canvas.width;
-                if (p.y < 0) p.y += canvas.height;
-                if (p.y > canvas.height) p.y -= canvas.height;
+                p.y += p.speed;
+                if (p.y > canvas.height) p.y = 0;
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
                 ctx.fill();
@@ -459,20 +385,10 @@
             canvas.height = window.innerHeight;
         });
 
-        // Initialize Tilt.js
-        document.addEventListener('DOMContentLoaded', () => {
-            VanillaTilt.init(document.querySelectorAll('.image-container, .beer-image-container, .container'), {
-                max: 6,
-                speed: 800,
-                glare: true,
-                'max-glare': 0.3
-            });
-        });
-
         window.addEventListener('error', (event) => {
             console.error('Erro global:', event.message, event.filename, event.lineno, event.colno, event.error?.stack || 'No stack trace');
             document.getElementById('root').innerHTML = `
-                <div className="bg-red-900/50 text-red-300 p-4 rounded text-center">
+                <div class="bg-red-900/50 text-red-300 p-4 rounded text-center">
                     Erro crítico: ${event.message}. Verifique o console.
                 </div>
             `;
@@ -512,104 +428,24 @@
             container.appendChild(canvas);
 
             ctx.strokeStyle = 'red';
-            ctx.lineWidth = 2.5;
-            ctx.shadowColor = 'rgba(255, 0, 0, 0.5)';
-            ctx.shadowBlur = 8;
-
-            const volumeRegex = /(\d+)(ML|L|LT|LTR|LTRO|LITRO)/i;
-            const processedWords = [];
-
+            ctx.lineWidth = 2;
             words.forEach(word => {
-                const volumeMatch = word.text.match(volumeRegex);
-                if (volumeMatch) {
-                    processedWords.push({
-                        text: word.text,
-                        confidence: word.confidence || 50,
-                        bbox: word.bbox,
-                        isVolume: true
-                    });
-                } else {
-                    const concatenatedMatch = word.text.match(/^(.*?[A-Z])(\d+)(ML|L|LT|LTR|LTRO|LITRO)$/i);
-                    if (concatenatedMatch) {
-                        const brandPart = concatenatedMatch[1];
-                        const volumePart = `${concatenatedMatch[2]}${concatenatedMatch[3]}`;
-                        const brandWidth = (brandPart.length / word.text.length) * (word.bbox.x1 - word.bbox.x0);
-                        const volumeWidth = (volumePart.length / word.text.length) * (word.bbox.x1 - word.bbox.x0);
-
-                        processedWords.push({
-                            text: brandPart,
-                            confidence: word.confidence || 50,
-                            bbox: {
-                                x0: word.bbox.x0,
-                                y0: word.bbox.y0,
-                                x1: word.bbox.x0 + brandWidth,
-                                y1: word.bbox.y1
-                            },
-                            isVolume: false
-                        });
-                        processedWords.push({
-                            text: volumePart,
-                            confidence: word.confidence || 50,
-                            bbox: {
-                                x0: word.bbox.x0 + brandWidth,
-                                y0: word.bbox.y0,
-                                x1: word.bbox.x1,
-                                y1: word.bbox.y1
-                            },
-                            isVolume: true
-                        });
-                    } else {
-                        processedWords.push({
-                            text: word.text,
-                            confidence: word.confidence || 50,
-                            bbox: word.bbox,
-                            isVolume: knownVolumes.includes(parseInt(word.text))
-                        });
-                    }
-                }
-            });
-
-            processedWords.forEach(word => {
                 if (word.bbox && word.confidence >= 50) {
+                    const { x0, y0, x1, y1 } = word.bbox;
+                    const isVolume = word.text.match(/(\d+)(ML|L|LT|LTR|LTRO|LITRO)/i) || knownVolumes.includes(parseInt(word.text));
                     const isPrice = word.text.match(/(R\$)?\s*\d+[,.]\d{2}/) || word.text.match(/\d+[,.]\d{2}/);
-                    ctx.strokeStyle = word.isVolume || isPrice ? '#22C55E' : 'red';
-                    ctx.shadowColor = word.isVolume || isPrice ? 'rgba(34, 197, 94, 0.6)' : 'rgba(255, 0, 0, 0.5)';
-                    ctx.lineWidth = word.isVolume || isPrice ? 3 : 2.5;
+
+                    if (isVolume || isPrice) {
+                        ctx.strokeStyle = '#22c55e';
+                        ctx.lineWidth = 2.5;
+                    } else {
+                        ctx.strokeStyle = 'red';
+                        ctx.lineWidth = 2;
+                    }
 
                     ctx.beginPath();
-                    ctx.rect(
-                        word.bbox.x0 * scaleX,
-                        word.bbox.y0 * scaleY,
-                        (word.bbox.x1 - word.bbox.x0) * scaleX,
-                        (word.bbox.y1 - word.bbox.y0) * scaleY
-                    );
+                    ctx.rect(x0 * scaleX, y0 * scaleY, (x1 - x0) * scaleX, (y1 - y0) * scaleY);
                     ctx.stroke();
-
-                    if (word.isVolume || isPrice) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = 'rgba(34, 197, 94, 0.4)';
-                        ctx.lineWidth = 6;
-                        ctx.rect(
-                            word.bbox.x0 * scaleX - 2,
-                            word.bbox.y0 * scaleY - 2,
-                            (word.bbox.x1 - word.bbox.x0) * scaleX + 4,
-                            (word.bbox.y1 - word.bbox.y0) * scaleY + 4
-                        );
-                        ctx.stroke();
-
-                        const rectCenterX = (word.bbox.x0 + (word.bbox.x1 - word.bbox.x0) / 2) * scaleX;
-                        const rectCenterY = (word.bbox.y0 + (word.bbox.y1 - word.bbox.y0) / 2) * scaleY;
-                        confetti({
-                            particleCount: 30,
-                            spread: 40,
-                            origin: {
-                                x: (rectCenterX + container.getBoundingClientRect().left) / window.innerWidth,
-                                y: (rectCenterY + container.getBoundingClientRect().top) / window.innerHeight
-                            },
-                            colors: ['#1E90FF', '#22C55E'],
-                            ticks: 100
-                        });
-                    }
                 }
             });
         }
@@ -628,13 +464,13 @@
             { id: 12, PRODUTO: 'CERVEJA LAGER AMSTEL 12X473ml', ML: 473, brand: 'AMSTEL' },
             { id: 13, PRODUTO: 'CERV HEINEKEN LT 12X473ml', ML: 473, brand: 'HEINEKEN' },
             { id: 14, PRODUTO: 'CERVEJA KAISER 12X473ml', ML: 473, brand: 'KAISER' },
-            { id: 15, PRODUTO: 'CERV PILSEN ANTARTICA 12X473ml', ML: 473, brand: 'ANTARCTICA' },
-            { id: 16, PRODUTO: 'CERV ANTARCTICA ORIGINAL 12X473ml', ML: 473, brand: 'ANTARCTICA' },
+            { id: 15, PRODUTO: 'CERV PILSEN ANTARTICA 12X473ml', ML: 473, brand: 'ANTARTICA' },
+            { id: 16, PRODUTO: 'CERV ANTARCTICA ORIGINAL 12X473ml', ML: 473, brand: 'ANTARTICA' },
             { id: 17, PRODUTO: 'CERVEJA BRAHMA 12X473ml', ML: 473, brand: 'BRAHMA' },
             { id: 18, PRODUTO: 'CERVEJA STELLA ARTOIS 12X473ml', ML: 473, brand: 'STELLA ARTOIS' },
-            { id: 19, PRODUTO: 'CERV P MALTE BOHEMIA 473ml', ML: 473, brand: 'BOHEMIA' },
+            { id: 19, PRODUTO: 'CERVEJA P MALTE BOHEMIA 473ml', ML: 473, brand: 'BOHEMIA' },
             { id: 20, PRODUTO: 'CERV P MALTE SPATEM LT 12X473ml', ML: 473, brand: 'SPATEM' },
-            { id: 21, PRODUTO: 'CERV ANTARCTICA SUB ZERO 473ml', ML: 473, brand: 'ANTARCTICA' },
+            { id: 21, PRODUTO: 'CERV ANTARCTICA SUB ZERO 473ml', ML: 473, brand: 'ANTARTICA' },
             { id: 22, PRODUTO: 'LEITE ITAMBÊ INTEGRAL 12X1L', ML: 1, brand: 'ITAMBÊ' },
             { id: 23, PRODUTO: 'LEITE ITAMBÊ DESNATADO 12X1L', ML: 1, brand: 'ITAMBÊ' },
             { id: 24, PRODUTO: 'LEITE ITAMBÊ SEMIDESNATADO 12X1L', ML: 1, brand: 'ITAMBÊ' },
@@ -667,7 +503,7 @@
             { id: 100, PRODUTO: 'CERV LAGER CORONA LN 6X330ml', ML: 330, brand: 'CORONA' },
             { id: 133, PRODUTO: 'CERV LAGER BUDWEISER LN 6X330ml', ML: 330, brand: 'BUDWEISER' },
             { id: 167, PRODUTO: 'CERV PILSEN LAUT 12X473ml', ML: 473, brand: 'LAUT' },
-            { id: 199, PRODUTO: 'REFRI CAÇULINHA SODA 12X200ml', ML: 200, brand: 'CAÇULINHA' },
+            { id: 199, PRODUTO: 'REFRI CAÇULINHA SODA 12X200ml', ML: 200, bank: 'CAÇULINHA' },
             { id: 232, PRODUTO: 'CERV LAGER HEINEKEN LN 6X330ml', ML: 330, brand: 'HEINEKEN' },
             { id: 233, PRODUTO: 'CERV LAGER HEINEKEN LN 6X330ml', ML: 330, brand: 'HEINEKEN' },
             { id: 265, PRODUTO: 'CERVEJA KAISER 12X473ml', ML: 473, brand: 'KAISER' },
@@ -698,7 +534,7 @@
             { prefix: 'EIS', brand: 'EISENBAHN', score: 100 },
             { prefix: 'AMS', brand: 'AMSTEL', score: 100 },
             { prefix: 'KAI', brand: 'KAISER', score: 100 },
-            { prefix: 'ANT', brand: 'ANTARCTICA', score: 100 },
+            { prefix: 'ANT', brand: 'ANTARTICA', score: 100 },
             { prefix: 'BOH', brand: 'BOHEMIA', score: 100 },
             { prefix: 'ITA', brand: 'ITAIPAVA', score: 100 },
             { prefix: 'SKO', brand: 'SKOL', score: 100 },
@@ -763,12 +599,12 @@
                 });
             }
 
-            const descriptors = ['ZERO', 'ALC', 'ÁLCOOL', 'LN', 'LONG NECK', 'ORIGINAL', 'PILSEN'];
+            const descriptors = ['ZERO', 'ALC', 'ÁLCOOL', 'LN', 'LONG NECK'];
             descriptors.forEach(desc => {
                 if (normalizedText.includes(desc) && normalizedProduct.includes(desc)) {
-                    score += desc === 'ORIGINAL' ? 200 : 100;
+                    score += 100;
                 } else if (normalizedText.includes(desc) !== normalizedProduct.includes(desc)) {
-                    score -= desc === 'ORIGINAL' ? 100 : 50;
+                    score -= 50;
                 }
             });
 
@@ -861,7 +697,7 @@
                 { wrong: /\bE1SENBAHN\b/gi, correct: 'EISENBAHN' },
                 { wrong: /\bAMST3L\b/gi, correct: 'AMSTEL' },
                 { wrong: /\bKA1SER\b/gi, correct: 'KAISER' },
-                { wrong: /\bANTART1CA\b/gi, correct: 'ANTARCTICA' },
+                { wrong: /\bANTART1CA\b/gi, correct: 'ANTARTICA' },
                 { wrong: /\bB0HEMIA\b/gi, correct: 'BOHEMIA' },
                 { wrong: /\bSK0L\b/gi, correct: 'SKOL' },
                 { wrong: /\b1TA1PAVA\b/gi, correct: 'ITAIPAVA' },
@@ -870,9 +706,7 @@
                 { wrong: /\bC0Q\b/gi, correct: 'COQ' },
                 { wrong: /\bC0R0TE\b/gi, correct: 'COROTE' },
                 { wrong: /\bLIMAO\b/gi, correct: 'LIMÃO' },
-                { wrong: /\b0LEO\b/gi, correct: 'ÓLEO' },
-                { wrong: /\bORIG\b(?=\s*ANTARCTICA)/gi, correct: 'ORIGINAL' },
-                { wrong: /\b(ANTARCTICA)(\d+)(ML|L|LT|LTR|LTRO|LITRO)\b/gi, correct: '$1 $2$3' }
+                { wrong: /\b0LEO\b/gi, correct: 'ÓLEO' }
             ];
             let corrected = text;
             corrections.forEach(({ wrong, correct }) => {
@@ -906,8 +740,6 @@
             const penalizedIds = new Set();
             let iteration = 0;
 
-            const isOriginalAntarctica = normalizedText.includes('ORIGINAL') || normalizedText.includes('ORIG');
-
             while (currentDatabase.length > 0 && iteration < 3) {
                 const scores = [];
                 let hasPenalty = false;
@@ -927,26 +759,16 @@
                         });
                     }
 
-                    const descriptors = ['ZERO', 'ALC', 'ÁLCOOL', 'LN', 'LONG NECK', 'ORIGINAL', 'PILSEN'];
+                    const descriptors = ['ZERO', 'ALC', 'ÁLCOOL', 'LN', 'LONG NECK'];
                     descriptors.forEach(desc => {
                         if (normalizedText.includes(desc) && normalizedProduct.includes(desc)) {
-                            score += desc === 'ORIGINAL' ? 200 : 100;
+                            score += 100;
                         } else if (normalizedText.includes(desc) !== normalizedProduct.includes(desc)) {
-                            score -= desc === 'ORIGINAL' ? 100 : 50;
+                            score -= 50;
                             penalizedIds.add(product.id);
                             hasPenalty = true;
                         }
                     });
-
-                    if (product.brand === 'ANTARCTICA' && volume === 473) {
-                        if (isOriginalAntarctica && product.id === 16) {
-                            score += 300;
-                        } else if (!isOriginalAntarctica && product.id === 15) {
-                            score += 250;
-                        } else {
-                            score -= 100;
-                        }
-                    }
 
                     productWords.forEach(word => {
                         if (textWords.includes(word)) {
@@ -970,10 +792,6 @@
                         score += 50;
                     } else if (similarity >= 0.5) {
                         score += 30;
-                    }
-
-                    if (normalizedText.includes('ANTARCTICA' + volume) && product.brand === 'ANTARCTICA') {
-                        score += 50;
                     }
 
                     scores.push({ product: product.PRODUTO, id: product.id, score, similarity: similarity.toFixed(2) });
@@ -1015,7 +833,7 @@
 
         function ConfidenceBar({ confidence, emoji, label }) {
             return (
-                <div className="animate-[slideIn_0.7s_ease-out]">
+                <div className="animate-[slideIn_0.6s_ease-out]">
                     <div className="confidence-bar">
                         <div className="confidence-fill" style={{ width: `${confidence}%` }}></div>
                     </div>
@@ -1083,15 +901,6 @@
                                 )
                             );
                             updateState({ beerImageUrl: response.data['IMAGEM URL'] || '' });
-                            if (response.data['IMAGEM URL']) {
-                                confetti({
-                                    particleCount: 50,
-                                    spread: 60,
-                                    origin: { y: 0.3 },
-                                    colors: ['#1E90FF', '#FFD700'],
-                                    ticks: 150
-                                });
-                            }
                         } catch (err) {
                             console.error('Erro ao buscar imagem do produto:', err.message);
                             updateState({ beerImageUrl: '' });
@@ -1182,13 +991,13 @@
                                 if (results.ocrspace.result.price !== 'R$ 0,00') {
                                     updateState({ priceDetected: true });
                                     confetti({ 
-                                        particleCount: 200, 
-                                        spread: 80, 
+                                        particleCount: 150, 
+                                        spread: 70, 
                                         origin: { y: 0.6 },
-                                        colors: ['#1E90FF', '#FFD700'],
-                                        ticks: 300
+                                        colors: ['#2563eb', '#7c3aed', '#ffffff'],
+                                        ticks: 250
                                     });
-                                    setTimeout(() => updateState({ priceDetected: false }), 2000);
+                                    setTimeout(() => updateState({ priceDetected: false }), 1800);
                                 }
                             } catch (err) {
                                 console.error('Erro no OCR.Space:', err.message, 'Resposta:', err.response?.data);
@@ -1238,13 +1047,13 @@
                         editPrice: false
                     });
                     confetti({ 
-                        particleCount: 200, 
-                        spread: 80, 
+                        particleCount: 150, 
+                        spread: 70, 
                         origin: { y: 0.6 },
-                        colors: ['#1E90FF', '#FFD700'],
-                        ticks: 300
+                        colors: ['#2563eb', '#7c3aed', '#ffffff'],
+                        ticks: 250
                     });
-                    setTimeout(() => updateState({ priceDetected: false }), 2000);
+                    setTimeout(() => updateState({ priceDetected: false }), 1800);
                 }
             };
 
@@ -1264,11 +1073,11 @@
                         successMessage: `PRODUTO ${result.product} FOI ENVIADO COM SUCESSO PARA BANCO DE DADOS NO VALOR DE ${result.price}`
                     });
                     confetti({ 
-                        particleCount: 300, 
-                        spread: 100, 
+                        particleCount: 250, 
+                        spread: 90, 
                         origin: { y: 0.5 }, 
-                        colors: ['#22C55E', '#10B981', '#FFD700'],
-                        ticks: 500
+                        colors: ['#22c55e', '#10b981', '#ffffff'],
+                        ticks: 450
                     });
                     setTimeout(() => updateState({ success: false, successMessage: '' }), 5000);
                 } catch (err) {
@@ -1283,11 +1092,11 @@
             };
 
             return (
-                <div className="container">
-                    <header className="header">
+                <div className="w-full max-w-[320px] mx-auto p-3 flex flex-col gap-3">
+                    <header className="header text-center animate-[fadeIn_0.6s_ease-out]">
                         {state.beerImageUrl && state.ocrResults.ocrspace?.result && !state.ocrResults.ocrspace.result.error ? (
                             <div className="flex flex-col items-center">
-                                <div className="beer-image-container">
+                                <div className="beer-image-container relative">
                                     <img src={state.beerImageUrl} alt="Produto Identificado" />
                                 </div>
                                 <hr className="separator" />
@@ -1298,87 +1107,22 @@
                         )}
                     </header>
 
-                    <main className="flex flex-col gap-5">
+                    <main className="p-3 flex flex-col gap-3">
                         {state.loading && (
-                            <div className="flex flex-col items-center gap-3">
+                            <div className="flex flex-col items-center gap-2 animate-[fadeIn_0.6s_ease-out]">
+                                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-blue-400"></div>
                                 <div className="progress-bar w-full">
                                     <div className="progress-fill" style={{ width: `${state.progress}%` }}></div>
                                 </div>
-                                <p className="text-sm animate-pulse">Processando imagem...</p>
                             </div>
                         )}
 
                         {state.error && (
-                            <div className="warning-modal">
-                                <p>{state.error}</p>
-                            </div>
-                        )}
-
-                        {state.imageUrl && !state.loading && (
-                            <div className="image-container">
-                                <img
-                                    src={state.imageUrl}
-                                    alt="Imagem para OCR"
-                                    ref={imageRef}
-                                    className={state.loading ? 'scanning-overlay' : ''}
-                                />
-                            </div>
-                        )}
-
-                        {state.ocrResults.ocrspace?.result && !state.ocrResults.ocrspace.result.error && (
-                            <div className="flex flex-col gap-4">
-                                <div className="flex flex-col gap-2">
-                                    <p className="product-label font-medium text-lg">
-                                        Produto: {state.ocrResults.ocrspace.result.product} ({formatVolume(state.ocrResults.ocrspace.result.volume)})
-                                    </p>
-                                    {state.editPrice ? (
-                                        <div className="flex items-center gap-2">
-                                            <input
-                                                type="text"
-                                                value={state.newPrice}
-                                                onChange={(e) => updateState({ newPrice: e.target.value })}
-                                                className="border rounded p-2 w-24 text-center bg-[var(--card-bg)] text-[var(--text-color)]"
-                                                placeholder="0,00"
-                                            />
-                                            <button
-                                                className="neon-button"
-                                                onClick={handlePriceChange}
-                                                disabled={state.loading || !state.newPrice}
-                                            >
-                                                Confirmar
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <p className="price-label font-medium text-lg">
-                                            Preço: {state.ocrResults.ocrspace.result.price}
-                                            <button
-                                                className="ml-2 text-[var(--button-bg)] underline"
-                                                onClick={() => updateState({ editPrice: true })}
-                                            >
-                                                Editar
-                                            </button>
-                                        </p>
-                                    )}
-                                    <ConfidenceBar
-                                        confidence={state.confidenceData.confidence}
-                                        emoji={state.confidenceData.emoji}
-                                        label={state.confidenceData.label}
-                                    />
-                                </div>
-
-                                {state.priceDetected && (
-                                    <div className="warning-modal">
-                                        <p>Preço detectado! Verifique antes de enviar.</p>
-                                    </div>
-                                )}
-
-                                <button
-                                    className="neon-button mt-2"
-                                    onClick={() => handleSubmit(state.ocrResults.ocrspace.result)}
-                                    disabled={state.loading || state.ocrResults.ocrspace.result.price === 'R$ 0,00'}
-                                >
-                                    Enviar Preço
-                                </button>
+                            <div className="warning-modal text-white flex items-center justify-center gap-2 animate-[fadeIn_0.6s_ease-out]">
+                                <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                {state.error}
                             </div>
                         )}
 
@@ -1388,9 +1132,82 @@
                                     <circle className="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
                                     <path className="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
                                 </svg>
-                                <h2>Sucesso!</h2>
-                                <p>{state.successMessage}</p>
+                                <h2 className="text-white">SUCESSO!</h2>
+                                <p className="text-white">{state.successMessage}</p>
                             </div>
+                        )}
+
+                        {state.imageUrl ? (
+                            <div className="image-container">
+                                <img src={state.imageUrl} alt="Produto" ref={imageRef} />
+                                {state.loading && <div className="scanning-overlay"></div>}
+                            </div>
+                        ) : (
+                            <div className="bg-gray-900/50 p-2 rounded text-center animate-[fadeIn_0.6s_ease-out]">Sem imagem</div>
+                        )}
+
+                        {state.ocrResults.ocrspace?.result && (
+                            <div className="bg-gray-900/50 p-3 rounded flex flex-col gap-3 animate-[fadeIn_0.6s_ease-out]">
+                                {state.ocrResults.ocrspace.result.error ? (
+                                    <div className="text-red-300">{state.ocrResults.ocrspace.result.error}</div>
+                                ) : (
+                                    <>
+                                        <p className="product-label flex items-center gap-2">
+                                            <svg className="icon text-blue-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                            </svg>
+                                            <strong className="text-blue-300 font-medium">Produto:</strong> 
+                                            <span className="animate-[glow_1.6s_infinite_ease-in-out]">{state.ocrResults.ocrspace.result.product}</span>
+                                        </p>
+                                        <p className="flex items-center gap-2">
+                                            <svg className="icon text-blue-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                            <strong className="text-blue-300 font-medium">Volume:</strong> 
+                                            <span className="animate-[glow_1.6s_infinite_ease-in-out]">{state.ocrResults.ocrspace.result.volume ? formatVolume(state.ocrResults.ocrspace.result.volume) : 'N/A'}</span>
+                                        </p>
+                                        <div className="price-label flex items-center gap-2">
+                                            <div className="flex items-center gap-2">
+                                                <svg className="icon text-blue-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                <strong className="text-blue-300 font-medium">Preço:</strong>
+                                            </div>
+                                            {state.editPrice ? (
+                                                <div className="flex gap-2">
+                                                    <input
+                                                        type="text"
+                                                        value={state.newPrice}
+                                                        onChange={(e) => updateState({ newPrice: e.target.value })}
+                                                        className="text-white px-2 py-1 rounded text-sm w-20"
+                                                        placeholder="0,00"
+                                                    />
+                                                    <button onClick={handlePriceChange} className="neon-button text-white px-2 py-1 rounded text-sm">OK</button>
+                                                </div>
+                                            ) : (
+                                                <div className="flex gap-2 items-center">
+                                                    <span className="text-base font-medium animate-[glow_1.6s_infinite_ease-in-out]">{state.ocrResults.ocrspace.result.price}</span>
+                                                    <button onClick={() => updateState({ editPrice: true })} className="text-blue-400 text-sm hover:underline">Editar</button>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <ConfidenceBar {...state.confidenceData} />
+                                    </>
+                                )}
+                            </div>
+                        )}
+
+                        {state.ocrResults.ocrspace?.result && !state.ocrResults.ocrspace.result.error && (
+                            <button
+                                onClick={() => handleSubmit(state.ocrResults.ocrspace.result)}
+                                className="neon-button text-white flex items-center justify-center"
+                                disabled={state.loading || !state.ocrResults.ocrspace?.result?.price || state.ocrResults.ocrspace.result.price === 'R$ 0,00'}
+                            >
+                                <svg className="icon mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Enviar Preço
+                            </button>
                         )}
                     </main>
                 </div>
