@@ -1,0 +1,348 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Acesso - Cordeiro Supermercado</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+        @media (max-width: 640px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+        .user-card {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .user-card > div {
+            flex: 1 1 auto;
+        }
+        .user-card button {
+            flex: 0 0 auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="sidebar fixed top-0 left-0 h-full w-64 bg-blue-800 text-white p-6 shadow-lg z-10">
+        <h1 class="text-2xl font-bold mb-8">Cordeiro Supermercado</h1>
+        <nav>
+            <ul>
+                <li class="mb-4"><a href="#" class="text-lg hover:text-blue-200">Gestão de Acesso</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 ml-64 p-6">
+        <header class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-4 px-6 rounded-lg shadow-md mb-8">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-semibold">Painel de Gestão de Acesso</h1>
+                <button id="toggle-sidebar" class="sm:hidden text-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Authorized Users -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold text-green-600 mb-4">Usuários Autorizados</h2>
+                <ul id="authorized-list" class="space-y-4"></ul>
+            </div>
+
+            <!-- Non-Authorized Users -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold text-red-600 mb-4">Usuários Não Autorizados</h2>
+                <ul id="non-authorized-list" class="space-y-4"></ul>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const BASE_URL = 'https://api.baserow.io/api/database/rows/table/221009/';
+        const TOKEN = 'UkqZsuMMnwE59fMqs8OwXX60SASP7FOd';
+        const MAILJET_API_KEY = '9c6abfc1f71a40d0bda6031254105f9d';
+        const MAILJET_API_SECRET = '57c059e8d6b016e8ffbd069662710a18';
+        const FROM_EMAIL = 'matheush2113@gmail.com';
+        const FROM_NAME = 'Cordeiro Supermercado';
+
+        // Função para retry de requisições
+        async function retryRequest(fn, retries = 3, delay = 1000) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    return await fn();
+                } catch (error) {
+                    if (i === retries - 1) throw error;
+                    console.warn(`Tentativa ${i + 1} falhou. Tentando novamente em ${delay}ms...`);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+        }
+
+        async function fetchAllRows(url = `${BASE_URL}?user_field_names=true`) {
+            let allResults = [];
+            while (url) {
+                try {
+                    const response = await retryRequest(() => axios.get(url, {
+                        headers: { 
+                            Authorization: `Token ${TOKEN}`,
+                            'Content-Type': 'application/json'
+                        },
+                        timeout: 10000
+                    }));
+                    allResults = allResults.concat(response.data.results);
+                    url = response.data.next;
+                } catch (error) {
+                    console.error('Erro ao buscar dados do Baserow:', {
+                        message: error.message,
+                        response: error.response?.data,
+                        status: error.response?.status
+                    });
+                    alert('Erro ao carregar usuários. Verifique o console para detalhes.');
+                    break;
+                }
+            }
+            return allResults;
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+        function displayUsers(users) {
+            const authorizedList = document.getElementById('authorized-list');
+            const nonAuthorizedList = document.getElementById('non-authorized-list');
+            authorizedList.innerHTML = '';
+            nonAuthorizedList.innerHTML = '';
+
+            users.forEach(user => {
+                const li = document.createElement('li');
+                li.className = `p-4 rounded-lg ${user.ACESSO ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'} border user-card`;
+                li.innerHTML = `
+                    <div>
+                        <span class="font-medium">Nome:</span> ${user.NOME} <br>
+                        <span class="font-medium">Usuário/Email:</span> ${user.USUARIO} <br>
+                        <span class="font-medium">Perfil:</span> ${user.PERFIL} <br>
+                        <span class="font-medium">Área:</span> ${user.AREA} <br>
+                        <span class="font-medium">Prateleira:</span> ${user.PRATELEIRA}
+                    </div>
+                `;
+
+                const button = document.createElement('button');
+                button.className = `px-4 py-2 rounded-lg text-white transition ${user.ACESSO ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'}`;
+                button.textContent = user.ACESSO ? 'Desautorizar' : 'Autorizar';
+                button.onclick = () => user.ACESSO ? deauthorizeUser(user.id, user.USUARIO, user.NOME) : authorizeUser(user.id, user.USUARIO, user.NOME);
+                li.appendChild(button);
+
+                if (user.ACESSO) {
+                    authorizedList.appendChild(li);
+                } else {
+                    nonAuthorizedList.appendChild(li);
+                }
+            });
+        }
+
+        async function authorizeUser(rowId, email, name) {
+            if (!validateEmail(email)) {
+                alert(`Erro: O campo USUARIO (${email}) não é um email válido. Por favor, atualize o campo no Baserow.`);
+                return;
+            }
+
+            try {
+                // Atualizar Baserow
+                console.log(`Tentando atualizar Baserow para rowId ${rowId} com ACESSO: true`);
+                const baserowResponse = await retryRequest(() => axios.patch(`${BASE_URL}${rowId}/?user_field_names=true`, 
+                    { ACESSO: true },
+                    { 
+                        headers: { 
+                            Authorization: `Token ${TOKEN}`,
+                            'Content-Type': 'application/json'
+                        },
+                        timeout: 10000
+                    }
+                ));
+                console.log('Baserow update response (authorize):', baserowResponse.data);
+
+                // Enviar email via Mailjet
+                console.log(`Enviando email de ${FROM_EMAIL} para ${email}`);
+                const emailBody = {
+                    SandboxMode: true,
+                    Messages: [{
+                        From: [{
+                            Email: FROM_EMAIL,
+                            Name: FROM_NAME
+                        }],
+                        To: [{
+                            Email: email,
+                            Name: name
+                        }],
+                        Subject: 'Autorização de Cadastro',
+                        TextPart: 'CORDEIRO SUPERMERCADO SISTEMA GESTÃO DE ESTOQUE: SEU CADASTRO FOI AUTORIZADO PELA NOSSA EQUIPE',
+                        HTMLPart: '<h3>CORDEIRO SUPERMERCADO SISTEMA GESTÃO DE ESTOQUE</h3><p>SEU CADASTRO FOI AUTORIZADO PELA NOSSA EQUIPE</p>'
+                    }]
+                };
+
+                const mailjetResponse = await retryRequest(() => axios.post('https://api.mailjet.com/v3.1/send', emailBody, {
+                    auth: {
+                        username: MAILJET_API_KEY,
+                        password: MAILJET_API_SECRET
+                    },
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    timeout: 10000
+                }));
+                console.log('Mailjet response (authorize):', mailjetResponse.data);
+
+                alert('Usuário autorizado e email simulado com sucesso (SandboxMode)!');
+                loadUsers();
+            } catch (error) {
+                console.error('Erro ao autorizar usuário:', {
+                    message: error.message,
+                    response: error.response?.data,
+                    status: error.response?.status,
+                    headers: error.response?.headers
+                });
+                alert(`Erro ao autorizar usuário: ${error.response?.data?.ErrorMessage || error.message}. Verifique o console para detalhes.`);
+            }
+        }
+
+        async function deauthorizeUser(rowId, email, name) {
+            if (!validateEmail(email)) {
+                alert(`Erro: O campo USUARIO (${email}) não é um email válido. Por favor, atualize o campo no Baserow.`);
+                return;
+            }
+
+            try {
+                // Atualizar Baserow
+                console.log(`Tentando atualizar Baserow para rowId ${rowId} com ACESSO: false`);
+                const baserowResponse = await retryRequest(() => axios.patch(`${BASE_URL}${rowId}/?user_field_names=true`, 
+                    { ACESSO: false },
+                    { 
+                        headers: { 
+                            Authorization: `Token ${TOKEN}`,
+                            'Content-Type': 'application/json'
+                        },
+                        timeout: 10000
+                    }
+                ));
+                console.log('Baserow update response (deauthorize):', baserowResponse.data);
+
+                // Enviar email via Mailjet
+                console.log(`Enviando email de ${FROM_EMAIL} para ${email}`);
+                const emailBody = {
+                    SandboxMode: true,
+                    Messages: [{
+                        From: [{
+                            Email: FROM_EMAIL,
+                            Name: FROM_NAME
+                        }],
+                        To: [{
+                            Email: email,
+                            Name: name
+                        }],
+                        Subject: 'Revogação de Acesso',
+                        TextPart: 'CORDEIRO SUPERMERCADO SISTEMA GESTÃO DE ESTOQUE: SEU ACESSO FOI DESAUTORIZADO PELA NOSSA EQUIPE',
+                        HTMLPart: '<h3>CORDEIRO SUPERMERCADO SISTEMA GESTÃO DE ESTOQUE</h3><p>SEU ACESSO FOI DESAUTORIZADO PELA NOSSA EQUIPE</p>'
+                    }]
+                };
+
+                const mailjetResponse = await retryRequest(() => axios.post('https://api.mailjet.com/v3.1/send', emailBody, {
+                    auth: {
+                        username: MAILJET_API_KEY,
+                        password: MAILJET_API_SECRET
+                    },
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    timeout: 10000
+                }));
+                console.log('Mailjet response (deauthorize):', mailjetResponse.data);
+
+                alert('Usuário desautorizado e email simulado com sucesso (SandboxMode)!');
+                loadUsers();
+            } catch (error) {
+                console.error('Erro ao desautorizar usuário:', {
+                    message: error.message,
+                    response: error.response?.data,
+                    status: error.response?.status,
+                    headers: error.response?.headers
+                });
+                alert(`Erro ao desautorizar usuário: ${error.response?.data?.ErrorMessage || error.message}. Verifique o console para detalhes.`);
+            }
+        }
+
+        async function loadUsers() {
+            const users = await fetchAllRows();
+            displayUsers(users);
+        }
+
+        // Toggle Sidebar for Mobile
+        document.getElementById('toggle-sidebar').addEventListener('click', () => {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('open');
+        });
+
+        loadUsers();
+    </script>
+</body>
+</html>
