@@ -225,7 +225,27 @@
             </div>
         </div>
     </div>
-
+    
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="text-xl font-semibold text-red-600"><i class="fas fa-exclamation-circle mr-3"></i>Confirmar Exclusão</h2>
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p class="text-gray-700 text-base">Tem certeza que deseja excluir este produto?</p>
+                <p class="text-gray-500 text-sm mt-2">Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer flex justify-end gap-3">
+                <button id="cancelDeleteBtn" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                    Não
+                </button>
+                <button id="confirmDeleteBtn" class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                    Sim, Excluir
+                </button>
+            </div>
+        </div>
+    </div>
     <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 p-4 rounded-lg text-white transition-all duration-300 transform scale-0 opacity-0">
         <p id="toast-message"></p>
     </div>
@@ -274,20 +294,41 @@
                 throw error; 
             }
         }
-
+        
+        // --- FUNÇÃO DE CALCULO DE DIAS ATUALIZADA ---
         const calculateDaysToExpire = (vencimento) => {
             if (!vencimento) return Infinity;
-            const today = new Date(); today.setHours(0, 0, 0, 0);
-            const expDate = new Date(vencimento); expDate.setHours(0, 0, 0, 0);
-            if (isNaN(expDate)) return Infinity;
+            
+            // Formato 'dd/mm/yyyy'
+            const parts = vencimento.split('/');
+            if (parts.length !== 3) return Infinity; // Verificação simples
+            
+            const day = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10) - 1; // Mês é baseado em 0 no JavaScript
+            const year = parseInt(parts[2], 10);
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const expDate = new Date(year, month, day);
+            if (isNaN(expDate.getTime())) return Infinity; // Se a data for inválida
+
             return Math.floor((expDate - today) / (1000 * 60 * 60 * 24));
         };
+        // --- FIM DA FUNÇÃO DE CALCULO DE DIAS ATUALIZADA ---
 
+        // --- FUNÇÃO DE FORMATO DE DATA ATUALIZADA ---
         const formatDate = (vencimento) => {
             if (!vencimento) return 'Data não informada';
-            const date = new Date(vencimento);
-            return isNaN(date) ? 'Data inválida' : date.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
+            
+            // Reutiliza a data como está, pois ela já está no formato correto
+            const parts = vencimento.split('/');
+            if (parts.length !== 3) return 'Data inválida';
+            
+            return vencimento;
         };
+        // --- FIM DA FUNÇÃO DE FORMATO DE DATA ATUALIZADA ---
+
 
         const STATUS_MAP = {
             expired: { text: 'Vencido', class: 'status-expired', badge: 'bg-expired' },
@@ -312,18 +353,30 @@
             return `${days} dia${days !== 1 ? 's' : ''}`;
         };
 
-        async function deleteProduct(productId) {
-            if (!confirm('Tem certeza que deseja excluir este produto? Esta ação não pode ser desfeita.')) {
-                return;
-            }
+        // Função para mostrar o modal de confirmação
+        function showConfirmModal(productId) {
+            const confirmModal = document.getElementById('confirmModal');
+            const confirmBtn = document.getElementById('confirmDeleteBtn');
+            const cancelBtn = document.getElementById('cancelDeleteBtn');
 
-            // Encontrar o card e adicionar um atributo para fácil remoção
+            // Define o que os botões fazem
+            confirmBtn.onclick = () => {
+                deleteProduct(productId);
+                closeModal();
+            };
+            cancelBtn.onclick = () => {
+                closeModal();
+            };
+
+            confirmModal.classList.add('flex');
+        }
+
+        async function deleteProduct(productId) {
             const cardToRemove = document.querySelector(`.card[data-id="${productId}"]`);
             if (cardToRemove) {
                 cardToRemove.remove();
             }
 
-            // Remover da lista local para manter o estado
             allProducts = allProducts.filter(p => p.id !== productId);
             updateDisplay();
 
@@ -408,7 +461,7 @@
                 });
                 card.querySelector('.delete-btn').addEventListener('click', (event) => {
                     event.stopPropagation();
-                    deleteProduct(product.id);
+                    showConfirmModal(product.id);
                 });
                 
                 container.appendChild(card);
@@ -428,9 +481,11 @@
                 case 'safe': filteredProducts = allProducts.filter(p => calculateDaysToExpire(p.VENCIMENTO) > 45); break;
                 case 'this_month':
                     filteredProducts = allProducts.filter(p => {
-                        if (!p.VENCIMENTO) return false;
-                        const expDate = new Date(p.VENCIMENTO);
-                        return expDate.getMonth() === now.getMonth() && expDate.getFullYear() === now.getFullYear() && calculateDaysToExpire(p.VENCIMENTO) >= 0;
+                        const parts = (p.VENCIMENTO || '').split('/');
+                        if (parts.length !== 3) return false;
+                        const month = parseInt(parts[1], 10) - 1; // Mês é baseado em 0
+                        const year = parseInt(parts[2], 10);
+                        return month === now.getMonth() && year === now.getFullYear() && calculateDaysToExpire(p.VENCIMENTO) >= 0;
                     });
                     break;
             }
