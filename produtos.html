@@ -25,7 +25,7 @@
         .main-title {
             color: #2563eb;
         }
-
+        
         .card {
             background: white;
             border-radius: 1rem;
@@ -38,7 +38,7 @@
 
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
         }
 
         .filter-btn {
@@ -75,7 +75,7 @@
             font-weight: 600;
             display: inline-block;
         }
-
+        
         .bg-expired { background-color: #ef4444; }
         .bg-critical { background-color: #f59e0b; }
         .bg-upcoming { background-color: #eab308; }
@@ -100,7 +100,7 @@
             justify-content: center;
             display: none;
         }
-
+        
         .modal.flex { display: flex; }
 
         .modal-content {
@@ -121,9 +121,8 @@
             justify-content: space-between;
             align-items: center;
         }
-
-        .modal-body { padding: 1.5rem; overflow-y: auto; }
         
+        .modal-body { padding: 1.5rem; overflow-y: auto; }
         .modal-footer {
             padding: 1rem 1.5rem;
             background-color: #f9fafb;
@@ -136,7 +135,6 @@
         .close-btn:hover { color: #374151; }
 
         .message-btn-container { position: relative; display: inline-block; }
-
         .badge {
             position: absolute;
             top: -8px;
@@ -154,67 +152,11 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             border: 2px solid white;
         }
-
         .loader {
             text-align: center;
             padding: 3rem;
             font-size: 1.5rem;
             color: #4f46e5;
-        }
-
-        #deleteModal .modal-content {
-            border-top: 5px solid #ef4444;
-        }
-
-        .notification-btn {
-            position: relative;
-            background-color: transparent;
-            border: none;
-            padding: 0.5rem;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .notification-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .notification-icon {
-            font-size: 1.75rem;
-            color: #f59e0b; /* Icone amarelo/laranja */
-        }
-
-        .notification-badge {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background: #dc2626;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: bold;
-            border: 2px solid white;
-        }
-
-        /* Animação para a seta */
-        @keyframes bounce-horizontal {
-            0%, 100% {
-                transform: translateX(0);
-            }
-            50% {
-                transform: translateX(5px);
-            }
-        }
-
-        .animated-arrow {
-            color: #6b7280;
-            font-size: 1.5rem;
-            animation: bounce-horizontal 1.5s infinite;
         }
     </style>
 </head>
@@ -237,7 +179,6 @@
         <div class="mb-2 text-center text-sm text-gray-500">
             <i class="fas fa-arrows-alt-h mr-2 animate-pulse"></i><span>Arraste para o lado para ver mais filtros</span>
         </div>
-
         <div class="overflow-x-auto pb-4 -mx-4 sm:-mx-0">
             <div id="filter-container" class="flex flex-nowrap justify-start sm:justify-center gap-3 mb-10 px-4 sm:px-0 whitespace-nowrap">
                 <button data-filter="all" class="filter-btn active"><i class="fas fa-list-ul mr-2"></i>Todos</button>
@@ -246,33 +187,14 @@
                 <button data-filter="upcoming" class="filter-btn"><i class="fas fa-hourglass-half mr-2"></i>Próximos (45 dias)</button>
                 <button data-filter="safe" class="filter-btn"><i class="fas fa-check-circle mr-2"></i>Seguros</button>
                 <button data-filter="this_month" class="filter-btn"><i class="fas fa-calendar-day mr-2"></i>Vencem no Mês</button>
-                <button id="notificationBtn" class="notification-btn" title="Aviso de exclusão automática">
-                    <i class="fas fa-bell notification-icon"></i>
-                    <span class="notification-badge">1</span>
-                </button>
-                <span class="animated-arrow self-center ml-2">></span>
             </div>
         </div>
 
         <div id="productContainer" class="grid grid-cols-1 gap-6"></div>
     </div>
 
-    <div id="messageModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="text-xl font-semibold text-blue-600"><i class="fas fa-comment-alt-dots mr-3"></i>Mensagem de Alerta</h2>
-                <span class="close-btn" onclick="closeModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <p id="modalMessage" class="text-gray-700 text-base"></p>
-            </div>
-            <div class="modal-footer">
-                <p id="modalExpiration" class="text-sm text-gray-600"></p>
-                <p id="modalStatus" class="text-sm text-gray-600 mt-1"></p>
-            </div>
-        </div>
-    </div>
-
+    <div id="messageModal" class="modal"><div class="modal-content"><div class="modal-header"><h2 class="text-xl font-semibold text-blue-600"><i class="fas fa-comment-alt-dots mr-3"></i>Mensagem de Alerta</h2><span class="close-btn" onclick="closeModal()">&times;</span></div><div class="modal-body"><p id="modalMessage" class="text-gray-700 text-base"></p></div><div class="modal-footer"><p id="modalExpiration" class="text-sm text-gray-600"></p><p id="modalStatus" class="text-sm text-gray-600 mt-1"></p></div></div></div>
+    
     <div id="profileModal" class="modal">
         <div class="modal-content text-center">
             <div class="modal-header">
@@ -291,137 +213,36 @@
         </div>
     </div>
 
-    <div id="deleteModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="text-xl font-semibold text-red-600"><i class="fas fa-trash-alt mr-3"></i>Confirmar Exclusão</h2>
-                <span class="close-btn" onclick="closeModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <p class="text-gray-700 mb-4">Tem certeza que deseja apagar o produto abaixo? Esta ação não pode ser desfeita.</p>
-                <div class="bg-gray-100 p-4 rounded-lg">
-                    <p class="font-bold text-gray-800" id="productToDeleteName"></p>
-                    <p class="text-sm text-gray-500" id="productToDeleteCode"></p>
-                </div>
-            </div>
-            <div class="modal-footer flex justify-end gap-3">
-                <button onclick="closeModal()" class="py-2 px-4 rounded-lg bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition-colors">Cancelar</button>
-                <button id="confirmDeleteBtn" class="py-2 px-4 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700 transition-colors">Apagar Produto</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="infoModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="text-xl font-semibold text-yellow-600"><i class="fas fa-exclamation-circle mr-3"></i>Aviso Importante</h2>
-                <span class="close-btn" onclick="closeModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <p class="text-gray-700">Para manter o estoque limpo e atualizado, todos os produtos que estiverem vencidos há mais de **18 dias** serão **apagados automaticamente** do sistema. Não é possível reverter esta ação.</p>
-                <p class="text-gray-700 mt-4">Fique atento aos produtos na categoria **"Vencidos"** para evitar a exclusão.</p>
-            </div>
-        </div>
-    </div>
-
     <script>
-        const API_BASE_URL = 'https://api.baserow.io/api/database/rows/table/150731/';
+        const API_BASE_URL = 'https://api.baserow.io/api/database/rows/table/150731/?user_field_names=true';
         const TOKEN = 'QNhuEjQ6tUb2CmQyN2B5ipfhC61gLfXe';
         const DEFAULT_PROFILE_IMG = 'https://media-public.canva.com/gJly0/MAGDkMgJly0/1/tl.png';
-
         let allProducts = [];
         const searchInput = document.getElementById('searchInput');
         const filterContainer = document.getElementById('filter-container');
 
-        async function fetchAllRows(url = API_BASE_URL + '?user_field_names=true', accumulated = []) {
+        async function fetchAllRows(url = API_BASE_URL, accumulated = []) {
             try {
                 const response = await fetch(url, { headers: { 'Authorization': `Token ${TOKEN}` } });
-                if (!response.ok) {
-                    throw new Error(`Erro na API. Status: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const data = await response.json();
-                if (data.results) {
-                    accumulated.push(...data.results);
-                }
+                accumulated.push(...data.results);
                 return data.next ? fetchAllRows(data.next, accumulated) : accumulated;
-            } catch (error) {
-                console.error('Erro ao buscar dados:', error);
-                throw error; // Propaga o erro para ser capturado no `init()`
-            }
-        }
-
-        async function deleteProduct(productId, productName) {
-            closeModal();
-            try {
-                const response = await fetch(`${API_BASE_URL}${productId}/`, {
-                    method: 'DELETE',
-                    headers: { 'Authorization': `Token ${TOKEN}` }
-                });
-                if (!response.ok) {
-                    throw new Error(`Erro ao apagar o produto. Status: ${response.status}`);
-                }
-                alert(`Produto "${productName}" apagado com sucesso!`);
-                init();
-            } catch (error) {
-                console.error('Erro ao apagar o produto:', error);
-                alert('Ocorreu um erro ao tentar apagar o produto. Verifique a permissão da sua API ou a sua conexão.');
-            }
-        }
-
-        async function checkAndAutoDelete() {
-            const expiredProducts = allProducts.filter(p => calculateDaysToExpire(p.VENCIMENTO) <= -18);
-            if (expiredProducts.length === 0) {
-                console.log('Nenhum produto para exclusão automática.');
-                return;
-            }
-            console.log(`Iniciando exclusão automática de ${expiredProducts.length} produto(s).`);
-            for (const product of expiredProducts) {
-                console.log(`Apagando automaticamente produto vencido: ${product.produto}`);
-                await deleteProduct(product.id, product.produto);
-                await new Promise(resolve => setTimeout(resolve, 500));
-            }
-        }
-
-        function showDeleteModal(productId, productName, productCode) {
-            document.getElementById('productToDeleteName').textContent = productName;
-            document.getElementById('productToDeleteCode').textContent = `Código: ${productCode}`;
-
-            const confirmBtn = document.getElementById('confirmDeleteBtn');
-            const newConfirmBtn = confirmBtn.cloneNode(true);
-            confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
-
-            newConfirmBtn.onclick = () => deleteProduct(productId, productName);
-
-            document.getElementById('deleteModal').classList.add('flex');
+            } catch (error) { console.error('Erro ao buscar dados:', error); throw error; }
         }
 
         const calculateDaysToExpire = (vencimento) => {
             if (!vencimento) return Infinity;
-
-            let expDate;
-            if (vencimento.includes('/')) {
-                const [day, month, year] = vencimento.split('/');
-                expDate = new Date(`${year}-${month}-${day}`);
-            } else {
-                expDate = new Date(vencimento);
-            }
             const today = new Date(); today.setHours(0, 0, 0, 0);
-            expDate.setHours(0, 0, 0, 0);
-
-            if (isNaN(expDate.getTime())) return Infinity;
+            const expDate = new Date(vencimento); expDate.setHours(0, 0, 0, 0);
+            if (isNaN(expDate)) return Infinity;
             return Math.floor((expDate - today) / (1000 * 60 * 60 * 24));
         };
 
         const formatDate = (vencimento) => {
             if (!vencimento) return 'Data não informada';
             const date = new Date(vencimento);
-            if (!isNaN(date.getTime())) {
-                return date.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
-            }
-            if (vencimento.includes('/')) {
-                return vencimento;
-            }
-            return 'Data inválida';
+            return isNaN(date) ? 'Data inválida' : date.toLocaleDateString('pt-BR', { timeZone: 'UTC' });
         };
 
         const STATUS_MAP = {
@@ -439,18 +260,45 @@
             if (days <= 45) return STATUS_MAP.upcoming;
             return STATUS_MAP.safe;
         };
-
+        
         const formatDaysBadge = (days) => {
             if (days === Infinity) return 'Inválido';
-            if (days < 0) return `Vencido há ${Math.abs(days)} dias`;
+            if (days < 0) return 'Vencido';
             if (days === 0) return 'Vence Hoje';
             return `${days} dia${days !== 1 ? 's' : ''}`;
         };
 
+        async function deleteProduct(productId) {
+            if (!confirm('Tem certeza que deseja excluir este produto? Esta ação não pode ser desfeita.')) {
+                return;
+            }
+
+            const url = `https://api.baserow.io/api/database/rows/table/150731/${productId}/`;
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Token ${TOKEN}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro ao excluir produto: ${response.statusText}`);
+                }
+
+                alert('Produto excluído com sucesso!');
+                await init();
+            } catch (error) {
+                console.error('Falha na exclusão:', error);
+                alert(`Erro ao excluir o produto: ${error.message}`);
+            }
+        }
+
         function renderProducts(products) {
             const container = document.getElementById('productContainer');
             container.innerHTML = '';
-
+            
             if (products.length === 0) {
                 container.innerHTML = `<p class="col-span-full text-center text-gray-500 text-lg py-10">Nenhum produto encontrado com os critérios selecionados.</p>`;
                 return;
@@ -466,7 +314,7 @@
 
                 const card = document.createElement('div');
                 card.className = `card p-5 flex flex-col justify-between ${statusInfo.class}`;
-
+                
                 card.innerHTML = `
                     <div class="flex-grow">
                         <div class="flex items-center mb-4">
@@ -486,27 +334,37 @@
                                 ${badgeHtml}
                             </div>
                             <button class="profile-btn text-blue-500 hover:text-blue-700 transition-colors duration-200" title="Ver Perfil"><i class="fas fa-user-circle text-2xl"></i></button>
-                            <button class="delete-btn text-red-500 hover:text-red-700 transition-colors duration-200" title="Apagar Produto"><i class="fas fa-trash text-2xl"></i></button>
+                            <button class="delete-btn text-red-500 hover:text-red-700 transition-colors duration-200" title="Excluir Produto"><i class="fas fa-trash-alt text-2xl"></i></button>
                         </div>
                         <div class="text-right">
                             <div class="days-badge ${statusInfo.badge}">${formatDaysBadge(days)}</div>
                             <p class="text-xs text-gray-500 mt-2"><i class="fas fa-user-check mr-2"></i><strong>${senderName}</strong></p>
                         </div>
                     </div>`;
-
-                card.querySelector('.message-btn').addEventListener('click', () => showModal('messageModal', product));
-                card.querySelector('.profile-btn').addEventListener('click', () => showModal('profileModal', product));
-                card.querySelector('.delete-btn').addEventListener('click', () => showDeleteModal(product.id, product.produto, product.codig));
+                
+                card.querySelector('.message-btn').addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    showModal('messageModal', product);
+                });
+                card.querySelector('.profile-btn').addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    showModal('profileModal', product);
+                });
+                card.querySelector('.delete-btn').addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    deleteProduct(product.id);
+                });
+                
                 container.appendChild(card);
             });
         }
-
+        
         function updateDisplay() {
             const searchTerm = searchInput.value.toLowerCase().trim();
             const activeFilter = filterContainer.querySelector('.filter-btn.active').dataset.filter;
             let filteredProducts = allProducts;
-            const now = new Date();
 
+            const now = new Date();
             switch (activeFilter) {
                 case 'expired': filteredProducts = allProducts.filter(p => calculateDaysToExpire(p.VENCIMENTO) < 0); break;
                 case 'critical': filteredProducts = allProducts.filter(p => { const d = calculateDaysToExpire(p.VENCIMENTO); return d >= 0 && d <= 7; }); break;
@@ -544,8 +402,6 @@
                 document.getElementById('modalProfileSender').innerHTML = `<i class="fas fa-user-check mr-2 text-gray-400"></i>Enviado por: <strong>${product.ENVIADOPORQUEM || 'Não informado'}</strong>`;
                 document.getElementById('modalExpirationProfile').innerHTML = `<i class="fas fa-calendar-alt mr-2"></i><strong>Vencimento:</strong> ${formatDate(product.VENCIMENTO)}`;
                 document.getElementById('modalStatusProfile').innerHTML = `<i class="fas fa-info-circle mr-2"></i><strong>Situação:</strong> ${statusInfo.text}`;
-            } else if (modalId === 'infoModal') {
-                // Nothing to do, modal content is static
             }
             modal.classList.add('flex');
         }
@@ -559,15 +415,14 @@
             container.innerHTML = `<div class="loader col-span-full"><i class="fas fa-spinner fa-spin mr-3"></i>Carregando produtos...</div>`;
             try {
                 allProducts = await fetchAllRows();
-                await checkAndAutoDelete();
-                allProducts = await fetchAllRows();
                 updateDisplay();
             } catch (error) {
                 container.innerHTML = `<div class="col-span-full text-center text-red-500 p-6 bg-red-50 rounded-lg"><p><strong>Falha ao carregar os dados do estoque.</strong></p><p class="text-sm">Verifique sua conexão ou a configuração da API.</p></div>`;
             }
         }
-
+        
         searchInput.addEventListener('keyup', updateDisplay);
+
         filterContainer.addEventListener('click', (event) => {
             const button = event.target.closest('.filter-btn');
             if (button) {
@@ -581,10 +436,6 @@
             modal.addEventListener('click', (event) => {
                 if (event.target === modal) closeModal();
             });
-        });
-
-        document.getElementById('notificationBtn').addEventListener('click', () => {
-            showModal('infoModal', {});
         });
 
         init();
