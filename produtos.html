@@ -158,6 +158,21 @@
             font-size: 1.5rem;
             color: #4f46e5;
         }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -213,6 +228,10 @@
         </div>
     </div>
 
+    <div id="loadingOverlay" class="overlay hidden">
+        <i class="fas fa-spinner fa-spin text-4xl text-blue-500"></i>
+    </div>
+
     <script>
         const API_BASE_URL = 'https://api.baserow.io/api/database/rows/table/150731/?user_field_names=true';
         const TOKEN = 'QNhuEjQ6tUb2CmQyN2B5ipfhC61gLfXe';
@@ -221,6 +240,16 @@
         const searchInput = document.getElementById('searchInput');
         const filterContainer = document.getElementById('filter-container');
 
+        // Função para mostrar ou esconder o overlay de carregamento
+        function toggleLoading(show) {
+            const overlay = document.getElementById('loadingOverlay');
+            if (show) {
+                overlay.classList.remove('hidden');
+            } else {
+                overlay.classList.add('hidden');
+            }
+        }
+        
         async function fetchAllRows(url = API_BASE_URL, accumulated = []) {
             try {
                 const response = await fetch(url, { headers: { 'Authorization': `Token ${TOKEN}` } });
@@ -228,7 +257,10 @@
                 const data = await response.json();
                 accumulated.push(...data.results);
                 return data.next ? fetchAllRows(data.next, accumulated) : accumulated;
-            } catch (error) { console.error('Erro ao buscar dados:', error); throw error; }
+            } catch (error) { 
+                console.error('Erro ao buscar dados:', error); 
+                throw error; 
+            }
         }
 
         const calculateDaysToExpire = (vencimento) => {
@@ -273,6 +305,10 @@
                 return;
             }
 
+            // Exclui o item da lista localmente para resposta instantânea
+            allProducts = allProducts.filter(p => p.id !== productId);
+            updateDisplay();
+
             const url = `https://api.baserow.io/api/database/rows/table/150731/${productId}/`;
             
             try {
@@ -288,10 +324,14 @@
                 }
 
                 alert('Produto excluído com sucesso!');
-                await init();
+                // Não precisa chamar init() pois já atualizamos a lista localmente.
+                // Opcional: Se desejar, pode revalidar os dados após um tempo
+                // para garantir que estão sincronizados com a API.
             } catch (error) {
                 console.error('Falha na exclusão:', error);
                 alert(`Erro ao excluir o produto: ${error.message}`);
+                // Re-renderiza a lista completa em caso de erro para manter a sincronização.
+                await init();
             }
         }
 
@@ -414,7 +454,9 @@
             const container = document.getElementById('productContainer');
             container.innerHTML = `<div class="loader col-span-full"><i class="fas fa-spinner fa-spin mr-3"></i>Carregando produtos...</div>`;
             try {
+                // Chama a função de busca e espera o resultado
                 allProducts = await fetchAllRows();
+                // Apenas renderiza a interface quando os dados estiverem prontos
                 updateDisplay();
             } catch (error) {
                 container.innerHTML = `<div class="col-span-full text-center text-red-500 p-6 bg-red-50 rounded-lg"><p><strong>Falha ao carregar os dados do estoque.</strong></p><p class="text-sm">Verifique sua conexão ou a configuração da API.</p></div>`;
