@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Acesso</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #b3e5fc);
+            color: #2c3e50;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .user-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+
+        .user-list {
+            flex: 1;
+            background: #f7f9fc;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+            min-width: 300px;
+        }
+
+        .user-list h3 {
+            font-size: 20px;
+            color: #0056b3;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        #authorizedList h3 {
+            color: #28a745;
+            border-color: #28a745;
+        }
+
+        #unauthorizedList h3 {
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .user-item {
+            background: #ffffff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            transition: transform 0.2s ease-in-out;
+        }
+        
+        .user-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .user-info {
+            flex-grow: 1;
+            width: 100%;
+            padding-bottom: 10px;
+        }
+        
+        .user-info h4 {
+            margin: 0 0 5px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .user-info p {
+            margin: 0;
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+
+        .user-actions {
+            width: 100%;
+            text-align: center;
+        }
+        
+        .user-actions button {
+            width: auto;
+            min-width: 120px;
+            padding: 8px 15px;
+            margin-top: 10px;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .authorize-btn {
+            background: linear-gradient(to right, #28a745, #218838);
+        }
+
+        .authorize-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .deauthorize-btn {
+            background: linear-gradient(to right, #dc3545, #c82333);
+        }
+
+        .deauthorize-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+        
+        .message {
+            text-align: center;
+            font-style: italic;
+            color: #95a5a6;
+            margin-top: 10px;
+        }
+
+        .loading-message {
+            text-align: center;
+            color: #3498db;
+        }
+
+        @media (max-width: 768px) {
+            .user-panel {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="painelSection" class="painel-section">
+            <h1>Gerenciar Acessos de Funcionários</h1>
+            <div class="user-panel">
+                <div id="authorizedList" class="user-list">
+                    <h3>Acesso Autorizado</h3>
+                    <div class="loading-message">Carregando...</div>
+                </div>
+
+                <div id="unauthorizedList" class="user-list">
+                    <h3>Aguardando Aprovação</h3>
+                    <div class="loading-message">Carregando...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // TOKEN E ID DA TABELA
+        const TABLE_ID = 221009;
+        const API_TOKEN = "Token QNhuEjQ6tUb2CmQyN2B5ipfhC61gLfXe";
+        const API_BASE_URL = "https://api.baserow.io/api/database/rows/table/";
+
+        const authorizedListEl = document.getElementById('authorizedList');
+        const unauthorizedListEl = document.getElementById('unauthorizedList');
+
+        // --- NOVA FUNÇÃO PARA BUSCAR TODAS AS PÁGINAS ---
+        /**
+         * Busca todos os registros de uma URL, seguindo a paginação da API.
+         * @param {string} url - A URL da API para buscar.
+         * @param {Array} accumulatedResults - A lista de resultados acumulados.
+         * @returns {Promise<Array>} Uma lista com todos os usuários.
+         */
+        async function fetchAllPages(url, accumulatedResults = []) {
+            try {
+                const response = await axios.get(url, {
+                    headers: { 'Authorization': API_TOKEN }
+                });
+                const data = response.data;
+                
+                // Acumula os resultados da página atual
+                accumulatedResults.push(...data.results);
+
+                // Se houver uma próxima página, chama a função novamente para ela
+                if (data.next) {
+                    return fetchAllPages(data.next, accumulatedResults);
+                }
+
+                // Se não houver mais páginas, retorna a lista completa
+                return accumulatedResults;
+            } catch (error) {
+                console.error("Erro durante a busca paginada:", error);
+                throw error; // Propaga o erro para ser tratado na função principal
+            }
+        }
+
+        // --- FUNÇÃO fetchUsers ATUALIZADA PARA USAR A BUSCA PAGINADA ---
+        async function fetchUsers() {
+            if (!authorizedListEl.querySelector('.user-item')) {
+                 authorizedListEl.innerHTML = '<h3>Acesso Autorizado</h3><div class="loading-message">Carregando...</div>';
+            }
+            if (!unauthorizedListEl.querySelector('.user-item')) {
+                unauthorizedListEl.innerHTML = '<h3>Aguardando Aprovação</h3><div class="loading-message">Carregando...</div>';
+            }
+            
+            try {
+                // Define a URL inicial para a primeira requisição
+                const initialUrl = `${API_BASE_URL}${TABLE_ID}/?user_field_names=true`;
+                
+                // Chama a nova função que busca TODAS as páginas
+                const users = await fetchAllPages(initialUrl);
+                
+                renderUsers(users);
+
+            } catch (error) {
+                console.error("Erro ao buscar usuários:", error);
+                authorizedListEl.innerHTML = '<h3>Acesso Autorizado</h3><p class="message">Erro ao carregar os dados.</p>';
+                unauthorizedListEl.innerHTML = '<h3>Aguardando Aprovação</h3><p class="message">Erro ao carregar os dados.</p>';
+            }
+        }
+
+        function renderUsers(users) {
+            authorizedListEl.innerHTML = '<h3>Acesso Autorizado</h3>';
+            unauthorizedListEl.innerHTML = '<h3>Aguardando Aprovação</h3>';
+            
+            // A lógica de filtragem e renderização continua a mesma
+            const authorized = users.filter(user => user.ACESSO === true);
+            const unauthorized = users.filter(user => user.ACESSO === false);
+
+            if (authorized.length > 0) {
+                authorized.forEach(user => {
+                    authorizedListEl.innerHTML += `
+                        <div class="user-item" data-id="${user.id}">
+                            <div class="user-info">
+                                <h4>${user.NOME} <span style="font-size:12px; color:#bdc3c7;">(ID: ${user.id})</span></h4>
+                                <p>Contato: ${user.USUARIO}</p>
+                                <p>Área: ${user.AREA}</p>
+                                ${user.PRATELEIRA ? `<p>Prateleira: ${user.PRATELEIRA}</p>` : ''}
+                            </div>
+                            <div class="user-actions">
+                                <button class="deauthorize-btn" onclick="updateUserAccess(${user.id}, false)">Desautorizar</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                authorizedListEl.innerHTML += '<p class="message">Nenhum usuário autorizado.</p>';
+            }
+
+            if (unauthorized.length > 0) {
+                unauthorized.forEach(user => {
+                    unauthorizedListEl.innerHTML += `
+                        <div class="user-item" data-id="${user.id}">
+                            <div class="user-info">
+                                <h4>${user.NOME} <span style="font-size:12px; color:#bdc3c7;">(ID: ${user.id})</span></h4>
+                                <p>Contato: ${user.USUARIO}</p>
+                                <p>Área: ${user.AREA}</p>
+                                ${user.PRATELEIRA ? `<p>Prateleira: ${user.PRATELEIRA}</p>` : ''}
+                            </div>
+                            <div class="user-actions">
+                                <button class="authorize-btn" onclick="updateUserAccess(${user.id}, true)">Autorizar</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                unauthorizedListEl.innerHTML += '<p class="message">Nenhum usuário aguardando aprovação.</p>';
+            }
+        }
+
+        async function updateUserAccess(userId, newAccess) {
+            try {
+                await axios.patch(`${API_BASE_URL}${TABLE_ID}/${userId}/?user_field_names=true`, { ACESSO: newAccess }, {
+                    headers: {
+                        'Authorization': API_TOKEN,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                fetchUsers();
+                
+            } catch (error) {
+                console.error("Erro ao atualizar acesso:", error);
+                alert("Erro ao atualizar o acesso. Tente novamente.");
+            }
+        }
+        
+        // A lógica de execução inicial não muda
+        fetchUsers();
+        setInterval(fetchUsers, 10000); // Continua atualizando a cada 10 segundos
+
+    </script>
+</body>
+</html>
