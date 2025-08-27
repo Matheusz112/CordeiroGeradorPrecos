@@ -113,6 +113,17 @@
             flex-direction: column;
             max-height: 90vh;
         }
+        
+        .modal-content-large {
+            background: white;
+            border-radius: 1rem;
+            width: 95%;
+            max-width: 800px;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+        }
 
         .modal-header {
             padding: 1rem 1.5rem;
@@ -171,6 +182,95 @@
 
         #toast.success { background-color: #10b981; } /* cor verde */
         #toast.error { background-color: #ef4444; } /* cor vermelha */
+        
+        .analysis-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            color: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .metric-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-success { background-color: #22c55e; }
+        .status-warning { background-color: #eab308; }
+        .status-danger { background-color: #ef4444; }
+
+        /* Nova classe para o resultado da análise */
+        .analysis-result {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            margin-top: 0.25rem;
+            display: inline-block;
+        }
+        
+        .analysis-success {
+            background-color: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+        
+        .analysis-warning {
+            background-color: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+        
+        .analysis-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        /* Estilo para a data limite */
+        .sell-by-date {
+            font-size: 0.7rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+            font-style: italic;
+        }
+
+        /* Estilo para o aviso de estimativa */
+        .estimate-warning {
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+        }
+
+        .estimate-warning i {
+            color: #f59e0b;
+            margin-right: 0.5rem;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -239,6 +339,74 @@
         </div>
     </div>
     
+    <div id="analyticsModal" class="modal">
+        <div class="modal-content-large">
+            <div class="modal-header">
+                <h2 class="text-xl font-semibold text-purple-600"><i class="fas fa-chart-line mr-3"></i>Análise de Vendas</h2>
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="analysis-card mb-6">
+                    <h3 id="analyticsProductName" class="text-2xl font-bold mb-4"></h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="metric-card text-center">
+                            <h4 class="text-sm opacity-80 mb-2">Dias até Vencimento</h4>
+                            <p id="analyticsDaysLeft" class="text-2xl font-bold"></p>
+                        </div>
+                        <div class="metric-card text-center">
+                            <h4 class="text-sm opacity-80 mb-2">Quantidade Atual</h4>
+                            <p id="analyticsQuantity" class="text-2xl font-bold"></p>
+                        </div>
+                        <div class="metric-card text-center">
+                            <h4 class="text-sm opacity-80 mb-2">Taxa de Conversão</h4>
+                            <p id="analyticsConversionRate" class="text-2xl font-bold"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-3">Projeção de Vendas</h4>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span>Vendas Diárias:</span>
+                                <span id="analyticsDailySales" class="font-semibold"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Total Projetado:</span>
+                                <span id="analyticsTotalSales" class="font-semibold"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Sobra Estimada:</span>
+                                <span id="analyticsRemaining" class="font-semibold"></span>
+                            </div>
+                            <div class="flex justify-between border-t pt-2">
+                                <span class="font-semibold">Vender até:</span>
+                                <span id="analyticsSellByDate" class="font-semibold text-blue-600"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-3">Status da Análise</h4>
+                        <div id="analyticsStatus" class="space-y-2">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="estimate-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span><strong>Aviso:</strong> Este cálculo é apenas uma estimativa baseada em dados históricos e padrões de venda. Os resultados reais podem variar devido a fatores como sazonalidade, promoções, mudanças no comportamento do cliente e outras variáveis de mercado.</span>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="salesChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <div id="confirmModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -264,13 +432,15 @@
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script>
         const API_BASE_URL = 'https://api.baserow.io/api/database/rows/table/150731/?user_field_names=true';
         const TOKEN = 'QNhuEjQ6tUb2CmQyN2B5ipfhC61gLfXe';
-        const DEFAULT_PROFILE_IMG = 'https://media-public.canva.com/gJly0/MAGDkMgJly0/1/tl.png';
+        const DEFAULT_PROFILE_IMG = '';
         let allProducts = [];
         const searchInput = document.getElementById('searchInput');
         const filterContainer = document.getElementById('filter-container');
+        let salesChart = null;
 
         // Função para exibir a notificação (toast)
         function showToast(message, type = 'success') {
@@ -343,6 +513,191 @@
         };
         // --- FIM DA FUNÇÃO DE FORMATO DE DATA ATUALIZADA ---
 
+        // Função para calcular a data limite de venda
+        function calculateSellByDate(quantity, dailySales) {
+            if (dailySales <= 0) return 'Não calculável';
+            
+            const daysToSell = Math.ceil(quantity / dailySales);
+            const today = new Date();
+            const sellByDate = new Date(today);
+            sellByDate.setDate(today.getDate() + daysToSell);
+            
+            return sellByDate.toLocaleDateString('pt-BR');
+        }
+        
+        // Função para calcular taxa de conversão baseada na margem
+        function getConversionRate(margem) {
+            if (!margem) return 0.02; // Default baixa
+            
+            const margin = margem.toUpperCase();
+            switch (margin) {
+                case 'BAIXA': return Math.random() * (0.02 - 0.01) + 0.01; // 1-2%
+                case 'PARCIAL': return Math.random() * (0.04 - 0.03) + 0.03; // 3-4%
+                case 'AUTOGIRO': return Math.random() * (0.06 - 0.05) + 0.05; // 5-6%
+                case 'SUPERGIRO': return Math.random() * (0.08 - 0.06) + 0.06; // 6-8%
+                default: return 0.02; // Default baixa
+            }
+        }
+        
+        // Função para analisar vendas
+        function analyzeSales(product) {
+            const daysToExpire = calculateDaysToExpire(product.VENCIMENTO);
+            const quantity = parseInt(product.quantidade) || 0;
+            const conversionRate = getConversionRate(product.MARGEM);
+            const dailyClients = 120; // Clientes diários fixo
+            
+            const dailySales = Math.floor(dailyClients * conversionRate);
+            const totalProjectedSales = dailySales * Math.max(0, daysToExpire);
+            const remaining = Math.max(0, quantity - totalProjectedSales);
+            const sellByDate = calculateSellByDate(quantity, dailySales);
+            
+            let status = 'success';
+            let statusText = 'Produto será vendido completamente';
+            let recommendation = 'Ótimo! O produto deve ser vendido antes do vencimento.';
+            let shortStatus = 'Vendas OK';
+            
+            if (daysToExpire <= 0) {
+                status = 'danger';
+                statusText = 'Produto já vencido';
+                recommendation = 'Produto vencido! Remova do estoque imediatamente.';
+                shortStatus = 'Vencido';
+            } else if (remaining > 0) {
+                if (remaining > quantity * 0.5) {
+                    status = 'danger';
+                    statusText = 'Alto risco de sobra no estoque';
+                    recommendation = 'Atenção! Grande quantidade pode não ser vendida. Considere promoções ou descontos.';
+                    shortStatus = 'Alto risco';
+                } else {
+                    status = 'warning';
+                    statusText = 'Possível sobra no estoque';
+                    recommendation = 'Cuidado! Pequena quantidade pode sobrar. Monitore as vendas de perto.';
+                    shortStatus = 'Possível sobra';
+                }
+            }
+            
+            return {
+                daysToExpire,
+                quantity,
+                conversionRate: (conversionRate * 100).toFixed(1) + '%',
+                dailySales,
+                totalProjectedSales,
+                remaining,
+                status,
+                statusText,
+                recommendation,
+                shortStatus,
+                sellByDate
+            };
+        }
+        
+        // Função para mostrar modal de análise
+        function showAnalyticsModal(product) {
+            const analysis = analyzeSales(product);
+            const modal = document.getElementById('analyticsModal');
+            
+            // Preencher dados básicos
+            document.getElementById('analyticsProductName').textContent = product.produto || 'N/A';
+            document.getElementById('analyticsDaysLeft').textContent = analysis.daysToExpire > 0 ? analysis.daysToExpire : 'Vencido';
+            document.getElementById('analyticsQuantity').textContent = analysis.quantity;
+            document.getElementById('analyticsConversionRate').textContent = analysis.conversionRate;
+            
+            // Preencher projeções
+            document.getElementById('analyticsDailySales').textContent = analysis.dailySales + ' unidades';
+            document.getElementById('analyticsTotalSales').textContent = analysis.totalProjectedSales + ' unidades';
+            document.getElementById('analyticsRemaining').textContent = analysis.remaining + ' unidades';
+            document.getElementById('analyticsSellByDate').textContent = analysis.sellByDate;
+            
+            // Status
+            const statusContainer = document.getElementById('analyticsStatus');
+            const statusClass = analysis.status === 'success' ? 'status-success' : 
+                              analysis.status === 'warning' ? 'status-warning' : 'status-danger';
+            
+            statusContainer.innerHTML = `
+                <div class="flex items-center mb-2">
+                    <span class="status-indicator ${statusClass}"></span>
+                    <span class="font-semibold">${analysis.statusText}</span>
+                </div>
+                <p class="text-sm text-gray-600">${analysis.recommendation}</p>
+            `;
+            
+            // Criar gráfico
+            createSalesChart(analysis);
+            
+            modal.classList.add('flex');
+        }
+        
+        // Função para criar gráfico de vendas
+        function createSalesChart(analysis) {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            
+            if (salesChart) {
+                salesChart.destroy();
+            }
+            
+            const days = Math.min(analysis.daysToExpire, 30); // Máximo 30 dias no gráfico
+            const labels = [];
+            const salesData = [];
+            const stockData = [];
+            
+            let currentStock = analysis.quantity;
+            
+            for (let i = 0; i <= days; i++) {
+                labels.push(`Dia ${i}`);
+                salesData.push(analysis.dailySales * i);
+                stockData.push(Math.max(0, currentStock - (analysis.dailySales * i)));
+            }
+            
+            salesChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Vendas Acumuladas',
+                        data: salesData,
+                        borderColor: '#22c55e',
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Estoque Restante',
+                        data: stockData,
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Unidades'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Período'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Projeção de Vendas vs Estoque'
+                        },
+                        legend: {
+                            display: true
+                        }
+                    }
+                }
+            });
+        }
 
         const STATUS_MAP = {
             expired: { text: 'Vencido', class: 'status-expired', badge: 'bg-expired' },
@@ -433,6 +788,11 @@
                 const hasMessage = !!product.ALERTAMENSAGEM;
                 const badgeHtml = hasMessage ? '<span class="badge">1</span>' : '';
                 const senderName = product.ENVIADOPORQUEM || 'Não informado';
+                
+                // Análise de vendas para mostrar no card
+                const analysis = analyzeSales(product);
+                const analysisClass = analysis.status === 'success' ? 'analysis-success' : 
+                                   analysis.status === 'warning' ? 'analysis-warning' : 'analysis-danger';
 
                 const card = document.createElement('div');
                 card.className = `card p-5 flex flex-col justify-between ${statusInfo.class}`;
@@ -449,6 +809,13 @@
                         </div>
                         <p class="text-gray-600 mb-2"><i class="fas fa-box-open mr-2 text-blue-400"></i><strong>Quantidade:</strong> ${product.quantidade || 'N/A'}</p>
                         <p class="text-gray-600"><i class="fas fa-calendar-check mr-2 text-blue-400"></i><strong>Vencimento:</strong> ${formatDate(product.VENCIMENTO)}</p>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600"><i class="fas fa-chart-pie mr-2 text-green-400"></i><strong>Margem:</strong> ${product.MARGEM || 'N/A'}</p>
+                                <div class="sell-by-date">Vender até: ${analysis.sellByDate}</div>
+                            </div>
+                            <span class="analysis-result ${analysisClass}">${analysis.shortStatus}</span>
+                        </div>
                     </div>
                     <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
                         <div class="flex items-center space-x-4">
@@ -457,6 +824,7 @@
                                 ${badgeHtml}
                             </div>
                             <button class="profile-btn text-blue-500 hover:text-blue-700 transition-colors duration-200" title="Ver Perfil"><i class="fas fa-user-circle text-2xl"></i></button>
+                            <button class="analytics-btn text-purple-500 hover:text-purple-700 transition-colors duration-200" title="Análise de Vendas"><i class="fas fa-chart-line text-2xl"></i></button>
                             <button class="barcode-btn text-blue-500 hover:text-blue-700 transition-colors duration-200" title="Gerar Código de Barras"><i class="fas fa-barcode text-2xl"></i></button>
                             <button class="delete-btn text-red-500 hover:text-red-700 transition-colors duration-200" title="Excluir Produto"><i class="fas fa-trash-alt text-2xl"></i></button>
                         </div>
@@ -473,6 +841,10 @@
                 card.querySelector('.profile-btn').addEventListener('click', (event) => {
                     event.stopPropagation();
                     showModal('profileModal', product);
+                });
+                card.querySelector('.analytics-btn').addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    showAnalyticsModal(product);
                 });
                 card.querySelector('.barcode-btn').addEventListener('click', (event) => {
                     event.stopPropagation();
@@ -568,6 +940,10 @@
 
         function closeModal() {
             document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('flex'));
+            if (salesChart) {
+                salesChart.destroy();
+                salesChart = null;
+            }
         }
 
         async function init() {
