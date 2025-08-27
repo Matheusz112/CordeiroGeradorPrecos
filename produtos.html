@@ -271,6 +271,76 @@
             color: #f59e0b;
             margin-right: 0.5rem;
         }
+
+        /* Estilos para o modal de atualizar quantidade */
+        .quantity-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .quantity-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .quantity-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .quantity-btn {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            background-color: #f9fafb;
+            color: #374151;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quantity-btn:hover {
+            background-color: #f3f4f6;
+            border-color: #9ca3af;
+        }
+
+        .quantity-btn.active {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        /* Loading spinner para botões */
+        .btn-loading {
+            position: relative;
+            pointer-events: none;
+        }
+
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -335,6 +405,50 @@
             <div class="modal-body text-center">
                 <p class="text-gray-700 font-semibold mb-4" id="barcodeModalProductCode"></p>
                 <img id="barcodeImage" class="mx-auto block w-full max-w-sm">
+            </div>
+        </div>
+    </div>
+    
+    <div id="updateQuantityModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="text-xl font-semibold text-green-600"><i class="fas fa-edit mr-3"></i>Atualizar Quantidade</h2>
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="mb-4">
+                    <h3 id="updateProductName" class="text-lg font-bold text-gray-800 mb-2"></h3>
+                    <p class="text-sm text-gray-600">Quantidade atual: <span id="currentQuantity" class="font-semibold"></span></p>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="newQuantity" class="block text-sm font-medium text-gray-700 mb-2">Nova Quantidade:</label>
+                    <input type="number" id="newQuantity" class="quantity-input" min="0" placeholder="Digite a nova quantidade">
+                </div>
+
+                <div class="quantity-buttons">
+                    <button type="button" class="quantity-btn" onclick="adjustQuantity(-10)">-10</button>
+                    <button type="button" class="quantity-btn" onclick="adjustQuantity(-5)">-5</button>
+                    <button type="button" class="quantity-btn" onclick="adjustQuantity(-1)">-1</button>
+                    <button type="button" class="quantity-btn" onclick="adjustQuantity(1)">+1</button>
+                    <button type="button" class="quantity-btn" onclick="adjustQuantity(5)">+5</button>
+                    <button type="button" class="quantity-btn" onclick="adjustQuantity(10)">+10</button>
+                </div>
+
+                <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <p class="text-sm text-blue-800">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        <strong>Dica:</strong> Use os botões acima para ajustar rapidamente a quantidade ou digite diretamente no campo.
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer flex justify-end gap-3">
+                <button id="cancelUpdateBtn" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                    Cancelar
+                </button>
+                <button id="confirmUpdateBtn" class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <i class="fas fa-save mr-2"></i>Atualizar
+                </button>
             </div>
         </div>
     </div>
@@ -438,6 +552,7 @@
         const TOKEN = 'QNhuEjQ6tUb2CmQyN2B5ipfhC61gLfXe';
         const DEFAULT_PROFILE_IMG = '';
         let allProducts = [];
+        let currentProductForUpdate = null;
         const searchInput = document.getElementById('searchInput');
         const filterContainer = document.getElementById('filter-container');
         let salesChart = null;
@@ -588,6 +703,89 @@
                 shortStatus,
                 sellByDate
             };
+        }
+
+        // Função para mostrar modal de atualizar quantidade
+        function showUpdateQuantityModal(product) {
+            currentProductForUpdate = product;
+            const modal = document.getElementById('updateQuantityModal');
+            const productName = document.getElementById('updateProductName');
+            const currentQuantity = document.getElementById('currentQuantity');
+            const newQuantityInput = document.getElementById('newQuantity');
+            
+            productName.textContent = product.produto || 'Produto sem nome';
+            currentQuantity.textContent = product.quantidade || '0';
+            newQuantityInput.value = product.quantidade || '0';
+            
+            modal.classList.add('flex');
+            newQuantityInput.focus();
+        }
+
+        // Função para ajustar quantidade com botões
+        function adjustQuantity(amount) {
+            const input = document.getElementById('newQuantity');
+            const currentValue = parseInt(input.value) || 0;
+            const newValue = Math.max(0, currentValue + amount);
+            input.value = newValue;
+        }
+
+        // Função para atualizar quantidade na API
+        async function updateProductQuantity() {
+            if (!currentProductForUpdate) return;
+
+            const newQuantity = document.getElementById('newQuantity').value;
+            const confirmBtn = document.getElementById('confirmUpdateBtn');
+            
+            if (!newQuantity || newQuantity < 0) {
+                showToast('Por favor, insira uma quantidade válida', 'error');
+                return;
+            }
+
+            // Mostrar loading
+            confirmBtn.classList.add('btn-loading');
+            confirmBtn.textContent = 'Atualizando...';
+            confirmBtn.disabled = true;
+
+            try {
+                const url = `https://api.baserow.io/api/database/rows/table/150731/${currentProductForUpdate.id}/`;
+                const response = await fetch(url, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Token ${TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        quantidade: newQuantity
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro ao atualizar produto: ${response.statusText}`);
+                }
+
+                const updatedProduct = await response.json();
+                
+                // Atualizar o produto na lista local
+                const productIndex = allProducts.findIndex(p => p.id === currentProductForUpdate.id);
+                if (productIndex !== -1) {
+                    allProducts[productIndex].quantidade = newQuantity;
+                }
+
+                // Atualizar o card na interface
+                updateDisplay();
+                
+                showToast(`Quantidade atualizada para ${newQuantity} unidades!`);
+                closeModal();
+
+            } catch (error) {
+                console.error('Erro ao atualizar quantidade:', error);
+                showToast(`Erro ao atualizar quantidade: ${error.message}`, 'error');
+            } finally {
+                // Remover loading
+                confirmBtn.classList.remove('btn-loading');
+                confirmBtn.innerHTML = '<i class="fas fa-save mr-2"></i>Atualizar';
+                confirmBtn.disabled = false;
+            }
         }
         
         // Função para mostrar modal de análise
@@ -824,6 +1022,7 @@
                                 ${badgeHtml}
                             </div>
                             <button class="profile-btn text-blue-500 hover:text-blue-700 transition-colors duration-200" title="Ver Perfil"><i class="fas fa-user-circle text-2xl"></i></button>
+                            <button class="update-quantity-btn text-green-500 hover:text-green-700 transition-colors duration-200" title="Atualizar Quantidade"><i class="fas fa-edit text-2xl"></i></button>
                             <button class="analytics-btn text-purple-500 hover:text-purple-700 transition-colors duration-200" title="Análise de Vendas"><i class="fas fa-chart-line text-2xl"></i></button>
                             <button class="barcode-btn text-blue-500 hover:text-blue-700 transition-colors duration-200" title="Gerar Código de Barras"><i class="fas fa-barcode text-2xl"></i></button>
                             <button class="delete-btn text-red-500 hover:text-red-700 transition-colors duration-200" title="Excluir Produto"><i class="fas fa-trash-alt text-2xl"></i></button>
@@ -841,6 +1040,10 @@
                 card.querySelector('.profile-btn').addEventListener('click', (event) => {
                     event.stopPropagation();
                     showModal('profileModal', product);
+                });
+                card.querySelector('.update-quantity-btn').addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    showUpdateQuantityModal(product);
                 });
                 card.querySelector('.analytics-btn').addEventListener('click', (event) => {
                     event.stopPropagation();
@@ -940,6 +1143,7 @@
 
         function closeModal() {
             document.querySelectorAll('.modal').forEach(modal => modal.classList.remove('flex'));
+            currentProductForUpdate = null;
             if (salesChart) {
                 salesChart.destroy();
                 salesChart = null;
@@ -957,6 +1161,7 @@
             }
         }
         
+        // Event Listeners
         searchInput.addEventListener('keyup', updateDisplay);
 
         filterContainer.addEventListener('click', (event) => {
@@ -968,7 +1173,18 @@
             }
         });
 
-        document.querySelectorAll('.modal').forEach(modal => {
+        // Event listeners para o modal de atualizar quantidade
+        document.getElementById('confirmUpdateBtn').addEventListener('click', updateProductQuantity);
+        document.getElementById('cancelUpdateBtn').addEventListener('click', closeModal);
+
+        // Permitir Enter no input para confirmar
+        document.getElementById('newQuantity').addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                updateProductQuantity();
+            }
+        });
+
+                document.querySelectorAll('.modal').forEach(modal => {
             modal.addEventListener('click', (event) => {
                 if (event.target === modal) closeModal();
             });
@@ -978,3 +1194,4 @@
     </script>
 </body>
 </html>
+
