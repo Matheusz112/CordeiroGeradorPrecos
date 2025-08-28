@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bebidas Inteligente</title>
+    <title>Macarrão Inteligente</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -400,8 +400,8 @@
 <body class="antialiased">
     <div class="container my-8">
         <header class="text-center mb-8">
-            <h1 class="main-title text-4xl md:text-5xl font-bold tracking-tight"><i class="fas fa-cubes-stacked mr-3"></i>Bebidas</h1>
-            <p class="text-slate-500 mt-2 text-lg">Gerencie suas bebidas com eficiência e evite perdas.</p>
+            <h1 class="main-title text-4xl md:text-5xl font-bold tracking-tight"><i class="fas fa-cubes-stacked mr-3"></i>Macarrão</h1>
+            <p class="text-slate-500 mt-2 text-lg">Gerencie prateleira Macarrão com eficiência e evite perdas.</p>
         </header>
         <div class="mb-8 max-w-2xl mx-auto">
             <div class="relative">
@@ -622,7 +622,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script>
-        const API_BASE_URL = 'https://api.baserow.io/api/database/rows/table/150731/?user_field_names=true';
+        const API_BASE_URL = 'https://api.baserow.io/api/database/rows/table/656122/?user_field_names=true';
         const TOKEN = 'QNhuEjQ6tUb2CmQyN2B5ipfhC61gLfXe';
         const DEFAULT_PROFILE_IMG = '';
         let allProducts = [];
@@ -1113,7 +1113,7 @@
             }
             allProducts = allProducts.filter(p => p.id !== productId);
             updateDisplay();
-            const url = `https://api.baserow.io/api/database/rows/table/150731/${productId}/`;
+            const url = `https://api.baserow.io/api/database/rows/table/656122/${productId}/`;
            
             try {
                 const response = await fetch(url, {
