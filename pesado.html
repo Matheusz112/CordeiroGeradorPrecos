@@ -1,0 +1,1297 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesado  Inteligente</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8fafc;
+            font-family: 'Poppins', sans-serif;
+            color: #334155;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        .main-title {
+            color: #2563eb;
+        }
+       
+        .card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-left: 5px solid transparent;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .filter-btn {
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            padding: 0.6rem 1.2rem;
+            font-weight: 500;
+            background-color: #e0e7ff;
+            color: #3730a3;
+            border: 1px solid transparent;
+        }
+        .filter-btn:hover {
+            background-color: #c7d2fe;
+            transform: scale(1.05);
+        }
+        .filter-btn.active {
+            background-color: #4f46e5;
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+        }
+        .status-expired { border-left-color: #ef4444; }
+        .status-critical { border-left-color: #f59e0b; }
+        .status-upcoming { border-left-color: #eab308; }
+        .status-safe { border-left-color: #22c55e; }
+        .days-badge {
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+       
+        .bg-expired { background-color: #ef4444; }
+        .bg-critical { background-color: #f59e0b; }
+        .bg-upcoming { background-color: #eab308; }
+        .bg-safe { background-color: #22c55e; }
+        .profile-img {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #60a5fa;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .modal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            display: none;
+        }
+       
+        .modal.flex { display: flex; }
+        .modal-content {
+            background: white;
+            border-radius: 1rem;
+            width: 95%;
+            max-width: 500px;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+        }
+       
+        .modal-content-large {
+            background: white;
+            border-radius: 1rem;
+            width: 95%;
+            max-width: 900px;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+        }
+        .modal-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+       
+        .modal-body { padding: 1.5rem; overflow-y: auto; }
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            background-color: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+            border-bottom-left-radius: 1rem;
+            border-bottom-right-radius: 1rem;
+        }
+        .close-btn { cursor: pointer; font-size: 1.5rem; color: #9ca3af; transition: color 0.2s; }
+        .close-btn:hover { color: #374151; }
+        .message-btn-container { position: relative; display: inline-block; }
+        .badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #dc2626;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            border: 2px solid white;
+        }
+        .loader {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.5rem;
+            color: #4f46e5;
+        }
+        #toast {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        #toast.show {
+            transform: translate(-50%, -20px) scale(1);
+            opacity: 1;
+        }
+        #toast.success { background-color: #10b981; }
+        #toast.error { background-color: #ef4444; }
+       
+        .analysis-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            color: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+       
+        .metric-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+       
+        .chart-container {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+       
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+       
+        .status-success { background-color: #22c55e; }
+        .status-warning { background-color: #eab308; }
+        .status-danger { background-color: #ef4444; }
+        .analysis-result {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            margin-top: 0.25rem;
+            display: inline-block;
+        }
+       
+        .analysis-success {
+            background-color: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+       
+        .analysis-warning {
+            background-color: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+       
+        .analysis-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        .sell-by-date {
+            font-size: 0.7rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+            font-style: italic;
+        }
+        .estimate-warning {
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+        }
+        .estimate-warning i {
+            color: #f59e0b;
+            margin-right: 0.5rem;
+        }
+        .quantity-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        .quantity-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .quantity-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .quantity-btn {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            background-color: #f9fafb;
+            color: #374151;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quantity-btn:hover {
+            background-color: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        .quantity-btn.active {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        .btn-loading {
+            position: relative;
+            pointer-events: none;
+        }
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        .profile-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        .profile-action-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            background-color: #f9fafb;
+            color: #374151;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .profile-action-btn:hover {
+            background-color: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        .profile-action-btn.barcode-btn {
+            background-color: #dbeafe;
+            color: #1e40af;
+            border-color: #3b82f6;
+        }
+        .profile-action-btn.barcode-btn:hover {
+            background-color: #bfdbfe;
+        }
+        .profile-action-btn.delete-btn {
+            background-color: #fee2e2;
+            color: #dc2626;
+            border-color: #ef4444;
+        }
+        .profile-action-btn.delete-btn:hover {
+            background-color: #fecaca;
+        }
+        /* Novos estilos para indicador de estoque calculado */
+        .stock-indicator {
+            background: linear-gradient(45deg, #06b6d4, #3b82f6);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-left: 0.5rem;
+        }
+        .stock-calculated {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+        }
+        /* Animação para gráficos Chart.js */
+        #salesChart {
+            max-height: 400px !important;
+        }
+        .chart-legend-custom {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .legend-item-custom {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .legend-color-custom {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="container my-8">
+        <header class="text-center mb-8">
+            <h1 class="main-title text-4xl md:text-5xl font-bold tracking-tight"><i class="fas fa-cubes-stacked mr-3"></i>Pesado s</h1>
+            <p class="text-slate-500 mt-2 text-lg">Gerencie suas Pesado s com eficiência e evite perdas.</p>
+        </header>
+        <div class="mb-8 max-w-2xl mx-auto">
+            <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                    <i class="fas fa-search text-gray-400"></i>
+                </span>
+                <input type="text" id="searchInput" placeholder="Pesquisar por nome do produto..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+        </div>
+        <div class="mb-2 text-center text-sm text-gray-500">
+            <i class="fas fa-arrows-alt-h mr-2 animate-pulse"></i><span>Arraste para o lado para ver mais filtros</span>
+        </div>
+        <div class="overflow-x-auto pb-4 -mx-4 sm:-mx-0">
+            <div id="filter-container" class="flex flex-nowrap justify-start sm:justify-center gap-3 mb-10 px-4 sm:px-0 whitespace-nowrap">
+                <button data-filter="all" class="filter-btn active"><i class="fas fa-list-ul mr-2"></i>Todos</button>
+                <button data-filter="expired" class="filter-btn"><i class="fas fa-times-circle mr-2"></i>Vencidos</button>
+                <button data-filter="critical" class="filter-btn"><i class="fas fa-exclamation-triangle mr-2"></i>Críticos (7 dias)</button>
+                <button data-filter="upcoming" class="filter-btn"><i class="fas fa-hourglass-half mr-2"></i>Próximos (45 dias)</button>
+                <button data-filter="safe" class="filter-btn"><i class="fas fa-check-circle mr-2"></i>Seguros</button>
+                <button data-filter="this_month" class="filter-btn"><i class="fas fa-calendar-day mr-2"></i>Vencem no Mês</button>
+            </div>
+        </div>
+        <div id="productContainer" class="grid grid-cols-1 gap-6"></div>
+    </div>
+    <div id="messageModal" class="modal"><div class="modal-content"><div class="modal-header"><h2 class="text-xl font-semibold text-blue-600"><i class="fas fa-comment-alt-dots mr-3"></i>Mensagem de Alerta</h2><span class="close-btn" onclick="closeModal()">&times;</span></div><div class="modal-body"><p id="modalMessage" class="text-gray-700 text-base"></p></div><div class="modal-footer"><p id="modalExpiration" class="text-sm text-gray-600"></p><p id="modalStatus" class="text-sm text-gray-600 mt-1"></p></div></div></div>
+   
+    <div id="profileModal" class="modal">
+        <div class="modal-content text-center">
+            <div class="modal-header">
+                <h2 class="text-xl font-semibold text-blue-600"><i class="fas fa-user-circle mr-3"></i>Perfil do Produto</h2>
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <img id="modalProfileImg" class="profile-img mx-auto block mb-4 w-24 h-24" alt="Foto de Perfil">
+                <h3 id="modalProfileName" class="text-xl font-bold text-gray-800"></h3>
+                <p id="modalProfileSender" class="text-base text-gray-600 mt-2"></p>
+               
+                <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">Código de Barras</h4>
+                    <p id="profileBarcodeCode" class="text-sm text-gray-600 mb-2"></p>
+                    <div id="profileBarcodeContainer" class="flex justify-center">
+                        <canvas id="profileBarcodeCanvas" class="max-w-full"></canvas>
+                    </div>
+                </div>
+               
+                <div class="profile-actions">
+                    <button id="profileDeleteBtn" class="profile-action-btn delete-btn">
+                        <i class="fas fa-trash-alt"></i>
+                        Excluir
+                    </button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <p id="modalExpirationProfile" class="text-sm text-gray-600"></p>
+                <p id="modalStatusProfile" class="text-sm text-gray-600 mt-1"></p>
+            </div>
+        </div>
+    </div>
+   
+    <div id="updateQuantityModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="text-xl font-semibold text-green-600"><i class="fas fa-edit mr-3"></i>Atualizar Quantidade</h2>
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="mb-4">
+                    <h3 id="updateProductName" class="text-lg font-bold text-gray-800 mb-2"></h3>
+                    <p class="text-sm text-gray-600">Quantidade atual: <span id="currentQuantity" class="font-semibold"></span></p>
+                </div>
+               
+                <div class="mb-4">
+                    <label for="newQuantity" class="block text-sm font-medium text-gray-700 mb-2">Nova Quantidade:</label>
+                    <input type="number" id="newQuantity" class="quantity-input" min="0" placeholder="Digite a nova quantidade">
+                </div>
+                <div class="quantity-buttons">
+                    <button type="button" class="quantity-btn" onclick="adjustQuantity(-10)">-10</button>
+                    <button type="button" class="quantity-btn" onclick="adjustQuantity(-5)">-5</button>
+                    <button type="button" class="quantity-btn" onclick="adjustQuantity(-1)">-1</button>
+                    <button type="button" class="quantity-btn" onclick="adjustQuantity(1)">+1</button>
+                    <button type="button" class="quantity-btn" onclick="adjustQuantity(5)">+5</button>
+                    <button type="button" class="quantity-btn" onclick="adjustQuantity(10)">+10</button>
+                </div>
+                <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <p class="text-sm text-blue-800">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        <strong>Dica:</strong> Use os botões acima para ajustar rapidamente a quantidade ou digite diretamente no campo.
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer flex justify-end gap-3">
+                <button id="cancelUpdateBtn" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                    Cancelar
+                </button>
+                <button id="confirmUpdateBtn" class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <i class="fas fa-save mr-2"></i>Atualizar
+                </button>
+            </div>
+        </div>
+    </div>
+   
+    <div id="analyticsModal" class="modal">
+        <div class="modal-content-large">
+            <div class="modal-header">
+                <h2 class="text-xl font-semibold text-purple-600"><i class="fas fa-chart-line mr-3"></i>Análise de Vendas</h2>
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="analysis-card mb-6">
+                    <h3 id="analyticsProductName" class="text-2xl font-bold mb-4"></h3>
+                   
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <div class="metric-card text-center">
+                            <h4 class="text-sm opacity-80 mb-2">Estoque Original</h4>
+                            <p id="analyticsOriginalQuantity" class="text-2xl font-bold"></p>
+                        </div>
+                        <div class="metric-card text-center">
+                            <h4 class="text-sm opacity-80 mb-2">Estoque Atual Estimado</h4>
+                            <p id="analyticsCurrentQuantity" class="text-2xl font-bold"></p>
+                        </div>
+                        <div class="metric-card text-center">
+                            <h4 class="text-sm opacity-80 mb-2">Estimativa Já Vendido</h4>
+                            <p id="analyticsSoldQuantity" class="text-2xl font-bold"></p>
+                        </div>
+                        <div class="metric-card text-center">
+                            <h4 class="text-sm opacity-80 mb-2">Taxa de Conversão</h4>
+                            <p id="analyticsConversionRate" class="text-2xl font-bold"></p>
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-3">Projeção de Vendas</h4>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span>Vendas Diárias:</span>
+                                <span id="analyticsDailySales" class="font-semibold"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Dias no Sistema:</span>
+                                <span id="analyticsDaysInSystem" class="font-semibold"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Total Vendido:</span>
+                                <span id="analyticsTotalSold" class="font-semibold text-green-600"></span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Estoque Restante:</span>
+                                <span id="analyticsRemaining" class="font-semibold text-blue-600"></span>
+                            </div>
+                            <div class="flex justify-between border-t pt-2">
+                                <span class="font-semibold">Dias até Vencimento:</span>
+                                <span id="analyticsDaysLeft" class="font-semibold text-orange-600"></span>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <h4 class="text-lg font-semibold text-gray-800 mb-3">Status da Análise</h4>
+                        <div id="analyticsStatus" class="space-y-2">
+                        </div>
+                    </div>
+                </div>
+                <div class="estimate-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span><strong>Aviso:</strong> Este cálculo é baseado na data de envio e padrões de vendas estimados. O estoque atual é calculado automaticamente considerando os dias decorridos desde o envio.</span>
+                </div>
+               
+                <!-- Gráfico Chart.js -->
+                <div class="chart-container">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-3 text-center">Projeção de Vendas vs Estoque (30 dias)</h4>
+                    <canvas id="salesChart" width="400" height="200"></canvas>
+                    <div class="chart-legend-custom">
+                        <div class="legend-item-custom">
+                            <div class="legend-color-custom" style="background: linear-gradient(45deg, #06b6d4, #0891b2);"></div>
+                            <span>Estoque Disponível</span>
+                        </div>
+                        <div class="legend-item-custom">
+                            <div class="legend-color-custom" style="background: linear-gradient(45deg, #22c55e, #16a34a);"></div>
+                            <span>Vendas Realizadas</span>
+                        </div>
+                        <div class="legend-item-custom">
+                            <div class="legend-color-custom" style="background: linear-gradient(45deg, #f59e0b, #d97706);"></div>
+                            <span>Projeção de Vendas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="text-xl font-semibold text-red-600"><i class="fas fa-exclamation-circle mr-3"></i>Confirmar Exclusão</h2>
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p class="text-gray-700 text-base">Tem certeza que deseja excluir este produto?</p>
+                <p class="text-gray-500 text-sm mt-2">Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer flex justify-end gap-3">
+                <button id="cancelDeleteBtn" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                    Não
+                </button>
+                <button id="confirmDeleteBtn" class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                    Sim, Excluir
+                </button>
+            </div>
+        </div>
+    </div>
+   
+    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 p-4 rounded-lg text-white transition-all duration-300 transform scale-0 opacity-0">
+        <p id="toast-message"></p>
+    </div>
+   
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        const API_BASE_URL = 'https://api.baserow.io/api/database/rows/table/656123/?user_field_names=true';
+        const TOKEN = 'QNhuEjQ6tUb2CmQyN2B5ipfhC61gLfXe';
+        const DEFAULT_PROFILE_IMG = '';
+        let allProducts = [];
+        let currentProductForUpdate = null;
+        let currentProductForProfile = null;
+        let salesChart = null;
+        const searchInput = document.getElementById('searchInput');
+        const filterContainer = document.getElementById('filter-container');
+        // Função para exibir a notificação (toast)
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+           
+            toast.className = 'fixed bottom-5 left-1/2 -translate-x-1/2 z-50 p-4 rounded-lg text-white transition-all duration-300 transform scale-0 opacity-0';
+           
+            toastMessage.textContent = message;
+            toast.classList.add(type);
+           
+            void toast.offsetWidth;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        async function fetchAllRows(url = API_BASE_URL, accumulated = []) {
+            try {
+                const response = await fetch(url, { headers: { 'Authorization': `Token ${TOKEN}` } });
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const data = await response.json();
+                accumulated.push(...data.results);
+                return data.next ? fetchAllRows(data.next, accumulated) : accumulated;
+            } catch (error) {
+                console.error('Erro ao buscar dados:', error);
+                throw error;
+            }
+        }
+        // Função para calcular dias até o vencimento
+        const calculateDaysToExpire = (vencimento) => {
+            if (!vencimento) return Infinity;
+           
+            const parts = vencimento.split('/');
+            if (parts.length !== 3) return Infinity;
+           
+            const day = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10) - 1;
+            const year = parseInt(parts[2], 10);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const expDate = new Date(year, month, day);
+            if (isNaN(expDate.getTime())) return Infinity;
+            return Math.floor((expDate - today) / (1000 * 60 * 60 * 24));
+        };
+        // Função para calcular dias desde o envio (corrigido para usar o campo DATAENVIO do Baserow)
+        const calculateDaysSinceShipment = (dataEnvio) => {
+            if (!dataEnvio) return 0;
+           
+            const parts = dataEnvio.split('/');
+            if (parts.length !== 3) return 0;
+           
+            const day = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10) - 1;
+            const year = parseInt(parts[2], 10);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const shipDate = new Date(year, month, day);
+            if (isNaN(shipDate.getTime())) return 0;
+            return Math.max(0, Math.floor((today - shipDate) / (1000 * 60 * 60 * 24)));
+        };
+        // Função para calcular estoque atual baseado na data de envio
+        const calculateCurrentStock = (product) => {
+            const originalQuantity = parseInt(product.quantidade) || 0;
+            const daysSinceShipment = calculateDaysSinceShipment(product.DATAENVIO);
+           
+            if (daysSinceShipment === 0) return originalQuantity;
+           
+            const conversionRate = getConversionRate(product.MARGEM);
+            const dailyClients = 170;
+            const dailySales = Math.floor(dailyClients * conversionRate);
+           
+            const totalSold = Math.min(dailySales * daysSinceShipment, originalQuantity);
+            return Math.max(0, originalQuantity - totalSold);
+        };
+        const formatDate = (vencimento) => {
+            if (!vencimento) return 'Data não informada';
+           
+            const parts = vencimento.split('/');
+            if (parts.length !== 3) return 'Data inválida';
+           
+            return vencimento;
+        };
+        function calculateSellByDate(quantity, dailySales) {
+            if (dailySales <= 0) return 'Não calculável';
+           
+            const daysToSell = Math.ceil(quantity / dailySales);
+            const today = new Date();
+            const sellByDate = new Date(today);
+            sellByDate.setDate(today.getDate() + daysToSell);
+           
+            return sellByDate.toLocaleDateString('pt-BR');
+        }
+       
+        function getConversionRate(margem) {
+            if (!margem) return 0.02;
+           
+            const margin = margem.toUpperCase();
+            switch (margin) {
+                case 'BAIXA': return Math.random() * (0.02 - 0.01) + 0.01;
+                case 'PARCIAL': return Math.random() * (0.04 - 0.03) + 0.03;
+                case 'AUTOGIRO': return Math.random() * (0.06 - 0.05) + 0.05;
+                case 'SUPERGIRO': return Math.random() * (0.08 - 0.06) + 0.06;
+                default: return 0.02;
+            }
+        }
+       
+        // Função melhorada para analisar vendas com estoque calculado
+        function analyzeSales(product) {
+            const originalQuantity = parseInt(product.quantidade) || 0;
+            const currentStock = calculateCurrentStock(product);
+            const daysSinceShipment = calculateDaysSinceShipment(product.DATAENVIO);
+            const daysToExpire = calculateDaysToExpire(product.VENCIMENTO);
+            const conversionRate = getConversionRate(product.MARGEM);
+            const dailyClients = 120;
+           
+            const dailySales = Math.floor(dailyClients * conversionRate);
+            const totalSoldSoFar = originalQuantity - currentStock;
+            const projectedFutureSales = dailySales * Math.max(0, daysToExpire);
+            const finalRemaining = Math.max(0, currentStock - projectedFutureSales);
+           
+            let status = 'success';
+            let statusText = 'Produto será vendido completamente';
+            let recommendation = 'Ótimo! O produto deve ser vendido antes do vencimento.';
+            let shortStatus = 'Vendas OK';
+           
+            if (daysToExpire <= 0) {
+                status = 'danger';
+                statusText = 'Produto já vencido';
+                recommendation = 'Produto vencido! Remova do estoque imediatamente.';
+                shortStatus = 'Vencido';
+            } else if (finalRemaining > 0) {
+                if (finalRemaining > currentStock * 0.5) {
+                    status = 'danger';
+                    statusText = 'Alto risco de sobra no estoque';
+                    recommendation = 'Atenção! Grande quantidade pode não ser vendida. Considere promoções ou descontos.';
+                    shortStatus = 'Alto risco';
+                } else {
+                    status = 'warning';
+                    statusText = 'Possível sobra no estoque';
+                    recommendation = 'Cuidado! Pequena quantidade pode sobrar. Monitore as vendas de perto.';
+                    shortStatus = 'Possível sobra';
+                }
+            }
+           
+            return {
+                originalQuantity,
+                currentStock,
+                totalSoldSoFar,
+                daysSinceShipment,
+                daysToExpire,
+                conversionRate: (conversionRate * 100).toFixed(1) + '%',
+                dailySales,
+                projectedFutureSales,
+                finalRemaining,
+                status,
+                statusText,
+                recommendation,
+                shortStatus
+            };
+        }
+        // Função para criar gráfico animado com Chart.js
+        function createAnimatedChart(analysis) {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+           
+            // Destruir gráfico anterior se existir
+            if (salesChart) {
+                salesChart.destroy();
+            }
+            const days = Math.min(analysis.daysToExpire + analysis.daysSinceShipment, 60);
+            const labels = [];
+            const stockData = [];
+            const salesData = [];
+            const projectionData = [];
+            let currentStock = analysis.originalQuantity;
+           
+            // Dados históricos (dias já passados)
+            for (let i = -analysis.daysSinceShipment; i <= 0; i++) {
+                labels.push(i === 0 ? 'Hoje' : `${Math.abs(i)}d atrás`);
+               
+                if (i < 0) {
+                    const dailySales = Math.min(analysis.dailySales, currentStock);
+                    salesData.push(dailySales);
+                    currentStock -= dailySales;
+                    stockData.push(currentStock);
+                    projectionData.push(null);
+                } else {
+                    salesData.push(null);
+                    stockData.push(analysis.currentStock);
+                    projectionData.push(null);
+                }
+            }
+            // Projeção futura
+            let futureStock = analysis.currentStock;
+            for (let i = 1; i <= Math.min(30, analysis.daysToExpire); i++) {
+                labels.push(`+${i}d`);
+               
+                const futureSales = Math.min(analysis.dailySales, futureStock);
+                futureStock -= futureSales;
+               
+                salesData.push(null);
+                stockData.push(null);
+                projectionData.push(Math.max(0, futureStock));
+            }
+            const gradientStock = ctx.createLinearGradient(0, 0, 0, 400);
+            gradientStock.addColorStop(0, 'rgba(6, 182, 212, 0.8)');
+            gradientStock.addColorStop(1, 'rgba(6, 182, 212, 0.1)');
+            const gradientSales = ctx.createLinearGradient(0, 0, 0, 400);
+            gradientSales.addColorStop(0, 'rgba(34, 197, 94, 0.8)');
+            gradientSales.addColorStop(1, 'rgba(34, 197, 94, 0.1)');
+            const gradientProjection = ctx.createLinearGradient(0, 0, 0, 400);
+            gradientProjection.addColorStop(0, 'rgba(245, 158, 11, 0.6)');
+            gradientProjection.addColorStop(1, 'rgba(245, 158, 11, 0.1)');
+            salesChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Estoque Disponível',
+                        data: stockData,
+                        borderColor: '#06b6d4',
+                        backgroundColor: gradientStock,
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#06b6d4',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 8
+                    }, {
+                        label: 'Vendas Diárias',
+                        data: salesData,
+                        borderColor: '#22c55e',
+                        backgroundColor: gradientSales,
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#22c55e',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 8
+                    }, {
+                        label: 'Projeção de Estoque',
+                        data: projectionData,
+                        borderColor: '#f59e0b',
+                        backgroundColor: gradientProjection,
+                        borderWidth: 3,
+                        borderDash: [10, 5],
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#f59e0b',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
+                            borderColor: '#4f46e5',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            displayColors: true,
+                            callbacks: {
+                                title: function(context) {
+                                    return `Dia: ${context[0].label}`;
+                                },
+                                label: function(context) {
+                                    const value = context.parsed.y;
+                                    if (value !== null) {
+                                        return `${context.dataset.label}: ${Math.round(value)} unidades`;
+                                    }
+                                    return null;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                color: '#6b7280',
+                                font: {
+                                    size: 11,
+                                    weight: '500'
+                                }
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                color: '#6b7280',
+                                font: {
+                                    size: 11,
+                                    weight: '500'
+                                },
+                                callback: function(value) {
+                                    return Math.round(value) + ' un';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        function generateBarcodeInProfile(product) {
+            const canvas = document.getElementById('profileBarcodeCanvas');
+            const codeElement = document.getElementById('profileBarcodeCode');
+           
+            const productCode = product.codig;
+           
+            if (productCode) {
+                const cleanCode = productCode.replace(/[^a-zA-Z0-9]/g, '');
+                codeElement.textContent = `Código: ${productCode}`;
+               
+                try {
+                    JsBarcode(canvas, cleanCode, {
+                        format: "CODE128",
+                        displayValue: true,
+                        height: 60,
+                        width: 1.5,
+                        margin: 5,
+                        fontSize: 12
+                    });
+                    canvas.style.display = 'block';
+                } catch (error) {
+                    console.error('Erro ao gerar código de barras:', error);
+                    canvas.style.display = 'none';
+                    codeElement.textContent = 'Erro ao gerar código de barras';
+                }
+            } else {
+                canvas.style.display = 'none';
+                codeElement.textContent = 'Código do produto não disponível';
+            }
+        }
+        function showUpdateQuantityModal(product) {
+            currentProductForUpdate = product;
+            const modal = document.getElementById('updateQuantityModal');
+            const productName = document.getElementById('updateProductName');
+            const currentQuantity = document.getElementById('currentQuantity');
+            const newQuantityInput = document.getElementById('newQuantity');
+           
+            productName.textContent = product.produto || 'Produto sem nome';
+            currentQuantity.textContent = product.quantidade || '0';
+            newQuantityInput.value = product.quantidade || '0';
+           
+            modal.classList.add('flex');
+            newQuantityInput.focus();
+        }
+        function adjustQuantity(amount) {
+            const input = document.getElementById('newQuantity');
+            const currentValue = parseInt(input.value) || 0;
+            const newValue = Math.max(0, currentValue + amount);
+            input.value = newValue;
+        }
+        function updateProductQuantity() {
+            if (!currentProductForUpdate) return;
+            const newQuantity = document.getElementById('newQuantity').value;
+            const confirmBtn = document.getElementById('confirmUpdateBtn');
+           
+            if (!newQuantity || newQuantity < 0) {
+                showToast('Por favor, insira uma quantidade válida', 'error');
+                return;
+            }
+            confirmBtn.classList.add('btn-loading');
+            confirmBtn.textContent = 'Atualizando...';
+            confirmBtn.disabled = true;
+            const productIndex = allProducts.findIndex(p => p.id === currentProductForUpdate.id);
+            if (productIndex !== -1) {
+                allProducts[productIndex].quantidade = newQuantity;
+            }
+            updateDisplay();
+           
+            showToast(`Quantidade atualizada para ${newQuantity} unidades!`);
+            closeModal();
+            confirmBtn.classList.remove('btn-loading');
+            confirmBtn.innerHTML = '<i class="fas fa-save mr-2"></i>Atualizar';
+            confirmBtn.disabled = false;
+        }
+       
+        function showAnalyticsModal(product) {
+            const analysis = analyzeSales(product);
+            const modal = document.getElementById('analyticsModal');
+           
+            // Preencher dados básicos
+            document.getElementById('analyticsProductName').textContent = product.produto || 'N/A';
+            document.getElementById('analyticsOriginalQuantity').textContent = analysis.originalQuantity;
+            document.getElementById('analyticsCurrentQuantity').textContent = analysis.currentStock;
+            document.getElementById('analyticsSoldQuantity').textContent = analysis.totalSoldSoFar;
+            document.getElementById('analyticsConversionRate').textContent = analysis.conversionRate;
+           
+            // Preencher projeções
+            document.getElementById('analyticsDailySales').textContent = analysis.dailySales + ' unidades';
+            document.getElementById('analyticsDaysInSystem').textContent = analysis.daysSinceShipment + ' dias';
+            document.getElementById('analyticsTotalSold').textContent = analysis.totalSoldSoFar + ' unidades';
+            document.getElementById('analyticsRemaining').textContent = analysis.currentStock + ' unidades';
+            document.getElementById('analyticsDaysLeft').textContent = analysis.daysToExpire > 0 ? analysis.daysToExpire + ' dias' : 'Vencido';
+           
+            // Status
+            const statusContainer = document.getElementById('analyticsStatus');
+            const statusClass = analysis.status === 'success' ? 'status-success' :
+                              analysis.status === 'warning' ? 'status-warning' : 'status-danger';
+           
+            statusContainer.innerHTML = `
+                <div class="flex items-center mb-2">
+                    <span class="status-indicator ${statusClass}"></span>
+                    <span class="font-semibold">${analysis.statusText}</span>
+                </div>
+                <p class="text-sm text-gray-600">${analysis.recommendation}</p>
+            `;
+           
+            // Criar gráfico animado
+            createAnimatedChart(analysis);
+           
+            modal.classList.add('flex');
+        }
+        const STATUS_MAP = {
+            expired: { text: 'Vencido', class: 'status-expired', badge: 'bg-expired' },
+            critical: { text: 'Vencendo em até 7 dias', class: 'status-critical', badge: 'bg-critical' },
+            upcoming: { text: 'Vence nos próximos 45 dias', class: 'status-upcoming', badge: 'bg-upcoming' },
+            safe: { text: 'Seguro', class: 'status-safe', badge: 'bg-safe' },
+            invalid: { text: 'Data inválida', class: 'status-expired', badge: 'bg-expired' }
+        };
+        const getStatusInfo = (days) => {
+            if (days === Infinity) return STATUS_MAP.invalid;
+            if (days < 0) return STATUS_MAP.expired;
+            if (days <= 7) return STATUS_MAP.critical;
+            if (days <= 45) return STATUS_MAP.upcoming;
+            return STATUS_MAP.safe;
+        };
+       
+        const formatDaysBadge = (days) => {
+            if (days === Infinity) return 'Inválido';
+            if (days < 0) return 'Vencido';
+            if (days === 0) return 'Vence Hoje';
+            return `${days} dia${days !== 1 ? 's' : ''}`;
+        };
+        function showConfirmModal(productId) {
+            const confirmModal = document.getElementById('confirmModal');
+            const confirmBtn = document.getElementById('confirmDeleteBtn');
+            const cancelBtn = document.getElementById('cancelDeleteBtn');
+            confirmBtn.onclick = () => {
+                deleteProduct(productId);
+                closeModal();
+            };
+            cancelBtn.onclick = () => {
+                closeModal();
+            };
+            confirmModal.classList.add('flex');
+        }
+        async function deleteProduct(productId) {
+            const cardToRemove = document.querySelector(`.card[data-id="${productId}"]`);
+            if (cardToRemove) {
+                cardToRemove.remove();
+            }
+            allProducts = allProducts.filter(p => p.id !== productId);
+            updateDisplay();
+            const url = `https://api.baserow.io/api/database/rows/table/656123/${productId}/`;
+           
+            try {
+                const response = await fetch(url, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Token ${TOKEN}`
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error(`Erro ao excluir produto: ${response.statusText}`);
+                }
+                showToast('Produto excluído com sucesso!');
+            } catch (error) {
+                console.error('Falha na exclusão:', error);
+                showToast(`Erro ao excluir o produto: ${error.message}`, 'error');
+                await init();
+            }
+        }
+        function renderProducts(products) {
+            const container = document.getElementById('productContainer');
+            container.innerHTML = '';
+           
+            if (products.length === 0) {
+                container.innerHTML = `<p class="col-span-full text-center text-gray-500 text-lg py-10">Nenhum produto encontrado com os critérios selecionados.</p>`;
+                return;
+            }
+            products.forEach(product => {
+                const days = calculateDaysToExpire(product.VENCIMENTO);
+                const statusInfo = getStatusInfo(days);
+                const profileImg = product.PERFILFOTOURL || DEFAULT_PROFILE_IMG;
+                const hasMessage = !!product.ALERTAMENSAGEM;
+                const badgeHtml = hasMessage ? '<span class="badge">1</span>' : '';
+                const senderName = product.ENVIADOPORQUEM || 'Não informado';
+               
+                // Calcular estoque atual
+                const originalQuantity = parseInt(product.quantidade) || 0;
+                const currentStock = calculateCurrentStock(product);
+                const daysSinceShipment = calculateDaysSinceShipment(product.DATAENVIO);
+               
+                // Análise de vendas para mostrar no card
+                const analysis = analyzeSales(product);
+                const analysisClass = analysis.status === 'success' ? 'analysis-success' :
+                                   analysis.status === 'warning' ? 'analysis-warning' : 'analysis-danger';
+                const card = document.createElement('div');
+                card.className = `card p-5 flex flex-col justify-between ${statusInfo.class}`;
+                card.setAttribute('data-id', product.id);
+               
+                // Mostrar quantidade original e calculada
+                const stockDisplay = originalQuantity !== currentStock ?
+                    `${currentStock}<span class="stock-indicator"><i class="fas fa-calculator"></i>Calculado</span> (Original: ${originalQuantity})` :
+                    originalQuantity.toString();
+               
+                card.innerHTML = `
+                    <div class="flex-grow">
+                        <div class="flex items-center mb-4">
+                            <img src="${profileImg}" class="profile-img mr-4" alt="Foto de Perfil" onerror="this.src='${DEFAULT_PROFILE_IMG}'">
+                            <div>
+                                <h3 class="text-lg font-bold text-blue-800 leading-tight">${product.produto || 'N/A'}</h3>
+                                <p class="text-sm text-gray-500">Cód: ${product.codig || 'N/A'}</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-2"><i class="fas fa-box-open mr-2 text-blue-400"></i><strong>Quantidade:</strong> ${stockDisplay}</p>
+                        ${originalQuantity !== currentStock ? `
+                        <div class="stock-calculated">
+                            <i class="fas fa-info-circle mr-1"></i>
+        
+			    <strong>Sistema há ${daysSinceShipment} dias</strong> - Vendido aprox: ${originalQuantity - currentStock} 
+
+                        </div>` : ''}
+                        <p class="text-gray-600"><i class="fas fa-calendar-check mr-2 text-blue-400"></i><strong>Vencimento:</strong> ${formatDate(product.VENCIMENTO)}</p>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-600"><i class="fas fa-chart-pie mr-2 text-green-400"></i><strong>Margem:</strong> ${product.MARGEM || 'N/A'}</p>
+                                <p class="text-gray-600 text-xs"><i class="fas fa-shipping-fast mr-2 text-orange-400"></i><strong>Enviado:</strong> ${formatDate(product.DATAENVIO) || 'N/A'}</p>
+                            </div>
+                            <span class="analysis-result ${analysisClass}">${analysis.shortStatus}</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="message-btn-container">
+                                <button class="message-btn text-blue-500 hover:text-blue-700 transition-colors duration-200" title="Ver Alerta"><i class="fas fa-envelope text-2xl"></i></button>
+                                ${badgeHtml}
+                            </div>
+                            <button class="profile-btn text-blue-500 hover:text-blue-700 transition-colors duration-200" title="Ver Perfil"><i class="fas fa-user-circle text-2xl"></i></button>
+                            <button class="update-quantity-btn text-green-500 hover:text-green-700 transition-colors duration-200" title="Atualizar Quantidade"><i class="fas fa-edit text-2xl"></i></button>
+                            <button class="analytics-btn text-purple-500 hover:text-purple-700 transition-colors duration-200" title="Análise de Vendas"><i class="fas fa-chart-line text-2xl"></i></button>
+                        </div>
+                        <div class="text-right">
+                            <div class="days-badge ${statusInfo.badge}">${formatDaysBadge(days)}</div>
+                            <p class="text-xs text-gray-500 mt-2"><i class="fas fa-user mr-2 text-indigo-400"></i>Enviado por: ${senderName}</p>
+                        </div>
+                    </div>
+                `;
+                card.querySelector('.message-btn').addEventListener('click', () => showMessageModal(product));
+                card.querySelector('.profile-btn').addEventListener('click', () => showProfileModal(product));
+                card.querySelector('.update-quantity-btn').addEventListener('click', () => showUpdateQuantityModal(product));
+                card.querySelector('.analytics-btn').addEventListener('click', () => showAnalyticsModal(product));
+                container.appendChild(card);
+            });
+        }
+        function showMessageModal(product) {
+            if (!product.ALERTAMENSAGEM) {
+                showToast('Nenhuma mensagem de alerta disponível', 'error');
+                return;
+            }
+            document.getElementById('modalMessage').textContent = product.ALERTAMENSAGEM;
+            document.getElementById('modalExpiration').textContent = `Vencimento: ${formatDate(product.VENCIMENTO)}`;
+            const statusInfo = getStatusInfo(calculateDaysToExpire(product.VENCIMENTO));
+            document.getElementById('modalStatus').textContent = `Status: ${statusInfo.text}`;
+            document.getElementById('messageModal').classList.add('flex');
+        }
+        function showProfileModal(product) {
+            document.getElementById('modalProfileImg').src = product.PERFILFOTOURL || DEFAULT_PROFILE_IMG;
+            document.getElementById('modalProfileName').textContent = product.produto || 'N/A';
+            document.getElementById('modalProfileSender').textContent = `Enviado por: ${product.ENVIADOPORQUEM || 'Não informado'}`;
+            generateBarcodeInProfile(product);
+            document.getElementById('modalExpirationProfile').textContent = `Vencimento: ${formatDate(product.VENCIMENTO)}`;
+            const statusInfo = getStatusInfo(calculateDaysToExpire(product.VENCIMENTO));
+            document.getElementById('modalStatusProfile').textContent = `Status: ${statusInfo.text}`;
+            const deleteBtn = document.getElementById('profileDeleteBtn');
+            deleteBtn.onclick = () => {
+                closeModal();
+                showConfirmModal(product.id);
+            };
+            document.getElementById('profileModal').classList.add('flex');
+        }
+        function closeModal() {
+            document.querySelectorAll('.modal.flex').forEach(modal => modal.classList.remove('flex'));
+        }
+        function updateDisplay() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            let filtered = allProducts.filter(p => (p.produto || '').toLowerCase().includes(searchTerm));
+            const today = new Date();
+            const thisMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+            const thisMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+            filtered = filtered.filter(p => {
+                const days = calculateDaysToExpire(p.VENCIMENTO);
+                switch (activeFilter) {
+                    case 'expired': return days < 0;
+                    case 'critical': return days >= 0 && days <= 7;
+                    case 'upcoming': return days > 7 && days <= 45;
+                    case 'safe': return days > 45;
+                    case 'this_month':
+                        if (!p.VENCIMENTO) return false;
+                        const [d, m, y] = p.VENCIMENTO.split('/');
+                        const expDate = new Date(y, m - 1, d);
+                        return expDate >= thisMonthStart && expDate <= thisMonthEnd;
+                    default: return true;
+                }
+            });
+            renderProducts(filtered);
+        }
+        async function init() {
+            const container = document.getElementById('productContainer');
+            container.innerHTML = '<p class="loader"><i class="fas fa-spinner fa-spin mr-2"></i>Carregando...</p>';
+            try {
+                allProducts = await fetchAllRows();
+                allProducts.sort((a, b) => calculateDaysToExpire(a.VENCIMENTO) - calculateDaysToExpire(b.VENCIMENTO));
+                updateDisplay();
+            } catch (error) {
+                container.innerHTML = '<p class="text-center text-red-500">Erro ao carregar produtos. Tente novamente.</p>';
+            }
+        }
+        // Event listeners
+        searchInput.addEventListener('input', updateDisplay);
+        filterContainer.addEventListener('click', e => {
+            if (e.target.classList.contains('filter-btn')) {
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                e.target.classList.add('active');
+                updateDisplay();
+            }
+        });
+        document.getElementById('cancelUpdateBtn').addEventListener('click', closeModal);
+        document.getElementById('confirmUpdateBtn').addEventListener('click', updateProductQuantity);
+        // Inicializar
+        init();
+    </script>
+</body>
+</html>
