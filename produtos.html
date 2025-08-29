@@ -40,11 +40,12 @@
         .filter-btn {
             transition: all 0.3s ease;
             border-radius: 0.75rem;
-            padding: 0.6rem 1.2rem;
+            padding: 0.5rem 1rem; /* Reduzido para tornar os filtros menores */
             font-weight: 500;
             background-color: #e0e7ff;
             color: #3730a3;
             border: 1px solid transparent;
+            font-size: 0.875rem; /* Reduzido o tamanho da fonte para tornar menor */
         }
         .filter-btn:hover {
             background-color: #c7d2fe;
@@ -419,7 +420,7 @@
             <i class="fas fa-arrows-alt-h mr-2 animate-pulse"></i><span>Arraste para o lado para ver mais filtros</span>
         </div>
         <div class="overflow-x-auto pb-4 -mx-4 sm:-mx-0">
-            <div id="filter-container" class="flex flex-nowrap justify-start sm:justify-center gap-3 mb-10 px-4 sm:px-0 whitespace-nowrap">
+            <div id="filter-container" class="flex flex-nowrap justify-start sm:justify-center gap-2 mb-10 px-4 sm:px-0 whitespace-nowrap"> <!-- Reduzido gap para 2 -->
                 <button data-filter="all" class="filter-btn active"><i class="fas fa-list-ul mr-2"></i>Todos</button>
                 <button data-filter="expired" class="filter-btn"><i class="fas fa-times-circle mr-2"></i>Vencidos</button>
                 <button data-filter="critical" class="filter-btn"><i class="fas fa-exclamation-triangle mr-2"></i>Críticos (7 dias)</button>
@@ -1018,7 +1019,7 @@
             currentQuantity.textContent = product.quantidade || '0';
             currentMargem.textContent = product.MARGEM || 'N/A';
             newQuantityInput.value = product.quantidade || '0';
-            newMargemSelect.value = product.MARGEM || 'BAIXA';
+            newMargemSelect.value = product.MARGEM ? product.MARGEM.toUpperCase() : 'BAIXA';
            
             modal.classList.add('flex');
             newQuantityInput.focus();
@@ -1050,8 +1051,8 @@
                 allProducts[productIndex].MARGEM = newMargem;
             }
 
-            // Atualizar na API Baserow
-            const url = `https://api.baserow.io/api/database/rows/table/150731/${currentProductForUpdate.id}/`;
+            // Atualizar na API Baserow (corrigido com ?user_field_names=true)
+            const url = `https://api.baserow.io/api/database/rows/table/150731/${currentProductForUpdate.id}/?user_field_names=true`;
             try {
                 const response = await fetch(url, {
                     method: 'PATCH',
