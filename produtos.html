@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1132,12 +1131,19 @@
                 await init();
             }
         }
+        async function autoDeleteExpiredProducts() {
+            const expiredProducts = allProducts.filter(p => calculateDaysToExpire(p.VENCIMENTO) < -10);
+            for (const product of expiredProducts) {
+                await deleteProduct(product.id);
+                showToast(`Produto "${product.produto}" excluído automaticamente (vencido há mais de 10 dias)`, 'success');
+            }
+        }
         function renderProducts(products) {
             const container = document.getElementById('productContainer');
             container.innerHTML = '';
            
             if (products.length === 0) {
-                container.innerHTML = `<p class="col-span-full text-center text-gray-500 text-lg py-10">Nenhum produto encontrado com os critérios selecionados.</p>`;
+                container.innerHTML = '<p class="col-span-full text-center text-gray-500 text-lg py-10">Nenhum produto encontrado com os critérios selecionados.</p>';
                 return;
             }
             products.forEach(product => {
@@ -1273,6 +1279,7 @@
             container.innerHTML = '<p class="loader"><i class="fas fa-spinner fa-spin mr-2"></i>Carregando...</p>';
             try {
                 allProducts = await fetchAllRows();
+                await autoDeleteExpiredProducts();
                 allProducts.sort((a, b) => calculateDaysToExpire(a.VENCIMENTO) - calculateDaysToExpire(b.VENCIMENTO));
                 updateDisplay();
             } catch (error) {
