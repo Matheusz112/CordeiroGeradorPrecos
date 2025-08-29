@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biscoitos  Inteligente</title>
+    <title>Biscoito Inteligente</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,11 +40,12 @@
         .filter-btn {
             transition: all 0.3s ease;
             border-radius: 0.75rem;
-            padding: 0.6rem 1.2rem;
+            padding: 0.5rem 1rem; /* Reduzido para tornar os filtros menores */
             font-weight: 500;
             background-color: #e0e7ff;
             color: #3730a3;
             border: 1px solid transparent;
+            font-size: 0.875rem; /* Reduzido o tamanho da fonte para tornar menor */
         }
         .filter-btn:hover {
             background-color: #c7d2fe;
@@ -248,7 +248,7 @@
             color: #f59e0b;
             margin-right: 0.5rem;
         }
-        .quantity-input {
+        .quantity-input, .margem-select {
             width: 100%;
             padding: 0.75rem;
             border: 2px solid #e5e7eb;
@@ -256,7 +256,7 @@
             font-size: 1rem;
             transition: border-color 0.2s;
         }
-        .quantity-input:focus {
+        .quantity-input:focus, .margem-select:focus {
             outline: none;
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
@@ -395,13 +395,18 @@
             border-radius: 3px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        /* Prevenir destaque azul no mobile */
+        button, .filter-btn, .message-btn, .profile-btn, .update-quantity-btn, .analytics-btn, .quantity-btn, .profile-action-btn, .close-btn {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
     </style>
 </head>
 <body class="antialiased">
     <div class="container my-8">
         <header class="text-center mb-8">
-            <h1 class="main-title text-4xl md:text-5xl font-bold tracking-tight"><i class="fas fa-cubes-stacked mr-3"></i>Biscoitos s</h1>
-            <p class="text-slate-500 mt-2 text-lg">Gerencie suas Biscoitos s com eficiência e evite perdas.</p>
+            <h1 class="main-title text-4xl md:text-5xl font-bold tracking-tight"><i class="fas fa-cubes-stacked mr-3"></i>Biscoitos</h1>
+            <p class="text-slate-500 mt-2 text-lg">Gerencie Biscoito com eficiência e evite perdas.</p>
         </header>
         <div class="mb-8 max-w-2xl mx-auto">
             <div class="relative">
@@ -415,7 +420,7 @@
             <i class="fas fa-arrows-alt-h mr-2 animate-pulse"></i><span>Arraste para o lado para ver mais filtros</span>
         </div>
         <div class="overflow-x-auto pb-4 -mx-4 sm:-mx-0">
-            <div id="filter-container" class="flex flex-nowrap justify-start sm:justify-center gap-3 mb-10 px-4 sm:px-0 whitespace-nowrap">
+            <div id="filter-container" class="flex flex-nowrap justify-start sm:justify-center gap-2 mb-10 px-4 sm:px-0 whitespace-nowrap"> <!-- Reduzido gap para 2 -->
                 <button data-filter="all" class="filter-btn active"><i class="fas fa-list-ul mr-2"></i>Todos</button>
                 <button data-filter="expired" class="filter-btn"><i class="fas fa-times-circle mr-2"></i>Vencidos</button>
                 <button data-filter="critical" class="filter-btn"><i class="fas fa-exclamation-triangle mr-2"></i>Críticos (7 dias)</button>
@@ -464,13 +469,14 @@
     <div id="updateQuantityModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="text-xl font-semibold text-green-600"><i class="fas fa-edit mr-3"></i>Atualizar Quantidade</h2>
+                <h2 class="text-xl font-semibold text-green-600"><i class="fas fa-edit mr-3"></i>Editar Produto</h2>
                 <span class="close-btn" onclick="closeModal()">&times;</span>
             </div>
             <div class="modal-body">
                 <div class="mb-4">
                     <h3 id="updateProductName" class="text-lg font-bold text-gray-800 mb-2"></h3>
                     <p class="text-sm text-gray-600">Quantidade atual: <span id="currentQuantity" class="font-semibold"></span></p>
+                    <p class="text-sm text-gray-600">Margem atual: <span id="currentMargem" class="font-semibold"></span></p>
                 </div>
                
                 <div class="mb-4">
@@ -485,10 +491,19 @@
                     <button type="button" class="quantity-btn" onclick="adjustQuantity(5)">+5</button>
                     <button type="button" class="quantity-btn" onclick="adjustQuantity(10)">+10</button>
                 </div>
+                <div class="mb-4 mt-6">
+                    <label for="newMargem" class="block text-sm font-medium text-gray-700 mb-2">Nova Margem:</label>
+                    <select id="newMargem" class="margem-select">
+                        <option value="BAIXA">Baixa</option>
+                        <option value="PARCIAL">Parcial</option>
+                        <option value="AUTOGIRO">Autogiro</option>
+                        <option value="SUPERGIRO">Supergiro</option>
+                    </select>
+                </div>
                 <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                     <p class="text-sm text-blue-800">
                         <i class="fas fa-info-circle mr-2"></i>
-                        <strong>Dica:</strong> Use os botões acima para ajustar rapidamente a quantidade ou digite diretamente no campo.
+                        <strong>Dica:</strong> Use os botões acima para ajustar rapidamente a quantidade ou digite diretamente no campo. Escolha a margem apropriada.
                     </p>
                 </div>
             </div>
@@ -996,11 +1011,15 @@
             const modal = document.getElementById('updateQuantityModal');
             const productName = document.getElementById('updateProductName');
             const currentQuantity = document.getElementById('currentQuantity');
+            const currentMargem = document.getElementById('currentMargem');
             const newQuantityInput = document.getElementById('newQuantity');
+            const newMargemSelect = document.getElementById('newMargem');
            
             productName.textContent = product.produto || 'Produto sem nome';
             currentQuantity.textContent = product.quantidade || '0';
+            currentMargem.textContent = product.MARGEM || 'N/A';
             newQuantityInput.value = product.quantidade || '0';
+            newMargemSelect.value = product.MARGEM ? product.MARGEM.toUpperCase() : 'BAIXA';
            
             modal.classList.add('flex');
             newQuantityInput.focus();
@@ -1011,9 +1030,10 @@
             const newValue = Math.max(0, currentValue + amount);
             input.value = newValue;
         }
-        function updateProductQuantity() {
+        async function updateProduct() {
             if (!currentProductForUpdate) return;
             const newQuantity = document.getElementById('newQuantity').value;
+            const newMargem = document.getElementById('newMargem').value;
             const confirmBtn = document.getElementById('confirmUpdateBtn');
            
             if (!newQuantity || newQuantity < 0) {
@@ -1023,13 +1043,38 @@
             confirmBtn.classList.add('btn-loading');
             confirmBtn.textContent = 'Atualizando...';
             confirmBtn.disabled = true;
+
+            // Atualizar localmente
             const productIndex = allProducts.findIndex(p => p.id === currentProductForUpdate.id);
             if (productIndex !== -1) {
                 allProducts[productIndex].quantidade = newQuantity;
+                allProducts[productIndex].MARGEM = newMargem;
             }
+
+            // Atualizar na API Baserow (corrigido com ?user_field_names=true)
+            const url = `https://api.baserow.io/api/database/rows/table/656126/${currentProductForUpdate.id}/?user_field_names=true`;
+            try {
+                const response = await fetch(url, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Token ${TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "quantidade": newQuantity,
+                        "MARGEM": newMargem
+                    })
+                });
+                if (!response.ok) {
+                    throw new Error(`Erro ao atualizar produto: ${response.statusText}`);
+                }
+                showToast(`Produto atualizado com sucesso! Quantidade: ${newQuantity}, Margem: ${newMargem}`);
+            } catch (error) {
+                console.error('Falha na atualização:', error);
+                showToast(`Erro ao atualizar o produto: ${error.message}`, 'error');
+            }
+
             updateDisplay();
-           
-            showToast(`Quantidade atualizada para ${newQuantity} unidades!`);
             closeModal();
             confirmBtn.classList.remove('btn-loading');
             confirmBtn.innerHTML = '<i class="fas fa-save mr-2"></i>Atualizar';
@@ -1132,12 +1177,19 @@
                 await init();
             }
         }
+        async function autoDeleteExpiredProducts() {
+            const expiredProducts = allProducts.filter(p => calculateDaysToExpire(p.VENCIMENTO) < -10);
+            for (const product of expiredProducts) {
+                await deleteProduct(product.id);
+                showToast(`Produto "${product.produto}" excluído automaticamente (vencido há mais de 10 dias)`, 'success');
+            }
+        }
         function renderProducts(products) {
             const container = document.getElementById('productContainer');
             container.innerHTML = '';
            
             if (products.length === 0) {
-                container.innerHTML = `<p class="col-span-full text-center text-gray-500 text-lg py-10">Nenhum produto encontrado com os critérios selecionados.</p>`;
+                container.innerHTML = '<p class="col-span-full text-center text-gray-500 text-lg py-10">Nenhum produto encontrado com os critérios selecionados.</p>';
                 return;
             }
             products.forEach(product => {
@@ -1273,6 +1325,7 @@
             container.innerHTML = '<p class="loader"><i class="fas fa-spinner fa-spin mr-2"></i>Carregando...</p>';
             try {
                 allProducts = await fetchAllRows();
+                await autoDeleteExpiredProducts();
                 allProducts.sort((a, b) => calculateDaysToExpire(a.VENCIMENTO) - calculateDaysToExpire(b.VENCIMENTO));
                 updateDisplay();
             } catch (error) {
@@ -1289,7 +1342,7 @@
             }
         });
         document.getElementById('cancelUpdateBtn').addEventListener('click', closeModal);
-        document.getElementById('confirmUpdateBtn').addEventListener('click', updateProductQuantity);
+        document.getElementById('confirmUpdateBtn').addEventListener('click', updateProduct);
         // Inicializar
         init();
     </script>
