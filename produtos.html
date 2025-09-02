@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -715,7 +715,7 @@
             if (daysSinceShipment === 0) return originalQuantity;
           
             const conversionRate = getConversionRate(product.MARGEM);
-            const dailyClients = 170;
+            const dailyClients = 220;
             const dailySales = Math.floor(dailyClients * conversionRate);
           
             const totalSold = Math.min(dailySales * daysSinceShipment, originalQuantity);
@@ -1351,4 +1351,4 @@
     </script>
 </body>
 </html>
-```
+
