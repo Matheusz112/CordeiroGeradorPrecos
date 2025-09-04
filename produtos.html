@@ -402,6 +402,19 @@
             align-items: center;
             justify-content: center;
         }
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2.5rem;
+        }
+        @media (max-width: 640px) {
+            .filter-btn {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.8rem;
+            }
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -423,18 +436,13 @@
                 <input type="text" id="searchInput" placeholder="Pesquisar por nome do produto..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
         </div>
-        <div class="mb-2 text-center text-sm text-gray-500">
-            <i class="fas fa-arrows-alt-h mr-2 animate-pulse"></i><span>Arraste para o lado para ver mais filtros</span>
-        </div>
-        <div class="overflow-x-auto pb-4 -mx-4 sm:-mx-0">
-            <div id="filter-container" class="flex flex-nowrap justify-end sm:justify-end gap-2 mb-10 px-4 sm:px-0 whitespace-nowrap">
-                <button data-filter="all" class="filter-btn active"><i class="fas fa-list-ul mr-2"></i>Todos</button>
-                <button data-filter="expired" class="filter-btn"><i class="fas fa-times-circle mr-2"></i>Vencidos</button>
-                <button data-filter="critical" class="filter-btn"><i class="fas fa-exclamation-triangle mr-2"></i>Críticos (7 dias)</button>
-                <button data-filter="upcoming" class="filter-btn"><i class="fas fa-hourglass-half mr-2"></i>Próximos (45 dias)</button>
-                <button data-filter="safe" class="filter-btn"><i class="fas fa-check-circle mr-2"></i>Seguros</button>
-                <button data-filter="this_month" class="filter-btn"><i class="fas fa-calendar-day mr-2"></i>Vencem no Mês</button>
-            </div>
+        <div id="filter-container" class="filter-container">
+            <button data-filter="all" class="filter-btn active"><i class="fas fa-list-ul mr-2"></i>Todos</button>
+            <button data-filter="expired" class="filter-btn"><i class="fas fa-times-circle mr-2"></i>Vencidos</button>
+            <button data-filter="critical" class="filter-btn"><i class="fas fa-exclamation-triangle mr-2"></i>Críticos (7 dias)</button>
+            <button data-filter="upcoming" class="filter-btn"><i class="fas fa-hourglass-half mr-2"></i>Próximos (45 dias)</button>
+            <button data-filter="safe" class="filter-btn"><i class="fas fa-check-circle mr-2"></i>Seguros</button>
+            <button data-filter="this_month" class="filter-btn"><i class="fas fa-calendar-day mr-2"></i>Vencem no Mês</button>
         </div>
         <div id="productContainer" class="grid grid-cols-1 gap-6"></div>
     </div>
@@ -531,19 +539,19 @@
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                         <div class="metric-card text-center">
                             <h4 class="text-sm opacity-80 mb-2">Estoque Original</h4>
-                            <p id="analyticsOriginalQuantity" class="text-2xl font-bold"></p>
+                            <p id="analyticsOriginalQuantity" class="text-2xl font-bold" data-value="0">0</p>
                         </div>
                         <div class="metric-card text-center">
                             <h4 class="text-sm opacity-80 mb-2">Estoque Atual Estimado</h4>
-                            <p id="analyticsCurrentQuantity" class="text-2xl font-bold"></p>
+                            <p id="analyticsCurrentQuantity" class="text-2xl font-bold" data-value="0">0</p>
                         </div>
                         <div class="metric-card text-center">
                             <h4 class="text-sm opacity-80 mb-2">Estimativa Já Vendido</h4>
-                            <p id="analyticsSoldQuantity" class="text-2xl font-bold"></p>
+                            <p id="analyticsSoldQuantity" class="text-2xl font-bold" data-value="0">0</p>
                         </div>
                         <div class="metric-card text-center">
                             <h4 class="text-sm opacity-80 mb-2">Taxa de Conversão</h4>
-                            <p id="analyticsConversionRate" class="text-2xl font-bold"></p>
+                            <p id="analyticsConversionRate" class="text-2xl font-bold" data-value="0">0%</p>
                         </div>
                     </div>
                 </div>
@@ -629,6 +637,7 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script>
         const API_BASE_URL = 'https://api.baserow.io/api/database/rows/table/150731/?user_field_names=true';
         const TOKEN = 'QNhuEjQ6tUb2CmQyN2B5ipfhC61gLfXe';
@@ -817,6 +826,21 @@
             const sellByDate = new Date(today);
             sellByDate.setDate(today.getDate() + daysToSell);
             return sellByDate.toLocaleDateString('pt-BR');
+        }
+
+        function animateNumber(element, endValue, isPercentage = false, duration = 1000) {
+            anime({
+                targets: element,
+                innerHTML: [0, endValue],
+                round: isPercentage ? 10 : 1,
+                easing: 'easeInOutQuad',
+                duration: duration,
+                update: function(anim) {
+                    element.innerHTML = isPercentage ? 
+                        (Math.round(anim.animations[0].currentValue * 10) / 10).toFixed(1) + '%' : 
+                        Math.round(anim.animations[0].currentValue);
+                }
+            });
         }
 
         function analyzeSales(product) {
@@ -1148,10 +1172,21 @@
             const analysis = analyzeSales(product);
             const modal = document.getElementById('analyticsModal');
             document.getElementById('analyticsProductName').textContent = product.produto || 'N/A';
-            document.getElementById('analyticsOriginalQuantity').textContent = analysis.originalQuantity;
-            document.getElementById('analyticsCurrentQuantity').textContent = analysis.currentStock;
-            document.getElementById('analyticsSoldQuantity').textContent = analysis.totalSoldSoFar;
-            document.getElementById('analyticsConversionRate').textContent = analysis.conversionRate;
+            const originalQuantityEl = document.getElementById('analyticsOriginalQuantity');
+            const currentQuantityEl = document.getElementById('analyticsCurrentQuantity');
+            const soldQuantityEl = document.getElementById('analyticsSoldQuantity');
+            const conversionRateEl = document.getElementById('analyticsConversionRate');
+            
+            originalQuantityEl.setAttribute('data-value', analysis.originalQuantity);
+            currentQuantityEl.setAttribute('data-value', analysis.currentStock);
+            soldQuantityEl.setAttribute('data-value', analysis.totalSoldSoFar);
+            conversionRateEl.setAttribute('data-value', parseFloat(analysis.conversionRate));
+            
+            animateNumber(originalQuantityEl, analysis.originalQuantity);
+            animateNumber(currentQuantityEl, analysis.currentStock);
+            animateNumber(soldQuantityEl, analysis.totalSoldSoFar);
+            animateNumber(conversionRateEl, parseFloat(analysis.conversionRate), true);
+            
             document.getElementById('analyticsDailySales').textContent = analysis.dailySales + ' unidades';
             document.getElementById('analyticsDaysInSystem').textContent = analysis.daysSinceShipment + ' dias';
             document.getElementById('analyticsTotalSold').textContent = analysis.totalSoldSoFar + ' unidades';
