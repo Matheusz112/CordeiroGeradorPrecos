@@ -391,15 +391,31 @@
             -webkit-tap-highlight-color: transparent;
             user-select: none;
         }
+        #header-video {
+            width: 100px;
+            height: 100px;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 <body class="antialiased">
     <div class="container my-8">
-        <header class="text-center mb-8">
-            <h1 class="main-title text-4xl md:text-5xl font-bold tracking-tight"><i class="fas fa-cubes-stacked mr-3"></i>Bebidas</h1>
-            <p class="text-slate-500 mt-2 text-lg">Gerencie suas bebidas com eficiência e evite perdas.</p>
+        <header class="text-center mb-8 flex items-center justify-center">
+            <div id="header-video" style="position: relative; width: 100px; height: 100px;">
+                <iframe allow="fullscreen;autoplay" allowfullscreen height="100%" src="https://streamable.com/e/lbl5wt?autoplay=1&muted=1&nocontrols=1" width="100%" style="border: none; width: 100%; height: 100%; position: absolute; left: 0px; top: 0px; overflow: hidden;"></iframe>
+            </div>
+            <div>
+                <h1 class="main-title text-4xl md:text-5xl font-bold tracking-tight"><i class="fas fa-cubes-stacked mr-3"></i>Bebidas</h1>
+                <p class="text-slate-500 mt-2 text-lg">Gerencie suas bebidas com eficiência e evite perdas.</p>
+            </div>
         </header>
-        <div class="mb-8 max-w-2xl mx-auto">
+        <div id="search-container" class="mb-8 max-w-2xl mx-auto">
             <div class="relative">
                 <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                     <i class="fas fa-search text-gray-400"></i>
@@ -411,7 +427,7 @@
             <i class="fas fa-arrows-alt-h mr-2 animate-pulse"></i><span>Arraste para o lado para ver mais filtros</span>
         </div>
         <div class="overflow-x-auto pb-4 -mx-4 sm:-mx-0">
-            <div id="filter-container" class="flex flex-nowrap justify-start sm:justify-center gap-2 mb-10 px-4 sm:px-0 whitespace-nowrap">
+            <div id="filter-container" class="flex flex-nowrap justify-end sm:justify-end gap-2 mb-10 px-4 sm:px-0 whitespace-nowrap">
                 <button data-filter="all" class="filter-btn active"><i class="fas fa-list-ul mr-2"></i>Todos</button>
                 <button data-filter="expired" class="filter-btn"><i class="fas fa-times-circle mr-2"></i>Vencidos</button>
                 <button data-filter="critical" class="filter-btn"><i class="fas fa-exclamation-triangle mr-2"></i>Críticos (7 dias)</button>
@@ -1374,10 +1390,19 @@
                     p.quantidade && parseInt(p.quantidade) > 0
                 );
                 for (const product of allProducts) {
+                    if (!product.DATAENVIO) {
+                        const today = new Date();
+                        await updateShipmentDate(product.id, today);
+                        product.DATAENVIO = dateToString(today);
+                    }
                     await updateShipmentDateIfNeeded(product);
                 }
                 await autoDeleteExpiredProducts();
-                allProducts.sort((a, b) => calculateDaysToExpire(a.VENCIMENTO) - calculateDaysToExpire(b.VENCIMENTO));
+                allProducts.sort((a, b) => {
+                    const dateA = parseDate(a.DATAENVIO) || new Date(0);
+                    const dateB = parseDate(b.DATAENVIO) || new Date(0);
+                    return dateB - dateA;
+                });
                 updateDisplay();
             } catch (error) {
                 container.innerHTML = '<p class="text-center text-red-500">Erro ao carregar produtos. Tente novamente.</p>';
