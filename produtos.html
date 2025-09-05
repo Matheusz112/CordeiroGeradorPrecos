@@ -1139,6 +1139,8 @@
             if (productIndex !== -1) {
                 allProducts[productIndex].quantidade = newQuantity;
                 allProducts[productIndex].MARGEM = newMargem;
+                const today = new Date();
+                allProducts[productIndex].DATAENVIO = dateToString(today);
             }
             const url = `https://api.baserow.io/api/database/rows/table/150731/${currentProductForUpdate.id}/?user_field_names=true`;
             try {
@@ -1150,13 +1152,14 @@
                     },
                     body: JSON.stringify({
                         "quantidade": newQuantity,
-                        "MARGEM": newMargem
+                        "MARGEM": newMargem,
+                        "DATAENVIO": dateToString(new Date())
                     })
                 });
                 if (!response.ok) {
                     throw new Error(`Erro ao atualizar produto: ${response.statusText}`);
                 }
-                showToast(`Produto atualizado com sucesso! Quantidade: ${newQuantity}, Margem: ${newMargem}`);
+                showToast(`Produto atualizado com sucesso! Quantidade: ${newQuantity}, Margem: ${newMargem}, Data de Envio: ${dateToString(new Date())}`);
             } catch (error) {
                 console.error('Falha na atualização:', error);
                 showToast(`Erro ao atualizar o produto: ${error.message}`, 'error');
