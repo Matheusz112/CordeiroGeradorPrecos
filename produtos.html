@@ -242,7 +242,7 @@
             color: #f59e0b;
             margin-right: 0.5rem;
         }
-        .quantity-input, .margem-select {
+        .quantity-input, .margem-select, #monthFilter {
             width: 100%;
             padding: 0.75rem;
             border: 2px solid #e5e7eb;
@@ -250,10 +250,23 @@
             font-size: 1rem;
             transition: border-color 0.2s;
         }
-        .quantity-input:focus, .margem-select:focus {
+        .quantity-input:focus, .margem-select:focus, #monthFilter:focus {
             outline: none;
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        #monthFilter {
+            background: white;
+            padding-right: 2rem;
+            min-width: 150px;
+        }
+        #monthFilter::-ms-expand {
+            display: none;
+        }
+        #monthFilter {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
         }
         .quantity-buttons {
             display: flex;
@@ -414,6 +427,10 @@
                 font-size: 0.75rem;
                 padding: 0.4rem 0.8rem;
             }
+            #monthFilter {
+                font-size: 0.75rem;
+                padding: 0.4rem 1rem;
+            }
         }
     </style>
 </head>
@@ -436,13 +453,21 @@
                 <input type="text" id="searchInput" placeholder="Pesquisar por nome do produto..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
         </div>
-        <div id="filter-container" class="filter-container">
+        <div id="filter-container" class="filter-container flex items-center justify-center gap-4 mb-8">
             <button data-filter="all" class="filter-btn active"><i class="fas fa-list-ul mr-2"></i>Todos</button>
             <button data-filter="expired" class="filter-btn"><i class="fas fa-times-circle mr-2"></i>Vencidos</button>
             <button data-filter="critical" class="filter-btn"><i class="fas fa-exclamation-triangle mr-2"></i>Críticos (7 dias)</button>
             <button data-filter="upcoming" class="filter-btn"><i class="fas fa-hourglass-half mr-2"></i>Próximos (45 dias)</button>
             <button data-filter="safe" class="filter-btn"><i class="fas fa-check-circle mr-2"></i>Seguros</button>
-            <button data-filter="this_month" class="filter-btn"><i class="fas fa-calendar-day mr-2"></i>Vencem no Mês</button>
+            <div class="relative">
+                <select id="monthFilter" class="quantity-input appearance-none pl-10 pr-8 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                    <option value="none">--Filtrar por Mês</option>
+                    <!-- Opções de meses serão preenchidas pelo JavaScript -->
+                </select>
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                    <i class="fas fa-calendar-alt text-gray-400"></i>
+                </span>
+            </div>
         </div>
         <div id="productContainer" class="grid grid-cols-1 gap-6"></div>
     </div>
@@ -1139,8 +1164,7 @@
             if (productIndex !== -1) {
                 allProducts[productIndex].quantidade = newQuantity;
                 allProducts[productIndex].MARGEM = newMargem;
-                const today = new Date();
-                allProducts[productIndex].DATAENVIO = dateToString(today);
+                allProducts[productIndex].DATAENVIO = dateToString(new Date());
             }
             const url = `https://api.baserow.io/api/database/rows/table/150731/${currentProductForUpdate.id}/?user_field_names=true`;
             try {
@@ -1395,20 +1419,25 @@
 
         function updateDisplay() {
             const searchTerm = searchInput.value.toLowerCase();
-            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            const activeFilter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+            const monthFilter = document.getElementById('monthFilter').value;
             let filtered = allProducts.filter(p => (p.produto || '').toLowerCase().includes(searchTerm));
             const today = new Date();
             const thisMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
             const thisMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
             filtered = filtered.filter(p => {
                 const days = calculateDaysToExpire(p.VENCIMENTO);
+                const expDate = parseDate(p.VENCIMENTO);
+                if (monthFilter !== 'none' && activeFilter === 'all') {
+                    const pKey = expDate ? `${expDate.getFullYear()}-${String(expDate.getMonth() + 1).padStart(2, '0')}` : null;
+                    return pKey === monthFilter;
+                }
                 switch (activeFilter) {
                     case 'expired': return days < 0;
                     case 'critical': return days >= 0 && days <= 7;
                     case 'upcoming': return days > 7 && days <= 45;
                     case 'safe': return days > 45;
                     case 'this_month':
-                        const expDate = parseDate(p.VENCIMENTO);
                         if (!expDate) return false;
                         return expDate >= thisMonthStart && expDate <= thisMonthEnd;
                     default: return true;
@@ -1441,6 +1470,33 @@
                     const dateB = parseDate(b.DATAENVIO) || new Date(0);
                     return dateB - dateA;
                 });
+
+                // Preencher o dropdown de meses
+                const monthFilter = document.getElementById('monthFilter');
+                const monthCounts = new Map();
+                for (const p of allProducts) {
+                    const exp = parseDate(p.VENCIMENTO);
+                    if (exp) {
+                        const key = `${exp.getFullYear()}-${String(exp.getMonth() + 1).padStart(2, '0')}`;
+                        monthCounts.set(key, (monthCounts.get(key) || 0) + 1);
+                    }
+                }
+                const sortedMonths = Array.from(monthCounts.keys()).sort((a, b) => {
+                    const [yearA, monthA] = a.split('-').map(Number);
+                    const [yearB, monthB] = b.split('-').map(Number);
+                    return yearA === yearB ? monthA - monthB : yearA - yearB;
+                });
+                const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+                sortedMonths.forEach(monthKey => {
+                    const [year, month] = monthKey.split('-').map(Number);
+                    const name = monthNames[month - 1];
+                    const count = monthCounts.get(monthKey);
+                    const option = document.createElement('option');
+                    option.value = monthKey;
+                    option.textContent = `${name} ${year} (${count} PRD)`;
+                    monthFilter.appendChild(option);
+                });
+
                 updateDisplay();
             } catch (error) {
                 container.innerHTML = '<p class="text-center text-red-500">Erro ao carregar produtos. Tente novamente.</p>';
@@ -1452,11 +1508,32 @@
             if (e.target.classList.contains('filter-btn')) {
                 document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
                 e.target.classList.add('active');
+                document.getElementById('monthFilter').value = 'none';
                 updateDisplay();
             }
         });
-        document.getElementById('cancelUpdateBtn').addEventListener('click', closeModal);
+       
+document.getElementById('monthFilter').addEventListener('change', () => {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+            updateDisplay();
+        });
+
         document.getElementById('confirmUpdateBtn').addEventListener('click', updateProduct);
+        document.getElementById('cancelUpdateBtn').addEventListener('click', closeModal);
+
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal') && !e.target.classList.contains('modal-content') && !e.target.classList.contains('modal-content-large')) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
         init();
     </script>
 </body>
