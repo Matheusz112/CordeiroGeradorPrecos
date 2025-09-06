@@ -23,7 +23,6 @@
         .main-title {
             color: #2563eb;
         }
-       
         .card {
             background: white;
             border-radius: 1rem;
@@ -40,12 +39,12 @@
         .filter-btn {
             transition: all 0.3s ease;
             border-radius: 0.75rem;
-            padding: 0.5rem 1rem; /* Reduzido para tornar os filtros menores */
+            padding: 0.5rem 1rem;
             font-weight: 500;
             background-color: #e0e7ff;
             color: #3730a3;
             border: 1px solid transparent;
-            font-size: 0.875rem; /* Reduzido o tamanho da fonte para tornar menor */
+            font-size: 0.875rem;
         }
         .filter-btn:hover {
             background-color: #c7d2fe;
@@ -68,7 +67,6 @@
             font-weight: 600;
             display: inline-block;
         }
-       
         .bg-expired { background-color: #ef4444; }
         .bg-critical { background-color: #f59e0b; }
         .bg-upcoming { background-color: #eab308; }
@@ -80,6 +78,7 @@
             object-fit: cover;
             border: 3px solid #60a5fa;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex-shrink: 0;
         }
         .modal {
             position: fixed;
@@ -91,7 +90,6 @@
             justify-content: center;
             display: none;
         }
-       
         .modal.flex { display: flex; }
         .modal-content {
             background: white;
@@ -103,7 +101,6 @@
             flex-direction: column;
             max-height: 90vh;
         }
-       
         .modal-content-large {
             background: white;
             border-radius: 1rem;
@@ -121,7 +118,6 @@
             justify-content: space-between;
             align-items: center;
         }
-       
         .modal-body { padding: 1.5rem; overflow-y: auto; }
         .modal-footer {
             padding: 1rem 1.5rem;
@@ -165,7 +161,6 @@
         }
         #toast.success { background-color: #10b981; }
         #toast.error { background-color: #ef4444; }
-       
         .analysis-card {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 1rem;
@@ -173,7 +168,6 @@
             color: white;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         }
-       
         .metric-card {
             background: rgba(255,255,255,0.1);
             border-radius: 0.5rem;
@@ -181,7 +175,6 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.2);
         }
-       
         .chart-container {
             background: white;
             border-radius: 0.5rem;
@@ -189,7 +182,6 @@
             margin-top: 1rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-       
         .status-indicator {
             display: inline-block;
             width: 12px;
@@ -197,10 +189,10 @@
             border-radius: 50%;
             margin-right: 8px;
         }
-       
         .status-success { background-color: #22c55e; }
         .status-warning { background-color: #eab308; }
         .status-danger { background-color: #ef4444; }
+        .status-info { background-color: #3b82f6; }
         .analysis-result {
             font-size: 0.75rem;
             padding: 0.25rem 0.5rem;
@@ -209,23 +201,25 @@
             margin-top: 0.25rem;
             display: inline-block;
         }
-       
         .analysis-success {
             background-color: #dcfce7;
             color: #166534;
             border: 1px solid #bbf7d0;
         }
-       
         .analysis-warning {
             background-color: #fef3c7;
             color: #92400e;
             border: 1px solid #fde68a;
         }
-       
         .analysis-danger {
             background-color: #fee2e2;
             color: #991b1b;
             border: 1px solid #fecaca;
+        }
+        .analysis-waiting {
+            background-color: #f3f4f6;
+            color: #4b5563;
+            border: 1px solid #d1d5db;
         }
         .sell-by-date {
             font-size: 0.7rem;
@@ -248,7 +242,7 @@
             color: #f59e0b;
             margin-right: 0.5rem;
         }
-        .quantity-input, .margem-select {
+        .quantity-input, .margem-select, #monthFilter {
             width: 100%;
             padding: 0.75rem;
             border: 2px solid #e5e7eb;
@@ -256,10 +250,23 @@
             font-size: 1rem;
             transition: border-color 0.2s;
         }
-        .quantity-input:focus, .margem-select:focus {
+        .quantity-input:focus, .margem-select:focus, #monthFilter:focus {
             outline: none;
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        #monthFilter {
+            background: white;
+            padding-right: 2rem;
+            min-width: 150px;
+        }
+        #monthFilter::-ms-expand {
+            display: none;
+        }
+        #monthFilter {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
         }
         .quantity-buttons {
             display: flex;
@@ -349,7 +356,6 @@
         .profile-action-btn.delete-btn:hover {
             background-color: #fecaca;
         }
-        /* Novos estilos para indicador de estoque calculado */
         .stock-indicator {
             background: linear-gradient(45deg, #06b6d4, #3b82f6);
             color: white;
@@ -371,7 +377,6 @@
             margin-top: 0.5rem;
             font-size: 0.8rem;
         }
-        /* Animação para gráficos Chart.js */
         #salesChart {
             max-height: 400px !important;
         }
@@ -395,20 +400,52 @@
             border-radius: 3px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        /* Prevenir destaque azul no mobile */
         button, .filter-btn, .message-btn, .profile-btn, .update-quantity-btn, .analytics-btn, .quantity-btn, .profile-action-btn, .close-btn {
             -webkit-tap-highlight-color: transparent;
             user-select: none;
+        }
+        #header-video {
+            width: 100px;
+            height: 100px;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 2.5rem;
+        }
+        @media (max-width: 640px) {
+            .filter-btn {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.8rem;
+            }
+            #monthFilter {
+                font-size: 0.75rem;
+                padding: 0.4rem 1rem;
+            }
         }
     </style>
 </head>
 <body class="antialiased">
     <div class="container my-8">
-        <header class="text-center mb-8">
-            <h1 class="main-title text-4xl md:text-5xl font-bold tracking-tight"><i class="fas fa-cubes-stacked mr-3"></i>Frios</h1>
-            <p class="text-slate-500 mt-2 text-lg">Gerencie Frios com eficiência e evite perdas.</p>
+        <header class="text-center mb-8 flex items-center justify-center">
+            <div id="header-video" style="position: relative; width: 100px; height: 100px;">
+                <iframe allow="fullscreen;autoplay" allowfullscreen height="100%" src="https://streamable.com/e/lbl5wt?autoplay=1&muted=1&nocontrols=1" width="100%" style="border: none; width: 100%; height: 100%; position: absolute; left: 0px; top: 0px; overflow: hidden;"></iframe>
+            </div>
+            <div>
+                <h1 class="main-title text-4xl md:text-5xl font-bold tracking-tight"><i class="fas fa-cubes-stacked mr-3"></i>Frios</h1>
+                <p class="text-slate-500 mt-2 text-lg">Gerencie seus Frios com eficiência e evite perdas.</p>
+            </div>
         </header>
-        <div class="mb-8 max-w-2xl mx-auto">
+        <div id="search-container" class="mb-8 max-w-2xl mx-auto">
             <div class="relative">
                 <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                     <i class="fas fa-search text-gray-400"></i>
@@ -416,23 +453,25 @@
                 <input type="text" id="searchInput" placeholder="Pesquisar por nome do produto..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
         </div>
-        <div class="mb-2 text-center text-sm text-gray-500">
-            <i class="fas fa-arrows-alt-h mr-2 animate-pulse"></i><span>Arraste para o lado para ver mais filtros</span>
-        </div>
-        <div class="overflow-x-auto pb-4 -mx-4 sm:-mx-0">
-            <div id="filter-container" class="flex flex-nowrap justify-start sm:justify-center gap-2 mb-10 px-4 sm:px-0 whitespace-nowrap"> <!-- Reduzido gap para 2 -->
-                <button data-filter="all" class="filter-btn active"><i class="fas fa-list-ul mr-2"></i>Todos</button>
-                <button data-filter="expired" class="filter-btn"><i class="fas fa-times-circle mr-2"></i>Vencidos</button>
-                <button data-filter="critical" class="filter-btn"><i class="fas fa-exclamation-triangle mr-2"></i>Críticos (7 dias)</button>
-                <button data-filter="upcoming" class="filter-btn"><i class="fas fa-hourglass-half mr-2"></i>Próximos (45 dias)</button>
-                <button data-filter="safe" class="filter-btn"><i class="fas fa-check-circle mr-2"></i>Seguros</button>
-                <button data-filter="this_month" class="filter-btn"><i class="fas fa-calendar-day mr-2"></i>Vencem no Mês</button>
+        <div id="filter-container" class="filter-container flex items-center justify-center gap-4 mb-8">
+            <button data-filter="all" class="filter-btn active"><i class="fas fa-list-ul mr-2"></i>Todos</button>
+            <button data-filter="expired" class="filter-btn"><i class="fas fa-times-circle mr-2"></i>Vencidos</button>
+            <button data-filter="critical" class="filter-btn"><i class="fas fa-exclamation-triangle mr-2"></i>Críticos (7 dias)</button>
+            <button data-filter="upcoming" class="filter-btn"><i class="fas fa-hourglass-half mr-2"></i>Próximos (45 dias)</button>
+            <button data-filter="safe" class="filter-btn"><i class="fas fa-check-circle mr-2"></i>Seguros</button>
+            <div class="relative">
+                <select id="monthFilter" class="quantity-input appearance-none pl-10 pr-8 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                    <option value="none">--Filtrar por Mês</option>
+                    <!-- Opções de meses serão preenchidas pelo JavaScript -->
+                </select>
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                    <i class="fas fa-calendar-alt text-gray-400"></i>
+                </span>
             </div>
         </div>
         <div id="productContainer" class="grid grid-cols-1 gap-6"></div>
     </div>
     <div id="messageModal" class="modal"><div class="modal-content"><div class="modal-header"><h2 class="text-xl font-semibold text-blue-600"><i class="fas fa-comment-alt-dots mr-3"></i>Mensagem de Alerta</h2><span class="close-btn" onclick="closeModal()">&times;</span></div><div class="modal-body"><p id="modalMessage" class="text-gray-700 text-base"></p></div><div class="modal-footer"><p id="modalExpiration" class="text-sm text-gray-600"></p><p id="modalStatus" class="text-sm text-gray-600 mt-1"></p></div></div></div>
-   
     <div id="profileModal" class="modal">
         <div class="modal-content text-center">
             <div class="modal-header">
@@ -443,7 +482,6 @@
                 <img id="modalProfileImg" class="profile-img mx-auto block mb-4 w-24 h-24" alt="Foto de Perfil">
                 <h3 id="modalProfileName" class="text-xl font-bold text-gray-800"></h3>
                 <p id="modalProfileSender" class="text-base text-gray-600 mt-2"></p>
-               
                 <div class="mt-4 p-4 bg-gray-50 rounded-lg">
                     <h4 class="text-lg font-semibold text-gray-800 mb-2">Código de Barras</h4>
                     <p id="profileBarcodeCode" class="text-sm text-gray-600 mb-2"></p>
@@ -451,7 +489,6 @@
                         <canvas id="profileBarcodeCanvas" class="max-w-full"></canvas>
                     </div>
                 </div>
-               
                 <div class="profile-actions">
                     <button id="profileDeleteBtn" class="profile-action-btn delete-btn">
                         <i class="fas fa-trash-alt"></i>
@@ -465,7 +502,6 @@
             </div>
         </div>
     </div>
-   
     <div id="updateQuantityModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -478,7 +514,6 @@
                     <p class="text-sm text-gray-600">Quantidade atual: <span id="currentQuantity" class="font-semibold"></span></p>
                     <p class="text-sm text-gray-600">Margem atual: <span id="currentMargem" class="font-semibold"></span></p>
                 </div>
-               
                 <div class="mb-4">
                     <label for="newQuantity" class="block text-sm font-medium text-gray-700 mb-2">Nova Quantidade:</label>
                     <input type="number" id="newQuantity" class="quantity-input" min="0" placeholder="Digite a nova quantidade">
@@ -517,7 +552,6 @@
             </div>
         </div>
     </div>
-   
     <div id="analyticsModal" class="modal">
         <div class="modal-content-large">
             <div class="modal-header">
@@ -527,27 +561,25 @@
             <div class="modal-body">
                 <div class="analysis-card mb-6">
                     <h3 id="analyticsProductName" class="text-2xl font-bold mb-4"></h3>
-                   
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                         <div class="metric-card text-center">
                             <h4 class="text-sm opacity-80 mb-2">Estoque Original</h4>
-                            <p id="analyticsOriginalQuantity" class="text-2xl font-bold"></p>
+                            <p id="analyticsOriginalQuantity" class="text-2xl font-bold" data-value="0">0</p>
                         </div>
                         <div class="metric-card text-center">
                             <h4 class="text-sm opacity-80 mb-2">Estoque Atual Estimado</h4>
-                            <p id="analyticsCurrentQuantity" class="text-2xl font-bold"></p>
+                            <p id="analyticsCurrentQuantity" class="text-2xl font-bold" data-value="0">0</p>
                         </div>
                         <div class="metric-card text-center">
                             <h4 class="text-sm opacity-80 mb-2">Estimativa Já Vendido</h4>
-                            <p id="analyticsSoldQuantity" class="text-2xl font-bold"></p>
+                            <p id="analyticsSoldQuantity" class="text-2xl font-bold" data-value="0">0</p>
                         </div>
                         <div class="metric-card text-center">
                             <h4 class="text-sm opacity-80 mb-2">Taxa de Conversão</h4>
-                            <p id="analyticsConversionRate" class="text-2xl font-bold"></p>
+                            <p id="analyticsConversionRate" class="text-2xl font-bold" data-value="0">0%</p>
                         </div>
                     </div>
                 </div>
-               
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-white p-4 rounded-lg shadow">
                         <h4 class="text-lg font-semibold text-gray-800 mb-3">Projeção de Vendas</h4>
@@ -574,7 +606,6 @@
                             </div>
                         </div>
                     </div>
-                   
                     <div class="bg-white p-4 rounded-lg shadow">
                         <h4 class="text-lg font-semibold text-gray-800 mb-3">Status da Análise</h4>
                         <div id="analyticsStatus" class="space-y-2">
@@ -585,8 +616,6 @@
                     <i class="fas fa-exclamation-triangle"></i>
                     <span><strong>Aviso:</strong> Este cálculo é baseado na data de envio e padrões de vendas estimados. O estoque atual é calculado automaticamente considerando os dias decorridos desde o envio.</span>
                 </div>
-               
-                <!-- Gráfico Chart.js -->
                 <div class="chart-container">
                     <h4 class="text-lg font-semibold text-gray-800 mb-3 text-center">Projeção de Vendas vs Estoque (30 dias)</h4>
                     <canvas id="salesChart" width="400" height="200"></canvas>
@@ -608,7 +637,6 @@
             </div>
         </div>
     </div>
-   
     <div id="confirmModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -629,13 +657,12 @@
             </div>
         </div>
     </div>
-   
     <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 p-4 rounded-lg text-white transition-all duration-300 transform scale-0 opacity-0">
         <p id="toast-message"></p>
     </div>
-   
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.0/dist/JsBarcode.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script>
         const API_BASE_URL = 'https://api.baserow.io/api/database/rows/table/656124/?user_field_names=true';
         const TOKEN = 'QNhuEjQ6tUb2CmQyN2B5ipfhC61gLfXe';
@@ -646,22 +673,20 @@
         let salesChart = null;
         const searchInput = document.getElementById('searchInput');
         const filterContainer = document.getElementById('filter-container');
-        // Função para exibir a notificação (toast)
+
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             const toastMessage = document.getElementById('toast-message');
-           
             toast.className = 'fixed bottom-5 left-1/2 -translate-x-1/2 z-50 p-4 rounded-lg text-white transition-all duration-300 transform scale-0 opacity-0';
-           
             toastMessage.textContent = message;
             toast.classList.add(type);
-           
             void toast.offsetWidth;
             toast.classList.add('show');
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 3000);
         }
+
         async function fetchAllRows(url = API_BASE_URL, accumulated = []) {
             try {
                 const response = await fetch(url, { headers: { 'Authorization': `Token ${TOKEN}` } });
@@ -674,103 +699,206 @@
                 throw error;
             }
         }
-        // Função para calcular dias até o vencimento
-        const calculateDaysToExpire = (vencimento) => {
-            if (!vencimento) return Infinity;
-           
-            const parts = vencimento.split('/');
-            if (parts.length !== 3) return Infinity;
-           
+
+        function parseDate(dateStr) {
+            if (!dateStr) return null;
+            const parts = dateStr.split('/');
+            if (parts.length !== 3) return null;
             const day = parseInt(parts[0], 10);
             const month = parseInt(parts[1], 10) - 1;
             const year = parseInt(parts[2], 10);
+            const date = new Date(year, month, day);
+            if (isNaN(date.getTime())) return null;
+            return date;
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return 'Data não informada';
+            const parts = dateStr.split('/');
+            if (parts.length !== 3) return 'Data inválida';
+            return dateStr;
+        }
+
+        function dateToString(date) {
+            if (!date) return '';
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        const calculateDaysToExpire = (vencimento) => {
+            const expDate = parseDate(vencimento);
+            if (!expDate) return Infinity;
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-            const expDate = new Date(year, month, day);
-            if (isNaN(expDate.getTime())) return Infinity;
             return Math.floor((expDate - today) / (1000 * 60 * 60 * 24));
         };
-        // Função para calcular dias desde o envio (corrigido para usar o campo DATAENVIO do Baserow)
-        const calculateDaysSinceShipment = (dataEnvio) => {
-            if (!dataEnvio) return 0;
-           
-            const parts = dataEnvio.split('/');
-            if (parts.length !== 3) return 0;
-           
-            const day = parseInt(parts[0], 10);
-            const month = parseInt(parts[1], 10) - 1;
-            const year = parseInt(parts[2], 10);
+
+        function getConversionRate(margem) {
+            if (!margem) return 0.004;
+            const margin = margem.toUpperCase();
+            switch (margin) {
+                case 'BAIXA': return Math.random() * (0.008 - 0.004) + 0.004;
+                case 'PARCIAL': return Math.random() * (0.02 - 0.012) + 0.012;
+                case 'AUTOGIRO': return Math.random() * (0.032 - 0.024) + 0.024;
+                case 'SUPERGIRO': return Math.random() * (0.048 - 0.032) + 0.032;
+                default: return 0.004;
+            }
+        }
+
+        async function updateShipmentDate(productId, newDate) {
+            const url = `https://api.baserow.io/api/database/rows/table/656124/${productId}/?user_field_names=true`;
+            try {
+                const response = await fetch(url, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Token ${TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "DATAENVIO": dateToString(newDate)
+                    })
+                });
+                if (!response.ok) {
+                    throw new Error(`Erro ao atualizar DATAENVIO: ${response.statusText}`);
+                }
+                showToast(`Data de envio atualizada para ${dateToString(newDate)}`);
+            } catch (error) {
+                console.error('Falha ao atualizar DATAENVIO:', error);
+                showToast(`Erro ao atualizar data de envio: ${error.message}`, 'error');
+            }
+        }
+
+        function computeEffectiveShipment(product) {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-            const shipDate = new Date(year, month, day);
-            if (isNaN(shipDate.getTime())) return 0;
-            return Math.max(0, Math.floor((today - shipDate) / (1000 * 60 * 60 * 24)));
+            const sameName = allProducts.filter(p => p.produto.trim().toLowerCase() === product.produto.trim().toLowerCase());
+            if (sameName.length === 1) {
+                const shipDate = parseDate(product.DATAENVIO);
+                if (!shipDate) return { effectiveStart: today, daysSince: 0, isWaiting: false, sellByDate: today };
+                const days = Math.max(0, Math.floor((today - shipDate) / 86400000));
+                return { effectiveStart: shipDate, daysSince: days, isWaiting: false, sellByDate: today };
+            }
+            sameName.sort((a, b) => {
+                const dateA = parseDate(a.VENCIMENTO) || new Date(0);
+                const dateB = parseDate(b.VENCIMENTO) || new Date(0);
+                return dateA - dateB;
+            });
+            let previousEnd = null;
+            for (const lot of sameName) {
+                const lotStart = parseDate(lot.DATAENVIO);
+                if (!lotStart) continue;
+                let effectiveStart;
+                if (previousEnd === null) {
+                    effectiveStart = lotStart;
+                } else {
+                    effectiveStart = new Date(Math.max(lotStart.getTime(), previousEnd.getTime()));
+                }
+                const quant = parseInt(lot.quantidade) || 0;
+                const conversionRate = getConversionRate(lot.MARGEM);
+                const daily = Math.floor(250 * conversionRate);
+                const daysToSell = daily > 0 ? Math.ceil(quant / daily) : 999999;
+                const sellByDate = new Date(effectiveStart.getTime() + daysToSell * 86400000);
+                previousEnd = sellByDate;
+                if (lot.id === product.id) {
+                    const isWaiting = effectiveStart > today;
+                    const daysSince = isWaiting ? 0 : Math.floor((today - effectiveStart) / 86400000);
+                    return { effectiveStart, daysSince, isWaiting, sellByDate };
+                }
+            }
+            return { effectiveStart: today, daysSince: 0, isWaiting: false, sellByDate: today };
+        }
+
+        async function updateShipmentDateIfNeeded(product) {
+            const sameName = allProducts.filter(p => p.produto.trim().toLowerCase() === product.produto.trim().toLowerCase());
+            if (sameName.length <= 1) return;
+            sameName.sort((a, b) => {
+                const dateA = parseDate(a.VENCIMENTO) || new Date(0);
+                const dateB = parseDate(b.VENCIMENTO) || new Date(0);
+                return dateA - dateB;
+            });
+            const productIndex = sameName.findIndex(p => p.id === product.id);
+            if (productIndex <= 0) return;
+            const previousLot = sameName[productIndex - 1];
+            const prevEff = computeEffectiveShipment(previousLot);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            if (prevEff.sellByDate <= today && parseDate(product.DATAENVIO) !== prevEff.sellByDate) {
+                await updateShipmentDate(product.id, prevEff.sellByDate);
+                product.DATAENVIO = dateToString(prevEff.sellByDate);
+            }
+        }
+
+        const calculateDaysSinceShipment = (product) => {
+            return computeEffectiveShipment(product).daysSince;
         };
-        // Função para calcular estoque atual baseado na data de envio
+
         const calculateCurrentStock = (product) => {
+            const { daysSince } = computeEffectiveShipment(product);
             const originalQuantity = parseInt(product.quantidade) || 0;
-            const daysSinceShipment = calculateDaysSinceShipment(product.DATAENVIO);
-           
-            if (daysSinceShipment === 0) return originalQuantity;
-           
+            if (daysSince === 0) return originalQuantity;
             const conversionRate = getConversionRate(product.MARGEM);
-            const dailyClients = 170;
-            const dailySales = Math.floor(dailyClients * conversionRate);
-           
-            const totalSold = Math.min(dailySales * daysSinceShipment, originalQuantity);
+            const dailySales = Math.floor(250 * conversionRate);
+            const totalSold = Math.min(dailySales * daysSince, originalQuantity);
             return Math.max(0, originalQuantity - totalSold);
         };
-        const formatDate = (vencimento) => {
-            if (!vencimento) return 'Data não informada';
-           
-            const parts = vencimento.split('/');
-            if (parts.length !== 3) return 'Data inválida';
-           
-            return vencimento;
-        };
+
         function calculateSellByDate(quantity, dailySales) {
             if (dailySales <= 0) return 'Não calculável';
-           
             const daysToSell = Math.ceil(quantity / dailySales);
             const today = new Date();
             const sellByDate = new Date(today);
             sellByDate.setDate(today.getDate() + daysToSell);
-           
             return sellByDate.toLocaleDateString('pt-BR');
         }
-       
-        function getConversionRate(margem) {
-            if (!margem) return 0.02;
-           
-            const margin = margem.toUpperCase();
-            switch (margin) {
-                case 'BAIXA': return Math.random() * (0.02 - 0.01) + 0.01;
-                case 'PARCIAL': return Math.random() * (0.04 - 0.03) + 0.03;
-                case 'AUTOGIRO': return Math.random() * (0.06 - 0.05) + 0.05;
-                case 'SUPERGIRO': return Math.random() * (0.08 - 0.06) + 0.06;
-                default: return 0.02;
-            }
+
+        function animateNumber(element, endValue, isPercentage = false, duration = 1000) {
+            anime({
+                targets: element,
+                innerHTML: [0, endValue],
+                round: isPercentage ? 10 : 1,
+                easing: 'easeInOutQuad',
+                duration: duration,
+                update: function(anim) {
+                    element.innerHTML = isPercentage ? 
+                        (Math.round(anim.animations[0].currentValue * 10) / 10).toFixed(1) + '%' : 
+                        Math.round(anim.animations[0].currentValue);
+                }
+            });
         }
-       
-        // Função melhorada para analisar vendas com estoque calculado
+
         function analyzeSales(product) {
+            const eff = computeEffectiveShipment(product);
             const originalQuantity = parseInt(product.quantidade) || 0;
-            const currentStock = calculateCurrentStock(product);
-            const daysSinceShipment = calculateDaysSinceShipment(product.DATAENVIO);
             const daysToExpire = calculateDaysToExpire(product.VENCIMENTO);
             const conversionRate = getConversionRate(product.MARGEM);
-            const dailyClients = 120;
-           
-            const dailySales = Math.floor(dailyClients * conversionRate);
+            const dailySales = Math.floor(250 * conversionRate);
+            if (eff.isWaiting) {
+                return {
+                    originalQuantity,
+                    currentStock: originalQuantity,
+                    totalSoldSoFar: 0,
+                    daysSinceShipment: 0,
+                    daysToExpire,
+                    conversionRate: (conversionRate * 100).toFixed(1) + '%',
+                    dailySales,
+                    projectedFutureSales: dailySales * Math.max(0, daysToExpire),
+                    finalRemaining: Math.max(0, originalQuantity - dailySales * Math.max(0, daysToExpire)),
+                    status: 'waiting',
+                    statusText: 'Aguardando venda de lote anterior',
+                    recommendation: 'Aguardando conclusão das vendas de lotes com vencimento mais próximo. Assim que for vendido, o cálculo começará.',
+                    shortStatus: 'Aguardando'
+                };
+            }
+            const currentStock = calculateCurrentStock(product);
             const totalSoldSoFar = originalQuantity - currentStock;
             const projectedFutureSales = dailySales * Math.max(0, daysToExpire);
             const finalRemaining = Math.max(0, currentStock - projectedFutureSales);
-           
             let status = 'success';
             let statusText = 'Produto será vendido completamente';
             let recommendation = 'Ótimo! O produto deve ser vendido antes do vencimento.';
             let shortStatus = 'Vendas OK';
-           
             if (daysToExpire <= 0) {
                 status = 'danger';
                 statusText = 'Produto já vencido';
@@ -789,12 +917,11 @@
                     shortStatus = 'Possível sobra';
                 }
             }
-           
             return {
                 originalQuantity,
                 currentStock,
                 totalSoldSoFar,
-                daysSinceShipment,
+                daysSinceShipment: eff.daysSince,
                 daysToExpire,
                 conversionRate: (conversionRate * 100).toFixed(1) + '%',
                 dailySales,
@@ -806,11 +933,9 @@
                 shortStatus
             };
         }
-        // Função para criar gráfico animado com Chart.js
+
         function createAnimatedChart(analysis) {
             const ctx = document.getElementById('salesChart').getContext('2d');
-           
-            // Destruir gráfico anterior se existir
             if (salesChart) {
                 salesChart.destroy();
             }
@@ -820,11 +945,8 @@
             const salesData = [];
             const projectionData = [];
             let currentStock = analysis.originalQuantity;
-           
-            // Dados históricos (dias já passados)
             for (let i = -analysis.daysSinceShipment; i <= 0; i++) {
                 labels.push(i === 0 ? 'Hoje' : `${Math.abs(i)}d atrás`);
-               
                 if (i < 0) {
                     const dailySales = Math.min(analysis.dailySales, currentStock);
                     salesData.push(dailySales);
@@ -837,14 +959,11 @@
                     projectionData.push(null);
                 }
             }
-            // Projeção futura
             let futureStock = analysis.currentStock;
             for (let i = 1; i <= Math.min(30, analysis.daysToExpire); i++) {
                 labels.push(`+${i}d`);
-               
                 const futureSales = Math.min(analysis.dailySales, futureStock);
                 futureStock -= futureSales;
-               
                 salesData.push(null);
                 stockData.push(null);
                 projectionData.push(Math.max(0, futureStock));
@@ -976,16 +1095,14 @@
                 }
             });
         }
+
         function generateBarcodeInProfile(product) {
             const canvas = document.getElementById('profileBarcodeCanvas');
             const codeElement = document.getElementById('profileBarcodeCode');
-           
             const productCode = product.codig;
-           
             if (productCode) {
                 const cleanCode = productCode.replace(/[^a-zA-Z0-9]/g, '');
                 codeElement.textContent = `Código: ${productCode}`;
-               
                 try {
                     JsBarcode(canvas, cleanCode, {
                         format: "CODE128",
@@ -1006,6 +1123,7 @@
                 codeElement.textContent = 'Código do produto não disponível';
             }
         }
+
         function showUpdateQuantityModal(product) {
             currentProductForUpdate = product;
             const modal = document.getElementById('updateQuantityModal');
@@ -1014,28 +1132,27 @@
             const currentMargem = document.getElementById('currentMargem');
             const newQuantityInput = document.getElementById('newQuantity');
             const newMargemSelect = document.getElementById('newMargem');
-           
             productName.textContent = product.produto || 'Produto sem nome';
             currentQuantity.textContent = product.quantidade || '0';
             currentMargem.textContent = product.MARGEM || 'N/A';
             newQuantityInput.value = product.quantidade || '0';
             newMargemSelect.value = product.MARGEM ? product.MARGEM.toUpperCase() : 'BAIXA';
-           
             modal.classList.add('flex');
             newQuantityInput.focus();
         }
+
         function adjustQuantity(amount) {
             const input = document.getElementById('newQuantity');
             const currentValue = parseInt(input.value) || 0;
             const newValue = Math.max(0, currentValue + amount);
             input.value = newValue;
         }
+
         async function updateProduct() {
             if (!currentProductForUpdate) return;
             const newQuantity = document.getElementById('newQuantity').value;
             const newMargem = document.getElementById('newMargem').value;
             const confirmBtn = document.getElementById('confirmUpdateBtn');
-           
             if (!newQuantity || newQuantity < 0) {
                 showToast('Por favor, insira uma quantidade válida', 'error');
                 return;
@@ -1043,15 +1160,12 @@
             confirmBtn.classList.add('btn-loading');
             confirmBtn.textContent = 'Atualizando...';
             confirmBtn.disabled = true;
-
-            // Atualizar localmente
             const productIndex = allProducts.findIndex(p => p.id === currentProductForUpdate.id);
             if (productIndex !== -1) {
                 allProducts[productIndex].quantidade = newQuantity;
                 allProducts[productIndex].MARGEM = newMargem;
+                allProducts[productIndex].DATAENVIO = dateToString(new Date());
             }
-
-            // Atualizar na API Baserow (corrigido com ?user_field_names=true)
             const url = `https://api.baserow.io/api/database/rows/table/656124/${currentProductForUpdate.id}/?user_field_names=true`;
             try {
                 const response = await fetch(url, {
@@ -1062,48 +1176,54 @@
                     },
                     body: JSON.stringify({
                         "quantidade": newQuantity,
-                        "MARGEM": newMargem
+                        "MARGEM": newMargem,
+                        "DATAENVIO": dateToString(new Date())
                     })
                 });
                 if (!response.ok) {
                     throw new Error(`Erro ao atualizar produto: ${response.statusText}`);
                 }
-                showToast(`Produto atualizado com sucesso! Quantidade: ${newQuantity}, Margem: ${newMargem}`);
+                showToast(`Produto atualizado com sucesso! Quantidade: ${newQuantity}, Margem: ${newMargem}, Data de Envio: ${dateToString(new Date())}`);
             } catch (error) {
                 console.error('Falha na atualização:', error);
                 showToast(`Erro ao atualizar o produto: ${error.message}`, 'error');
             }
-
             updateDisplay();
             closeModal();
             confirmBtn.classList.remove('btn-loading');
             confirmBtn.innerHTML = '<i class="fas fa-save mr-2"></i>Atualizar';
             confirmBtn.disabled = false;
         }
-       
+
         function showAnalyticsModal(product) {
             const analysis = analyzeSales(product);
             const modal = document.getElementById('analyticsModal');
-           
-            // Preencher dados básicos
             document.getElementById('analyticsProductName').textContent = product.produto || 'N/A';
-            document.getElementById('analyticsOriginalQuantity').textContent = analysis.originalQuantity;
-            document.getElementById('analyticsCurrentQuantity').textContent = analysis.currentStock;
-            document.getElementById('analyticsSoldQuantity').textContent = analysis.totalSoldSoFar;
-            document.getElementById('analyticsConversionRate').textContent = analysis.conversionRate;
-           
-            // Preencher projeções
+            const originalQuantityEl = document.getElementById('analyticsOriginalQuantity');
+            const currentQuantityEl = document.getElementById('analyticsCurrentQuantity');
+            const soldQuantityEl = document.getElementById('analyticsSoldQuantity');
+            const conversionRateEl = document.getElementById('analyticsConversionRate');
+            
+            originalQuantityEl.setAttribute('data-value', analysis.originalQuantity);
+            currentQuantityEl.setAttribute('data-value', analysis.currentStock);
+            soldQuantityEl.setAttribute('data-value', analysis.totalSoldSoFar);
+            conversionRateEl.setAttribute('data-value', parseFloat(analysis.conversionRate));
+            
+            animateNumber(originalQuantityEl, analysis.originalQuantity);
+            animateNumber(currentQuantityEl, analysis.currentStock);
+            animateNumber(soldQuantityEl, analysis.totalSoldSoFar);
+            animateNumber(conversionRateEl, parseFloat(analysis.conversionRate), true);
+            
             document.getElementById('analyticsDailySales').textContent = analysis.dailySales + ' unidades';
             document.getElementById('analyticsDaysInSystem').textContent = analysis.daysSinceShipment + ' dias';
             document.getElementById('analyticsTotalSold').textContent = analysis.totalSoldSoFar + ' unidades';
             document.getElementById('analyticsRemaining').textContent = analysis.currentStock + ' unidades';
             document.getElementById('analyticsDaysLeft').textContent = analysis.daysToExpire > 0 ? analysis.daysToExpire + ' dias' : 'Vencido';
-           
-            // Status
             const statusContainer = document.getElementById('analyticsStatus');
-            const statusClass = analysis.status === 'success' ? 'status-success' :
-                              analysis.status === 'warning' ? 'status-warning' : 'status-danger';
-           
+            let statusClass = 'status-success';
+            if (analysis.status === 'warning') statusClass = 'status-warning';
+            if (analysis.status === 'danger') statusClass = 'status-danger';
+            if (analysis.status === 'waiting') statusClass = 'status-info';
             statusContainer.innerHTML = `
                 <div class="flex items-center mb-2">
                     <span class="status-indicator ${statusClass}"></span>
@@ -1111,12 +1231,10 @@
                 </div>
                 <p class="text-sm text-gray-600">${analysis.recommendation}</p>
             `;
-           
-            // Criar gráfico animado
             createAnimatedChart(analysis);
-           
             modal.classList.add('flex');
         }
+
         const STATUS_MAP = {
             expired: { text: 'Vencido', class: 'status-expired', badge: 'bg-expired' },
             critical: { text: 'Vencendo em até 7 dias', class: 'status-critical', badge: 'bg-critical' },
@@ -1124,6 +1242,7 @@
             safe: { text: 'Seguro', class: 'status-safe', badge: 'bg-safe' },
             invalid: { text: 'Data inválida', class: 'status-expired', badge: 'bg-expired' }
         };
+
         const getStatusInfo = (days) => {
             if (days === Infinity) return STATUS_MAP.invalid;
             if (days < 0) return STATUS_MAP.expired;
@@ -1131,13 +1250,14 @@
             if (days <= 45) return STATUS_MAP.upcoming;
             return STATUS_MAP.safe;
         };
-       
+
         const formatDaysBadge = (days) => {
             if (days === Infinity) return 'Inválido';
             if (days < 0) return 'Vencido';
             if (days === 0) return 'Vence Hoje';
             return `${days} dia${days !== 1 ? 's' : ''}`;
         };
+
         function showConfirmModal(productId) {
             const confirmModal = document.getElementById('confirmModal');
             const confirmBtn = document.getElementById('confirmDeleteBtn');
@@ -1151,6 +1271,7 @@
             };
             confirmModal.classList.add('flex');
         }
+
         async function deleteProduct(productId) {
             const cardToRemove = document.querySelector(`.card[data-id="${productId}"]`);
             if (cardToRemove) {
@@ -1159,7 +1280,6 @@
             allProducts = allProducts.filter(p => p.id !== productId);
             updateDisplay();
             const url = `https://api.baserow.io/api/database/rows/table/656124/${productId}/`;
-           
             try {
                 const response = await fetch(url, {
                     method: 'DELETE',
@@ -1177,6 +1297,7 @@
                 await init();
             }
         }
+
         async function autoDeleteExpiredProducts() {
             const expiredProducts = allProducts.filter(p => calculateDaysToExpire(p.VENCIMENTO) < -10);
             for (const product of expiredProducts) {
@@ -1184,10 +1305,10 @@
                 showToast(`Produto "${product.produto}" excluído automaticamente (vencido há mais de 10 dias)`, 'success');
             }
         }
+
         function renderProducts(products) {
             const container = document.getElementById('productContainer');
             container.innerHTML = '';
-           
             if (products.length === 0) {
                 container.innerHTML = '<p class="col-span-full text-center text-gray-500 text-lg py-10">Nenhum produto encontrado com os critérios selecionados.</p>';
                 return;
@@ -1199,31 +1320,28 @@
                 const hasMessage = !!product.ALERTAMENSAGEM;
                 const badgeHtml = hasMessage ? '<span class="badge">1</span>' : '';
                 const senderName = product.ENVIADOPORQUEM || 'Não informado';
-               
-                // Calcular estoque atual
                 const originalQuantity = parseInt(product.quantidade) || 0;
                 const currentStock = calculateCurrentStock(product);
-                const daysSinceShipment = calculateDaysSinceShipment(product.DATAENVIO);
-               
-                // Análise de vendas para mostrar no card
+                const daysSinceShipment = calculateDaysSinceShipment(product);
                 const analysis = analyzeSales(product);
-                const analysisClass = analysis.status === 'success' ? 'analysis-success' :
-                                   analysis.status === 'warning' ? 'analysis-warning' : 'analysis-danger';
+                let analysisClass = 'analysis-success';
+                if (analysis.status === 'warning') analysisClass = 'analysis-warning';
+                if (analysis.status === 'danger') analysisClass = 'analysis-danger';
+                if (analysis.status === 'waiting') analysisClass = 'analysis-waiting';
                 const card = document.createElement('div');
                 card.className = `card p-5 flex flex-col justify-between ${statusInfo.class}`;
                 card.setAttribute('data-id', product.id);
-               
-                // Mostrar quantidade original e calculada
                 const stockDisplay = originalQuantity !== currentStock ?
                     `${currentStock}<span class="stock-indicator"><i class="fas fa-calculator"></i>Calculado</span> (Original: ${originalQuantity})` :
                     originalQuantity.toString();
-               
+                const sellByDate = calculateSellByDate(currentStock, analysis.dailySales);
+                const sellByHtml = `<p class="sell-by-date"><i class="fas fa-calendar-alt mr-2"></i>Estimativa para vender todo: ${sellByDate}</p>`;
                 card.innerHTML = `
                     <div class="flex-grow">
                         <div class="flex items-center mb-4">
                             <img src="${profileImg}" class="profile-img mr-4" alt="Foto de Perfil" onerror="this.src='${DEFAULT_PROFILE_IMG}'">
                             <div>
-                                <h3 class="text-lg font-bold text-blue-800 leading-tight">${product.produto || 'N/A'}</h3>
+                                <h3 class="text-lg font-bold text-blue-800 leading-tight">${product.produto}</h3>
                                 <p class="text-sm text-gray-500">Cód: ${product.codig || 'N/A'}</p>
                             </div>
                         </div>
@@ -1231,10 +1349,9 @@
                         ${originalQuantity !== currentStock ? `
                         <div class="stock-calculated">
                             <i class="fas fa-info-circle mr-1"></i>
-        
-			    <strong>Sistema há ${daysSinceShipment} dias</strong> - Vendido aprox: ${originalQuantity - currentStock} 
-
+                            <strong>Sistema há ${daysSinceShipment} dias</strong> - Vendido aprox: ${originalQuantity - currentStock}
                         </div>` : ''}
+                        ${sellByHtml}
                         <p class="text-gray-600"><i class="fas fa-calendar-check mr-2 text-blue-400"></i><strong>Vencimento:</strong> ${formatDate(product.VENCIMENTO)}</p>
                         <div class="flex items-center justify-between">
                             <div>
@@ -1267,6 +1384,7 @@
                 container.appendChild(card);
             });
         }
+
         function showMessageModal(product) {
             if (!product.ALERTAMENSAGEM) {
                 showToast('Nenhuma mensagem de alerta disponível', 'error');
@@ -1278,9 +1396,10 @@
             document.getElementById('modalStatus').textContent = `Status: ${statusInfo.text}`;
             document.getElementById('messageModal').classList.add('flex');
         }
+
         function showProfileModal(product) {
             document.getElementById('modalProfileImg').src = product.PERFILFOTOURL || DEFAULT_PROFILE_IMG;
-            document.getElementById('modalProfileName').textContent = product.produto || 'N/A';
+            document.getElementById('modalProfileName').textContent = product.produto;
             document.getElementById('modalProfileSender').textContent = `Enviado por: ${product.ENVIADOPORQUEM || 'Não informado'}`;
             generateBarcodeInProfile(product);
             document.getElementById('modalExpirationProfile').textContent = `Vencimento: ${formatDate(product.VENCIMENTO)}`;
@@ -1293,57 +1412,128 @@
             };
             document.getElementById('profileModal').classList.add('flex');
         }
+
         function closeModal() {
             document.querySelectorAll('.modal.flex').forEach(modal => modal.classList.remove('flex'));
         }
+
         function updateDisplay() {
             const searchTerm = searchInput.value.toLowerCase();
-            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            const activeFilter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+            const monthFilter = document.getElementById('monthFilter').value;
             let filtered = allProducts.filter(p => (p.produto || '').toLowerCase().includes(searchTerm));
             const today = new Date();
             const thisMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
             const thisMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
             filtered = filtered.filter(p => {
                 const days = calculateDaysToExpire(p.VENCIMENTO);
+                const expDate = parseDate(p.VENCIMENTO);
+                if (monthFilter !== 'none' && activeFilter === 'all') {
+                    const pKey = expDate ? `${expDate.getFullYear()}-${String(expDate.getMonth() + 1).padStart(2, '0')}` : null;
+                    return pKey === monthFilter;
+                }
                 switch (activeFilter) {
                     case 'expired': return days < 0;
                     case 'critical': return days >= 0 && days <= 7;
                     case 'upcoming': return days > 7 && days <= 45;
                     case 'safe': return days > 45;
                     case 'this_month':
-                        if (!p.VENCIMENTO) return false;
-                        const [d, m, y] = p.VENCIMENTO.split('/');
-                        const expDate = new Date(y, m - 1, d);
+                        if (!expDate) return false;
                         return expDate >= thisMonthStart && expDate <= thisMonthEnd;
                     default: return true;
                 }
             });
             renderProducts(filtered);
         }
+
         async function init() {
             const container = document.getElementById('productContainer');
             container.innerHTML = '<p class="loader"><i class="fas fa-spinner fa-spin mr-2"></i>Carregando...</p>';
             try {
                 allProducts = await fetchAllRows();
+                allProducts = allProducts.filter(p => 
+                    p.produto && p.produto.trim() !== '' && p.produto !== 'N/A' &&
+                    p.VENCIMENTO && p.VENCIMENTO.trim() !== '' && p.VENCIMENTO !== 'N/A' &&
+                    p.quantidade && parseInt(p.quantidade) > 0
+                );
+                for (const product of allProducts) {
+                    if (!product.DATAENVIO) {
+                        const today = new Date();
+                        await updateShipmentDate(product.id, today);
+                        product.DATAENVIO = dateToString(today);
+                    }
+                    await updateShipmentDateIfNeeded(product);
+                }
                 await autoDeleteExpiredProducts();
-                allProducts.sort((a, b) => calculateDaysToExpire(a.VENCIMENTO) - calculateDaysToExpire(b.VENCIMENTO));
+                allProducts.sort((a, b) => {
+                    const dateA = parseDate(a.DATAENVIO) || new Date(0);
+                    const dateB = parseDate(b.DATAENVIO) || new Date(0);
+                    return dateB - dateA;
+                });
+
+                // Preencher o dropdown de meses
+                const monthFilter = document.getElementById('monthFilter');
+                const monthCounts = new Map();
+                for (const p of allProducts) {
+                    const exp = parseDate(p.VENCIMENTO);
+                    if (exp) {
+                        const key = `${exp.getFullYear()}-${String(exp.getMonth() + 1).padStart(2, '0')}`;
+                        monthCounts.set(key, (monthCounts.get(key) || 0) + 1);
+                    }
+                }
+                const sortedMonths = Array.from(monthCounts.keys()).sort((a, b) => {
+                    const [yearA, monthA] = a.split('-').map(Number);
+                    const [yearB, monthB] = b.split('-').map(Number);
+                    return yearA === yearB ? monthA - monthB : yearA - yearB;
+                });
+                const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+                sortedMonths.forEach(monthKey => {
+                    const [year, month] = monthKey.split('-').map(Number);
+                    const name = monthNames[month - 1];
+                    const count = monthCounts.get(monthKey);
+                    const option = document.createElement('option');
+                    option.value = monthKey;
+                    option.textContent = `${name} ${year} (${count} PRD)`;
+                    monthFilter.appendChild(option);
+                });
+
                 updateDisplay();
             } catch (error) {
                 container.innerHTML = '<p class="text-center text-red-500">Erro ao carregar produtos. Tente novamente.</p>';
             }
         }
-        // Event listeners
+
         searchInput.addEventListener('input', updateDisplay);
         filterContainer.addEventListener('click', e => {
             if (e.target.classList.contains('filter-btn')) {
                 document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
                 e.target.classList.add('active');
+                document.getElementById('monthFilter').value = 'none';
                 updateDisplay();
             }
         });
-        document.getElementById('cancelUpdateBtn').addEventListener('click', closeModal);
+       
+document.getElementById('monthFilter').addEventListener('change', () => {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+            updateDisplay();
+        });
+
         document.getElementById('confirmUpdateBtn').addEventListener('click', updateProduct);
-        // Inicializar
+        document.getElementById('cancelUpdateBtn').addEventListener('click', closeModal);
+
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal') && !e.target.classList.contains('modal-content') && !e.target.classList.contains('modal-content-large')) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
         init();
     </script>
 </body>
